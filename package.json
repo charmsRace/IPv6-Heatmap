@@ -1,0 +1,59 @@
+{
+  "name": "ipv6-heatmap",
+  "version": "0.0.1",
+  "description": "A MEAN SPA IPv6 heatmap visualization",
+  "main": "entry.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Calamitizer/IPv6-Heatmap.git"
+  },
+  "keywords": [
+    "later"
+  ],
+  "author": "J. Alex Ruble",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Calamitizer/IPv6-Heatmap/issues"
+  },
+  "homepage": "https://github.com/Calamitizer/IPv6-Heatmap#readme",
+  "dependencies": {
+    "angular": "^1.5.7",
+    "angular-route": "^1.5.7",
+    "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
+    "debug": "^2.2.0",
+    "ejs": "^2.4.2",
+    "express": "^4.14.0",
+    "mongojs": "^2.4.0",
+    "mongoose": "^4.5.3",
+    "morgan": "^1.7.0"
+  },
+  "devDependencies": {
+    "browserify": "^13.0.1",
+    "del": "^2.2.1",
+    "gulp-cssmin": "^0.1.7",
+    "gulp-debug": "^2.1.2",
+    "gulp-jshint": "^2.0.1",
+    "gulp-less": "^3.1.0",
+    "gulp-livereload": "^3.8.1",
+    "gulp-mobilizer": "0.0.3",
+    "gulp-ng-annotate": "^2.0.0",
+    "gulp-nodemon": "^2.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.5.4",
+    "gulp-require-angular": "^0.7.1",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^1.5.4",
+    "gulp-util": "^3.0.7",
+    "gulp-watch": "^4.3.8",
+    "jshint": "^2.9.2",
+    "path": "^0.12.7",
+    "run-sequence": "^1.2.2",
+    "streamqueue": "^1.1.1",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}

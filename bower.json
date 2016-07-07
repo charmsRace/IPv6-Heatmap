@@ -1,0 +1,16 @@
+{
+  "name": "ipv6-heatmap",
+  "version": "0.0.1",
+  "description": "A MEAN SPA heatmap visualization of global IPv6 locations",
+  "private": true,
+  "dependencies": {
+    "jquery": "1.9.1",
+    "jquery-1.9.1": "http://code.jquery.com/jquery-1.9.1.js",
+    "bootstrap": "^3.3.6",
+    "angular": "^1.5.7",
+    "angular-route": "^1.5.7"
+  },
+  "resolutions": {
+    "jquery": "1.9.1 - 2"
+  }
+}

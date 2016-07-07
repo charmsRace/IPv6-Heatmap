@@ -1,3 +1,17 @@
+### Linux ###
+*~
+
+# temporary files which can be created if a process still has a handle open of a deleted file
+.fuse_hidden*
+
+# KDE directory preferences
+.directory
+
+# Linux trash folder which might appear on any partition or disk
+.Trash-*
+
+### Node ###
+
 # Logs
 logs
 *.log
@@ -35,3 +49,14 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+### Bower ###
+client/lib/
+client/src/lib/
+bower_components
+.bower-cache
+.bower-registry
+.bower-tmp
+
+### Custom ###
+scratch.js
