@@ -20,19 +20,31 @@ var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var gutil = require('gulp-util');
 var debug = require('gulp-debug');
-
+var concat = require('gulp-concat');
 
 var dir = {
     srv: 'server',
     clisrc: path.join('client', 'src'),
     clibuild: path.join('client', 'www')
-}
+};
 
 var cf = {
     js: {
         src: [
             path.join(dir.srv, '**/*.js'),
             path.join(dir.clisrc, '**/*.js')
+        ]
+    },
+    html: {
+        src: [
+            path.join(dir.clisrc, '**/*.html'),
+            '!' + path.join(dir.clisrc, 'vendor/**/*.html')
+        ]
+    },
+    css: {
+        src: [
+            path.join(dir.clisrc, 'vendor/bootstrap/dist/css/bootstrap.min.css'),
+            path.join(dir.clisrc, 'css/**/*.css')
         ]
     },
     less: {
@@ -55,7 +67,7 @@ var cf = {
             '?'
         ]
     }
-}
+};
 
 gulp.on('error', function(er) {
     throw(er);
@@ -65,7 +77,7 @@ gulp.task('clean', function() {
     return del([
         path.join(dir.clibuild, '**/*')
     ]).then(function(paths) {
-        console.log('Deleted files and folders:\n', paths.join('n'));
+        console.log('Deleted files and folders:\n', paths.join('\n'));
     });
 });
         
@@ -74,7 +86,7 @@ gulp.task('images', function() {
         gulp
             .src(path.join(dir.clisrc, 'images/**/*'))
             .pipe(gulp.dest(path.join(dir.clibuild, 'images')))
-    )
+    );
 });
 
 gulp.task('html', function() {
@@ -82,9 +94,19 @@ gulp.task('html', function() {
         '<script type="text/javascript" src="js/bundle.min.js"></script>'
     ];
     gulp
-        .src(path.join(dir.clisrc, '**/*.html'))
+        .src(cf.html.src)
         .pipe(replace('<!-- inject:js -->', injection.join('\n    ')))
         .pipe(gulp.dest(dir.clibuild));
+});
+
+gulp.task('css', function() {
+    gulp
+        .src(cf.css.src)
+//        .pipe(mobilizer(...))
+        .pipe(cssmin())
+        .pipe(concat('style.css'))
+        .pipe(rename({suffix: '.min'}))
+        .pipe(gulp.dest(path.join(dir.clibuild, 'css')));
 });
 
 gulp.task('less', function() {
@@ -123,6 +145,9 @@ gulp.task('js', function() {
             .bundle()
             .pipe(source('bundle.js'))
             .pipe(buffer())
+            .on('error', function(e) {
+                console.log(e);
+            })
             .pipe(sourcemaps.init({loadMaps: true}))
             .pipe(ngAnnotate())
 //            .pipe(uglify())
@@ -130,7 +155,7 @@ gulp.task('js', function() {
             .on('error', gutil.log)
             .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest(path.join(dir.clibuild, 'js/')))
-    )
+    );
 });
 
 gulp.task('nodemon', function() {
@@ -146,7 +171,7 @@ gulp.task('build', function(done) {
     var tasks = [
         'html',
         'images',
-        'less',
+        'css',
         'js'
     ];
     sequence('clean', 'lint', tasks, done);

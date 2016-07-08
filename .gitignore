@@ -51,8 +51,7 @@ jspm_packages
 .node_repl_history
 
 ### Bower ###
-client/lib/
-client/src/lib/
+client/src/vendor/
 bower_components
 .bower-cache
 .bower-registry

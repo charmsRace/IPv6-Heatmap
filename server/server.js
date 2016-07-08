@@ -24,9 +24,14 @@
     iphm.use(bodyParser.json());
     iphm.use(bodyParser.urlencoded({extended: true}));
     iphm.use(cookieParser());
-    iphm.use(express.static(path.join(__dirname, '../client')));
+    iphm.use(express.static(path.join(__dirname, '../client/www')));
     
-    require('./routes/index.js')(iphm);
+    var siteRouter = require('./routes/site.js');
+    var apiRouter = require('./routes/api.js');
+    //siteRouter.use('/api', apiRouter);
+    iphm.use('/api', apiRouter);
+    iphm.use('/', siteRouter);
+    
     iphm.set('port', port);
     
     var server = iphm.listen(iphm.get('port'), function() {

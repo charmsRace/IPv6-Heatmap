@@ -1,26 +1,18 @@
-console.log('test');
-
-console.log('test2');
-
 var angular = require('angular');
 
-require('./lib/angular-route/angular-route.js');
+require('./vendor/angular-route/angular-route.js');
 require('./js/factory');
 require('./js/controllers');
+require('./js/ip.service.js');
+require('./js/main.ctrl.js');
+require('./js/sub.ctrl.js');
+require('./js/routes.js');
 
 angular
     .module('iphm', [
         'ngRoute',
-        'iphm.factory',
-        'iphm.controllers'
-    ])
-    .config(function($routeProvider) {
-      $routeProvider
-          .when('/', {
-              templateUrl: 'partials/todo.html',
-              controller: 'TodoCtrl'
-          })
-          .otherwise({
-              redirectTo: '/'
-          });
-    });
+        'iphm.routes',
+        'iphm.main',
+        'iphm.sub',
+        'iphm.api'
+    ]);
