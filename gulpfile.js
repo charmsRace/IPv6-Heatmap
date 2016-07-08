@@ -71,7 +71,11 @@ var cf = {
     }
 };
 
-for (db in dbcf.dbs) {
+console.log('test1');
+
+for (var i = 0; i < dbcf.dbs.length; i++) {
+    var db = dbcf.dbs[i];
+    console.log(db);
     gulp.task(db.taskname, syncDb(db));
 }
 

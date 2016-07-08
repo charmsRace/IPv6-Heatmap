@@ -4,7 +4,6 @@
     var request = require('request');
     var path = require('path');
     var fs = require('fs');
-    var md5 = require('md5');
     var unzip = require('unzip-wrapper');
     var glob = require('glob');
     var del = require('del');
@@ -12,7 +11,7 @@
     var dbcf = require('./dbcf.js');
     
     var getLocalMd5 = function(db) {
-        var md5 = undefined;
+        var md5;
         try {
             md5 = fs.readFileSync(path.join(dbcf.dir, db.filename), {encoding: 'ascii'});
             console.log('Local md5 for ' + db.filename + ': ' + md5);
@@ -39,8 +38,9 @@
     };
     
     var exists = function(db) {
+        var stats;
         try {
-            var stats = fs.statSync(path.join(dbcf.dir, db.filename));
+            stats = fs.statSync(path.join(dbcf.dir, db.filename));
         } catch (err) {
             console.log(db.filename + ' not found');
             return false;

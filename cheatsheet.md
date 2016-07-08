@@ -17,3 +17,5 @@ https://www.npmjs.com/package/tree-fiddy
 rm $ vend
 
 gulp srv js?
+
+gulp ln
