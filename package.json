@@ -27,9 +27,16 @@
     "debug": "^2.2.0",
     "ejs": "^2.4.2",
     "express": "^4.14.0",
+    "glob": "^7.0.5",
+    "gulp-gunzip": "0.0.3",
+    "maxmind": "^1.1.0",
+    "md5": "^2.1.0",
     "mongojs": "^2.4.0",
     "mongoose": "^4.5.3",
-    "morgan": "^1.7.0"
+    "morgan": "^1.7.0",
+    "request": "^2.72.0",
+    "unzip": "^0.1.11",
+    "unzip-wrapper": "^0.1.5"
   },
   "devDependencies": {
     "browserify": "^13.0.1",

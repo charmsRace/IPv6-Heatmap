@@ -21,6 +21,8 @@ var buffer = require('vinyl-buffer');
 var gutil = require('gulp-util');
 var debug = require('gulp-debug');
 var concat = require('gulp-concat');
+var dbcf = require('./server/methods/dbcf.js');
+var syncDb = require('./server/methods/syncDb.js');
 
 var dir = {
     srv: 'server',
@@ -69,8 +71,19 @@ var cf = {
     }
 };
 
-gulp.on('error', function(er) {
-    throw(er);
+for (db in dbcf.dbs) {
+    gulp.task(db.taskname, syncDb(db));
+}
+
+gulp.task('syncdbs', function(done) {
+    sequence(dbcf.dbs.map(function(db) {
+        return db.taskname;
+    }), done);
+});
+
+gulp.on('error', function(err) {
+    console.log('Gulp has encountered an error:\n');
+    throw err;
 });
 
 gulp.task('clean', function() {
