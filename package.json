@@ -30,6 +30,7 @@
     "express": "^4.14.0",
     "glob": "^7.0.5",
     "gulp-gunzip": "0.0.3",
+    "line-input-stream": "^1.0.1",
     "maxmind": "^1.1.0",
     "md5": "^2.1.0",
     "mongojs": "^2.4.0",

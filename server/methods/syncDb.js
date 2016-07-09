@@ -1,6 +1,9 @@
 (function() {
     'use strict';
     
+    // Probably need to write all of this as gulp tasks
+    // so I can use run-sequence...
+    
     var request = require('request');
     var path = require('path');
     var fs = require('fs');
@@ -130,6 +133,12 @@
         });
     };
     
+    /*
+    var deleteZip = function(db) {
+        return 'pass';
+    };
+    */
+    
     var renameDir = function(db) {
         var dbpattern = dbcf.dir + '/' + db.dirname + '_*[0-9]';
         glob(dbpattern, function(err, files) {
@@ -172,6 +181,7 @@
                 return;
             }
             unzipDb(db);
+            //deleteZip(db);
             renameDir(db);
             pruneDb(db);
             console.log('Done syncing ' + db.name);

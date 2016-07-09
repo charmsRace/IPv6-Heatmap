@@ -23,3 +23,9 @@ gulp ln
 remove '/;;*$/'
 
 something like `sed /err*[0-9]x/err/`
+
+npm for catching '(!!)', ';;*$', &c., <name> -n --no-gitignore
+
+sayson
+
+cidr syntax parser
