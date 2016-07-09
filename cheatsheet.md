@@ -10,6 +10,38 @@ https://www.npmjs.com/package/tree-fiddy
 
 Procfile
 'No ENV file found'
+fvc
+--trace-sync-io
+
+envcf/
+  index.js
+  development.js
+  staging.js
+  production.js
+
+```javascript
+// development.js
+(function() {
+    'use strict';
+    module.exports = {
+        SECRET_API: 'foo',
+        logLevel: 'debug'
+    };
+}());
+```
+
+```javascript
+(function() {
+    'use strict';
+    module.exports = require('./' + process.env.NODE_ENV + '.js');
+    /* or
+    *  console.error('Unrecognized NODE_ENV: ' + process.env.NODE_ENV);
+    *  process.exit(1);
+    */
+}());
+```
+
+node repl
 
 (mongod repair)
 

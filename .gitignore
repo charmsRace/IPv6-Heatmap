@@ -59,6 +59,14 @@ bower_components
 
 ### Custom ###
 
+# Environment config
+envcf/development.js
+envcf/staging.js
+.env
+
+# Heroku debug log
+npm-debug.log
+
 # MaxMind GeoLite2 database
 server/mmdb/GeoLite2-City-CSV.zip
 server/mmdb/GeoLite2-City-CSV/GeoLite2-City-Blocks-IPv6.csv

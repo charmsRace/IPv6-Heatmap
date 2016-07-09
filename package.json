@@ -4,13 +4,11 @@
   "description": "A MEAN SPA IPv6 heatmap visualization",
   "main": "./server/server.js",
   "scripts": {
-    "start": "node ./server/server.js"
+    "start": "node ./server/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
     "node": "6.3.0"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -33,6 +31,7 @@
     "cookie-parser": "^1.4.3",
     "crypto": "0.0.3",
     "debug": "^2.2.0",
+    "dotenv": "^2.0.0",
     "ejs": "^2.4.2",
     "express": "^4.14.0",
     "fast-csv": "^2.0.0",

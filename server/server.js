@@ -1,6 +1,8 @@
 (function() {
     'use strict';
     
+    require('dotenv').config();
+    
     var express = require('express');
     var path = require('path');
     var morgan = require('morgan');
@@ -9,7 +11,7 @@
     var ejs = require('ejs');
     var mongoose = require('mongoose');
     var http = require('http');
-    
+        
     var dbcf = require('./methods/dbcf.js');
     
     var dburi = process.env.MONGOLAB_URI || dbcf.localUri;
