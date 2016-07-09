@@ -40,6 +40,10 @@ envcf/
     */
 }());
 ```
+lowercase
+
+foreman
+https://devcenter.heroku.com/articles/node-best-practices
 
 node repl
 

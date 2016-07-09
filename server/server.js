@@ -14,11 +14,9 @@
         
     var dbcf = require('./methods/dbcf.js');
     
-    var dburi = process.env.MONGOLAB_URI || dbcf.localUri;
+    var dburi = process.env.MONGODB_URI || dbcf.localUri;
     
     mongoose.connect(dburi);
-    
-    var port = process.env.PORT || 3000;
     
     var iphm = express();
     
@@ -38,6 +36,7 @@
     iphm.use('/api', apiRouter);
     iphm.use('/', siteRouter);
     
+    var port = process.env.PORT || 3000;
     var server = http.createServer(iphm);
     iphm.set('port', port);
     iphm.listen(iphm.get('port'), function() {
