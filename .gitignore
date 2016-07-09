@@ -58,4 +58,5 @@ bower_components
 .bower-tmp
 
 ### Custom ###
+server/mmdb
 scratch.js

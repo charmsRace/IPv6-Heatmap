@@ -71,8 +71,6 @@ var cf = {
     }
 };
 
-console.log('test1');
-
 for (var i = 0; i < dbcf.dbs.length; i++) {
     var db = dbcf.dbs[i];
     console.log(db);

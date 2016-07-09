@@ -19,3 +19,7 @@ rm $ vend
 gulp srv js?
 
 gulp ln
+
+remove '/;;*$/'
+
+something like `sed /err*[0-9]x/err/`
