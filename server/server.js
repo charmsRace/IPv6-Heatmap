@@ -8,9 +8,13 @@
     var bodyParser = require('body-parser');
     var ejs = require('ejs');
     var mongoose = require('mongoose');
+    var http = require('http');
     
-    var db = require('./config/db.js');
-    mongoose.connect(db.uri);
+    var dbcf = require('./methods/dbcf.js');
+    
+    var dburi = process.env.MONGOLAB_URI || dbcf.localUri;
+    
+    mongoose.connect(dburi);
     
     var port = process.env.PORT || 3000;
     
@@ -32,10 +36,10 @@
     iphm.use('/api', apiRouter);
     iphm.use('/', siteRouter);
     
+    var server = http.createServer(iphm);
     iphm.set('port', port);
-    
-    var server = iphm.listen(iphm.get('port'), function() {
-        console.log('Express server listening on port ' + server.address().port);
+    iphm.listen(iphm.get('port'), function() {
+        console.log('Express server listening on port ' + iphm.get('port'));
     });
     
     module.exports = iphm;

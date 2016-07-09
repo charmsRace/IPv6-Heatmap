@@ -60,6 +60,7 @@ bower_components
 ### Custom ###
 
 # MaxMind GeoLite2 database
+server/mmdb/GeoLite2-City-CSV.zip
 server/mmdb/GeoLite2-City-CSV/GeoLite2-City-Blocks-IPv6.csv
 
 # Scratchwork

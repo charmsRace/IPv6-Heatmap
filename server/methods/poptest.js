@@ -3,6 +3,7 @@
     
     console.log('start');
     
+    var path = require('path');
     var mongoose = require('mongoose');
     console.log('bpath');
     var fs = require('fs');

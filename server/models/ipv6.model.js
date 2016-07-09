@@ -2,15 +2,20 @@
     'use strict';
 
     var mongoose = require('mongoose');
-
-    var IPv6Schema = new mongoose.Schema({
-        name: {
-            type: String,
-            default: ''
-        }
+    
+    var coordFreqSchema = new mongoose.Schema({
+        long: Number,
+        lat: Number,
+        numIps: Number,
+        temp: Number,
+        alpha: Number
     });
-
-    IPv6Schema.methods = {};
+    
+    coordFreqSchema.methods.findSameNum = function(cb) {
+        return this.model('CoordFreq').find({type: this.type}, cb);
+    };
+    
+    var CoordFreq = mongoose.model('CoordFreq', coordFreqSchema);
 
     module.exports = mongoose.model('IPv6', IPv6Schema);
 }());

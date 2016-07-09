@@ -4,6 +4,7 @@
     var path = require('path');
     
     var dbcf = {
+        localUri: 'mongodb://localhost/ipv6',
         dir: path.join(__dirname, '../mmdb'),
         baseUrl: 'http://geolite.maxmind.com/download/geoip/database/',
         // a mess because I realized I only needed one db

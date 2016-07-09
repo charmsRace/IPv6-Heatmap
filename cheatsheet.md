@@ -29,3 +29,5 @@ npm for catching '(!!)', ';;*$', &c., <name> -n --no-gitignore
 sayson
 
 cidr syntax parser
+
+gitignore '*.gi'
