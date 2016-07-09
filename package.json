@@ -2,7 +2,13 @@
   "name": "ipv6-heatmap",
   "version": "0.0.1",
   "description": "A MEAN SPA IPv6 heatmap visualization",
-  "main": "entry.js",
+  "main": "./server/server.js",
+  "scripts": {
+    "start": "node ./server/server.js"
+  },
+  "engines": {
+    "node": "6.3.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
