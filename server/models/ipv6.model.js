@@ -17,5 +17,5 @@
     
     var CoordFreq = mongoose.model('CoordFreq', coordFreqSchema);
 
-    module.exports = mongoose.model('IPv6', IPv6Schema);
+    module.exports = CoordFreq;
 }());

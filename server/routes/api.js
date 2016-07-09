@@ -4,7 +4,7 @@
     var path = require('path');
     var express = require('express');
 
-    var IPv6 = require('../models/ipv6.js');
+    var IPv6 = require('../models/ipv6.model.js');
 
     var root = path.join(__dirname, '../../client/www');
     
