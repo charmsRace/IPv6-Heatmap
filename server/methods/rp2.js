@@ -278,10 +278,27 @@ db.once('open', function() {
             });
     };
     
+    var llng, rlng, dlat, ulat;
+    
+    var bBoxQuery = function(llng, rlng, dlat, ulat) {
+        return CoordFreq
+            .find()
+            .select('coords alpha')
+            .where('coords.lat')
+            .gte(dlat)
+            .lte(ulat)
+            .$where(function inLong() { // probably performance-heavy
+                var long = this.coords.long
+                return ((llng <= long) && (long <= rlng)) === (llng <= rlng);
+            })
+            .lean();
+    };
+    
     var testfun = function(cb) {
         console.log('test');
         cb(null);
     };
+    
     
     var wait = function(cb) {
         setTimeout(function() {
@@ -317,7 +334,12 @@ db.once('open', function() {
         setTemps,
         testfun,
         setAlphas,
-        showCF
+        showCF,
+        function(cb) {
+            console.log('end series');
+            console.log(bBoxQuery(1, 2, 3, 4));
+            cb(null);
+        }
     ]);
     
     
