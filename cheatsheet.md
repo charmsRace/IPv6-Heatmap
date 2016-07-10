@@ -12,6 +12,7 @@ Procfile
 'No ENV file found'
 fvc
 --trace-sync-io
+ftp
 
 envcf/
   index.js
@@ -40,7 +41,9 @@ envcf/
     */
 }());
 ```
-lowercase
+lowercase fn
+
+f = ('x' => {'x: ' + x})
 
 foreman
 https://devcenter.heroku.com/articles/node-best-practices

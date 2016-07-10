@@ -12,6 +12,7 @@
             name: 'GeoLite2 City',
             dirname: 'GeoLite2-City-CSV',
             filename: 'GeoLite2-City-CSV.zip',
+            csvname: 'GeoLite2-City-Blocks-IPv6.csv',
             url: 'http://geolite.maxmind.com/download/geoip/database/GeoLite2-City-CSV.zip',
             keep: [
                 'GeoLite2-City-Blocks-IPv6.csv',
