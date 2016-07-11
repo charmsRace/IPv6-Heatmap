@@ -37,11 +37,24 @@
     iphm.use('/', siteRouter);
     
     var port = process.env.PORT || 3000;
-    var server = http.createServer(iphm);
     iphm.set('port', port);
-    iphm.listen(iphm.get('port'), function() {
-        console.log('Express server listening on port ' + iphm.get('port'));
-    });
+    var server = http.createServer(iphm);
+    
+    connect()
+        .on('error', console.log)
+        .on('disconnected', connect)
+        .once('open', listen);
+    
+    function listen() {
+        iphm.listen(iphm.get('port'), function() {
+            console.log('Express server listening on port ' + iphm.get('port'));
+        });
+    }
+    
+    function connect() {
+        var options = {};
+        return mongoose.connect('mongodb://localhost/test', options).connection;
+    }
     
     module.exports = iphm;
 }());

@@ -291,6 +291,7 @@ db.once('open', function() {
                 var long = this.coords.long
                 return ((llng <= long) && (long <= rlng)) === (llng <= rlng);
             })
+            .snapshot()
             .lean();
     };
     
