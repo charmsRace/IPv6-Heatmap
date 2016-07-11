@@ -3,7 +3,7 @@
 
     var express = require('express');
     var path = require('path');
-    var coordFreqs = require('../controllers/coordFreqs.js');
+    var coordFreqs = require('../controllers/coord-freqs.js');
     
     /* used?
     var handleError = function(res, reason, message, code) {
@@ -27,10 +27,10 @@
     
     apiRouter
         .use(function(req, res, next) {
-            console.log('API request made: ' + req);
+            console.log('API request made: ' + JSON.stringify(req.params));
             next();
         })
-        .get(coordApiRE, coordFreqs.reqBBox);
+        .get(coordApiRE, coordFreqs.reqBBox)
         .use(function(err, req, res, next) {
             console.log('API request made: ' + req);
             next();
@@ -44,7 +44,7 @@
             }
             return;
         })
-        .use(function(req, res) {
+        .use(function(err, req, res, next) {
             res
                 .status(500)
                 .render('500', {});

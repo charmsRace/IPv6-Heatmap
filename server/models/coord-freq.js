@@ -30,23 +30,24 @@
     
     CoordFreqSchema.statics = {
         fetchBBox: function(llng, rlng, dlat, ulat) {
+            console.log('inside');
+            var ls = String(llng);
+            var rs = String(rlng);
+            var longExp = '((' + ls + ' <= this.coords.long)' // I am
+                + ' && (this.coords.long <= ' + rs + '))'     // *so*
+                + ' === (' + ls + ' <= ' + rs + ')';          // sorry
             return this
                 .find()
-                .select('coords alpha')
                 .where('coords.lat')
                 .gte(dlat)
                 .lte(ulat)
-                .$where(function inLong() {
-                    var long = this.coords.long;
-                    var within = (llng <= long) && (long <= rlng);
-                    var anticlockwise = (llng <= rlng);
-                    return within === anticlockwise;
-                })
+                .$where(longExp)
+                .select('coords alpha')
                 .lean()
                 .exec();
         }
     };
-    
-    mongoose.model('CoordFreq', CoordFreqSchema);
-    
+    console.log(3);
+    module.exports = mongoose.model('CoordFreq', CoordFreqSchema);
+    console.log(2);
 }());
