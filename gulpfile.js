@@ -189,7 +189,7 @@ gulp.task('build', function(done) {
         'css',
         'js'
     ];
-    sequence('clean', 'lint', tasks, done);
+    sequence('clean', /*'lint', */tasks, done);
 });
 
 gulp.task('serve', function(done) {

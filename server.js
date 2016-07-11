@@ -36,7 +36,7 @@
     var siteRouter = require('./server/routes/site.js');
     var apiRouter = require('./server/routes/api.js');
     //siteRouter.use('/api', apiRouter);
-    iphm.use('/api', apiRouter);
+    iphm.use('/api/v1/coordfreq', apiRouter);
     iphm.use(siteRouter);
     
     iphm.set('port', port);

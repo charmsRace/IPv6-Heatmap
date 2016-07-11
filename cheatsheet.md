@@ -49,6 +49,8 @@ coord filters
 
 random docs
 
+app-version
+
 foreman
 https://devcenter.heroku.com/articles/node-best-practices
 

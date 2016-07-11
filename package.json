@@ -45,6 +45,7 @@
     "mongoose": "^4.5.3",
     "morgan": "^1.7.0",
     "request": "^2.72.0",
+    "restangular": "^1.5.2",
     "unzip": "^0.1.11",
     "unzip-wrapper": "^0.1.5"
   },
