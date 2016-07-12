@@ -63,6 +63,7 @@ bower_components
 envcf/development.js
 envcf/staging.js
 .env
+mongodb.heroku.uri
 
 # Heroku debug log
 npm-debug.log

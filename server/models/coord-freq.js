@@ -52,7 +52,7 @@
                 .exec();
         }
     };
-    console.log(3);
+    
     module.exports = mongoose.model('CoordFreq', CoordFreqSchema);
-    console.log(2);
+    
 }());

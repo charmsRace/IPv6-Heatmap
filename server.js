@@ -78,7 +78,7 @@
         .once('open', function(){
             require('./server/methods/repop-db.js');
             listen();
-        }));
+        });
     
     module.exports = iphm;
 }());

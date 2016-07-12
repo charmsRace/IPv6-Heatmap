@@ -15,32 +15,8 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
 */
-    var coordFreqSchema = new mongoose.Schema({
-        coords: {
-            type: {
-                lat: {
-                    type: Number
-                },
-                long: {
-                    type: Number
-                }
-            }
-        },
-        numIps: {
-            type: Number,
-            default: 0
-        },
-        temp: {
-            type: Number,
-            default: 0
-        },
-        alpha: {
-            type: Number,
-            default: 0
-        }
-    });
-    
-    var CoordFreq = mongoose.model('CoordFreq', coordFreqSchema);
+
+    var CoordFreq = require('./../models/coord-freq');
     
     var dropCoordFreq = function() {
         CoordFreq.remove({}, function(err) {
@@ -128,10 +104,10 @@ db.once('open', function() {
     };
     
     var csvPath = dbcf.dir + '/' + dbcf.db.dirname + '/' + dbcf.db.csvname;
-    var csvPath = './testip.csv';
+    //var csvPath = './testip.csv';
     
     var parseRow = function(cb, row) {
-        console.log(row);
+        //console.log(row);
         if (row.network === 'network') {
             cb(null);
             return;
@@ -194,7 +170,6 @@ db.once('open', function() {
             .snapshot()
             .exec()
             .then(function(res) {
-                console.log(res);
                 cb(null);
             })
             .catch(function(err) {
@@ -341,6 +316,3 @@ db.once('open', function() {
             }
         ]);
     }());
-    
-    // module.exports = would be nice
-});
