@@ -59,7 +59,8 @@
                 controllerAs: 'frameCtrl'
             })
             .otherwise({
-                redirectTo: '/views/map.html'
+                templateIrl: '/views/map.html',
+                redirectTo: '/index.html'
             });
         $locationProvider.html5Mode(true);
     }
