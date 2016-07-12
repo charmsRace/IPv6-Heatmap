@@ -15,7 +15,7 @@
     
     var dbcf = require('./server/methods/dbcf.js');
     var dburi = process.env.MONGODB_URI || dbcf.localUri;
-    var dburi = 'mongodb://localhost/test';
+    //var dburi = 'mongodb://localhost/development';
     
     var modelDir = path.join(__dirname, 'server/models');
     
@@ -58,24 +58,23 @@
         .forEach(function(file) {
             require(path.join(modelDir, file));
         });
+    var listen = function() {
+        iphm.listen(iphm.get('port'), function() {
+            console.log('Express server listening on port ' + iphm.get('port'));
+        });
+    };
+    
+    var connect = function {
+        var options = {};
+        return mongoose
+            .connect(dburi, options)
+            .connection;
+    };
     
     connect()
         .on('error', console.log)
         .on('disconnected', connect)
         .once('open', listen);
-    
-    function listen() {
-        iphm.listen(iphm.get('port'), function() {
-            console.log('Express server listening on port ' + iphm.get('port'));
-        });
-    }
-    
-    function connect() {
-        var options = {};
-        return mongoose
-            .connect(dburi, options)
-            .connection;
-    }
     
     module.exports = iphm;
 }());
