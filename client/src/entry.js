@@ -39,7 +39,7 @@
     function routeConfig($routeProvider, $locationProvider) {
         console.log('configged');
         $routeProvider
-            .when('/', {
+            .when('/map', {
                 templateUrl: '/views/map.html',
                 controller: 'MapCtrl',
             })
