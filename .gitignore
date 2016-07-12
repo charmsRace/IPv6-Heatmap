@@ -59,9 +59,6 @@ bower_components
 
 ### Custom ###
 
-# Build directory
-client/www
-
 # Environment config
 envcf/development.js
 envcf/staging.js
