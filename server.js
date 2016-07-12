@@ -40,10 +40,10 @@
     var fallbackRouter = require('./server/routers/fallback.js');
     
     iphm.use(loggingRouter);
-    iphm.use('/raw', rawRouter)
-    iphm.use('/api/v0.1', apiRouter)
-    iphm.use('/', siteRouter)
-    iphm.use('/', staticRouter)
+    iphm.use('/raw', rawRouter);
+    iphm.use('/api/v0.1', apiRouter);
+    iphm.use('/', siteRouter);
+    iphm.use('/', staticRouter);
     iphm.use(fallbackRouter);
     
     iphm.set('port', port);
@@ -58,6 +58,7 @@
         .forEach(function(file) {
             require(path.join(modelDir, file));
         });
+    
     var listen = function() {
         iphm.listen(iphm.get('port'), function() {
             console.log('Express server listening on port ' + iphm.get('port'));
