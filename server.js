@@ -31,13 +31,20 @@
     iphm.use(bodyParser.json());
     iphm.use(bodyParser.urlencoded({extended: true}));
     iphm.use(cookieParser());
-    iphm.use(express.static(path.join(__dirname, './client/www')));
     
-    var siteRouter = require('./server/routes/site.js');
-    var apiRouter = require('./server/routes/api.js');
-    //siteRouter.use('/api', apiRouter);
-    iphm.use('/api/v1/coordfreq', apiRouter);
-    iphm.use(siteRouter);
+    var loggingRouter = require('./server/routers/logging.js');
+    var rawRouter = require('./server/routers/raw.js');
+    var apiRouter = require('./server/routers/api.js');
+    var siteRouter = require('./server/routers/site.js');
+    var staticRouter = require('./server/routers/static.js');
+    var fallbackRouter = require('./server/routers/fallback.js');
+    
+    iphm.use(loggingRouter);
+    iphm.use('/raw', rawRouter)
+    iphm.use('/api/v0.1', apiRouter)
+    iphm.use('/', siteRouter)
+    iphm.use('/', staticRouter)
+    iphm.use(fallbackRouter);
     
     iphm.set('port', port);
     var server = http.createServer(iphm);

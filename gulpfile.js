@@ -57,6 +57,22 @@ var cf = {
             './src/less'
         ]
     },
+    json: {
+        src: [
+            path.join(dir.clisrc, 'json/**/*.json')
+        ],
+        paths: [
+            './src/json'
+        ]
+    },
+    api: {
+        src: [
+            path.join(dir.clisrc, 'api/**/*.api*')
+        ],
+        paths: [
+            './src/api'
+        ]
+    },
     vendor: {
         js: [
             '?'
@@ -173,6 +189,18 @@ gulp.task('js', function() {
     );
 });
 
+gulp.task('json', function() {
+    gulp
+        .src(cf.json.src)
+        .pipe(gulp.dest(path.join(dir.clibuild, 'json/')));
+});
+
+gulp.task('api', function() {
+    gulp
+        .src(cf.api.src)
+        .pipe(gulp.dest(path.join(dir.clibuild, 'api/')));
+});
+
 gulp.task('nodemon', function() {
     nodemon({
         script: path.join(dir.srv, 'server.js'),
@@ -187,7 +215,9 @@ gulp.task('build', function(done) {
         'html',
         'images',
         'css',
-        'js'
+        'js',
+        'json',
+        'api'
     ];
     sequence('clean', /*'lint', */tasks, done);
 });

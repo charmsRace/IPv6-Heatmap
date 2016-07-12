@@ -11,7 +11,9 @@
     "angular-route": "^1.5.7",
     "font-awesome": "^4.6.3",
     "animate.css": "^3.5.2",
-    "restangular": "^1.5.2"
+    "restangular": "^1.5.2",
+    "leaflet": "^0.7.7",
+    "angular-leaflet-directive": "^0.10.0"
   },
   "resolutions": {
     "jquery": "1.9.1 - 2"
