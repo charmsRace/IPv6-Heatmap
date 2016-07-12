@@ -9,7 +9,10 @@
     
     siteRouter
         .use(function(req, res, next) {
-            console.log('Site request made: ' + req.params);
+            console.log('Site request made.\n'
+                + 'Base: ' + req.baseUrl + '\n'
+                + 'Original: ' + req.originalUrl + '\n'
+                + 'Url: ' + req.url);
             next();
         });
     
