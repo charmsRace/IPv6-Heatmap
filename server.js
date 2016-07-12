@@ -75,7 +75,10 @@
     connect()
         .on('error', console.log)
         .on('disconnected', connect)
-        .once('open', listen);
+        .once('open', function(){
+            require('./server/methods/repop-db.js');
+            listen();
+        }));
     
     module.exports = iphm;
 }());
