@@ -64,7 +64,7 @@
         });
     };
     
-    var connect = function {
+    var connect = function() {
         var options = {};
         return mongoose
             .connect(dburi, options)
