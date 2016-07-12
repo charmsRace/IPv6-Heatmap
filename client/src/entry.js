@@ -60,7 +60,7 @@
             })
             .otherwise({
                 templateIrl: '/views/map.html',
-                redirectTo: '/index.html'
+                redirectTo: '/map'
             });
         $locationProvider.html5Mode(true);
     }

@@ -33,7 +33,7 @@ var dir = {
 var cf = {
     js: {
         src: [
-            path.join(dir.srv, '**/*.js'),
+            //path.join(dir.srv, '**/*.js'),
             path.join(dir.clisrc, '**/*.js')
         ]
     },
