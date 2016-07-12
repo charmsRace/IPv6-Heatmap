@@ -7,12 +7,10 @@ var fastCsv = require('fast-csv');
 var async = require('async');
 var dbcf = require('./dbcf.js');
 
-var l = console.log;
-
 mongoose.connect('mongodb://localhost/test');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {    
+db.once('open', function() {
     var coordFreqSchema = new mongoose.Schema({
         coords: {
             type: {
@@ -183,9 +181,7 @@ db.once('open', function() {
                 console.log('End csv stream');
                 cb(null);
             });
-        l('before');
-        l(stream.pipe(csvStream));
-        l('after');
+        stream.pipe(csvStream);
     };
     
     var showCF = function(cb) {
@@ -224,11 +220,9 @@ db.once('open', function() {
             .snapshot()
             .exec()
             .then(function(cfs) {
-                l(1);
                 return Promise.all(cfs.map(setTempAsync));
             })
             .then(function() {
-                l(2);
                 cb(null);
             })
             .catch(function(err) {
@@ -338,25 +332,9 @@ db.once('open', function() {
         showCF,
         function(cb) {
             console.log('end series');
-            console.log(bBoxQuery(1, 2, 3, 4));
             cb(null);
         }
     ]);
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
+    // module.exports = <Promise> would be nice
 });

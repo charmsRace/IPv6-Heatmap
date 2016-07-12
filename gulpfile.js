@@ -22,7 +22,7 @@ var gutil = require('gulp-util');
 var debug = require('gulp-debug');
 var concat = require('gulp-concat');
 var dbcf = require('./server/methods/dbcf.js');
-var syncDb = require('./server/methods/syncDb.js');
+//var syncDb = require('./server/methods/syncDb.js');
 
 var dir = {
     srv: 'server',
@@ -87,6 +87,7 @@ var cf = {
     }
 };
 
+/*
 for (var i = 0; i < dbcf.dbs.length; i++) {
     var db = dbcf.dbs[i];
     console.log(db);
@@ -98,6 +99,7 @@ gulp.task('syncdbs', function(done) {
         return db.taskname;
     }), done);
 });
+*/
 
 gulp.on('error', function(err) {
     console.log('Gulp has encountered an error:\n');
@@ -179,12 +181,12 @@ gulp.task('js', function() {
             .on('error', function(e) {
                 console.log(e);
             })
-            .pipe(sourcemaps.init({loadMaps: true}))
-            .pipe(ngAnnotate())
+//            .pipe(sourcemaps.init({loadMaps: true}))
+//            .pipe(ngAnnotate())
 //            .pipe(uglify())
             .pipe(rename({suffix: '.min'}))
             .on('error', gutil.log)
-            .pipe(sourcemaps.write('./'))
+//            .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest(path.join(dir.clibuild, 'js/')))
     );
 });

@@ -12,28 +12,32 @@
     };
     */
     
+    var maybeSlash = '(?:\\/)?';
     var lngRE = '([+-]?(?:\\d{0,3}\\.\\d+|\\d{1,3}))';
     var latRE = '([+-]?(?:\\d{0,2}\\.\\d+|\\d{1,2}))';
     var coordApiRE = new RegExp(
-        '^\\/'
-            + 'llng=' + lngRE
-            + '\\?rlng=' + lngRE
-            + '\\?dlat=' + latRE
-            + '\\?ulat=' + latRE
-        + '$'
+        '^' + maybeSlash + 'coord-freqs'
+            + '&llng=' + lngRE
+            + '&rlng=' + lngRE
+            + '&dlat=' + latRE
+            + '&ulat=' + latRE
+        + maybeSlash + '$'
     );
+    
+    // /^(?:\/)?coord-freqs&llng=([+-]?(?:\d{0,3}\.\d+|\d{1,3}))&rlng=([+-]?(?:\d{0,3}\.\d+|\d{1,3}))&dlat=([+-]?(?:\d{0,2}\.\d+|\d{1,2}))&ulat=([+-]?(?:\d{0,2}\.\d+|\d{1,2}))(?:\/)?$/
     
     var apiRouter = express.Router();
     
     apiRouter
         .use(function(req, res, next) {
-            console.log('API request made: ' + JSON.stringify(req.params));
+            console.log('API request made');
             next();
         })
-        .get(coordApiRE, coordFreqs.reqBBox)
-        .use(function(err, req, res, next) {
-            console.log('API request made: ' + req);
-            next();
+        .get(coordApiRE, function(req, res) {
+            // note getting by RegExp doesn't name the parameters...
+            // they're just req.params[0-3].
+            // name them here, and also validate
+            coordFreqs.reqBBox(req, res)
         })
         .use(function(err, req, res, next) {
             if (~err.message.indexOf('not found')) {

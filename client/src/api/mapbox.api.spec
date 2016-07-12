@@ -2,7 +2,7 @@ http://{s}.somedomain.com/blabla/{z}/{x}/{y}.png
 
 http://api.mapbox.com/v4/{map_id}/{z}/{x}/{y}.png?access_token={apikey}
 
-GET http://api.mapbox.com/v4/{map_id}/{z}/{x}/{y}{@2x}.{format}?access_token={apikey}
+GET http://api.mapbox.com/v4/{map_id}/{z}/{x}/{y}{highDPI}.{format}?access_token={apikey}
 
 https://api.mapbox.com/v4/mapbox.light/1/2/3.png?access_token=pk.eyJ1IjoiY2FsYW1pdGl6ZXIiLCJhIjoiY2lxaTQzcm5iMDVoemZ5bnB6NXdpYnVlNyJ9.HGpHUJPiNRP75L5SaCZV5Q
 
