@@ -53,6 +53,8 @@
         });
     };
     
+    listen();
+    
     db
         .connect()
         .once('open', function() {
@@ -60,7 +62,6 @@
                 .then(db.log)
                 .then(db.populate)
                 .then(db.log)
-                .then(listen);
         });
     
     /*
