@@ -13,11 +13,7 @@
     var mongoose = require('mongoose');
     var http = require('http');
     
-    var dbcf = require('./server/methods/dbcf.js');
-    var dburi = process.env.MONGODB_URI || dbcf.localUri;
-    //var dburi = 'mongodb://localhost/development';
-    
-    var modelDir = path.join(__dirname, 'server/models');
+    var db = require('./server/methods/index.js')
     
     var port = process.env.PORT || 3000;
     
@@ -50,14 +46,6 @@
     var server = http.createServer(iphm);
     
     console.log('start');
-    fs
-        .readdirSync(modelDir)
-        .filter(function(file) {
-            return ~file.search(/^[^\.].*\.js$/);
-        })
-        .forEach(function(file) {
-            require(path.join(modelDir, file));
-        });
     
     var listen = function() {
         iphm.listen(iphm.get('port'), function() {
@@ -65,6 +53,17 @@
         });
     };
     
+    db
+        .connect()
+        .once('open', function() {
+            db.drop()
+                .then(db.log)
+                .then(db.populate)
+                .then(db.log)
+                .then(listen);
+        });
+    
+    /*
     var connect = function() {
         var options = {};
         return mongoose
@@ -79,6 +78,5 @@
             require('./server/methods/repop-db.js');
             listen();
         });
-    
-    module.exports = iphm;
+    */
 }());

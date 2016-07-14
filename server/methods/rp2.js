@@ -111,7 +111,7 @@ db.once('open', function() {
             console.log('Error finding mask of network ' + network);
             throw err;
         }
-        return 128 + mask;
+        return 128 + mask; //testing purposes
         return Math.pow(2, Math.pow(2, 7) - mask);
     };
     
@@ -123,8 +123,7 @@ db.once('open', function() {
         return ((maxTemp - temp) / maxTemp);
     };
     
-    var csvPath = dbcf.dir + '/' + dbcf.db.dirname + '/' + dbcf.db.csvname;
-    var csvPath = './testip.csv';
+    var csvPath = path.join(__dirname, '../mmdb/GeoLite2-City-Blocks-IPv6.csv');
     
     var parseRow = function(cb, row) {
         console.log(row);

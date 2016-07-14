@@ -51,7 +51,7 @@ jspm_packages
 .node_repl_history
 
 ### Bower ###
-client/src/vendor/
+/client/src/vendor/
 bower_components
 .bower-cache
 .bower-registry
@@ -60,10 +60,7 @@ bower_components
 ### Custom ###
 
 # Environment config
-envcf/development.js
-envcf/staging.js
-.env
-mongodb.heroku.uri
+*.env
 
 # Heroku debug log
 npm-debug.log
