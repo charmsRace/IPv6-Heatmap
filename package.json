@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
-    "node": "6.3.0"
+    "node": "6.2.2",
+    "npm": "3.10.5"
   },
   "repository": {
     "type": "git",
@@ -37,11 +38,13 @@
     "cookie-parser": "^1.4.3",
     "crypto": "0.0.3",
     "debug": "^2.2.0",
+    "del": "^2.2.1",
     "dotenv": "^2.0.0",
     "ejs": "^2.4.2",
     "express": "^4.14.0",
     "fast-csv": "^2.0.0",
     "glob": "^7.0.5",
+    "gulp": "^3.9.1",
     "gulp-gunzip": "0.0.3",
     "leaflet": "^0.7.7",
     "leaflet.heat": "^0.2.0",
@@ -51,6 +54,7 @@
     "mongojs": "^2.4.0",
     "mongoose": "^4.5.3",
     "morgan": "^1.7.0",
+    "nodemon": "^1.9.2",
     "npm": "^3.10.5",
     "request": "^2.72.0",
     "request-promise": "^3.0.0",

@@ -1,0 +1,4 @@
+* text=auto
+
+*.zip binary
+# (I commit the binary directly in development)

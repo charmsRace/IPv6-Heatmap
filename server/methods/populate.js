@@ -43,11 +43,12 @@
             console.log('Error finding mask of network ' + network);
             throw err;
         }
-        return 128 + mask;
+        //return 128 + mask;
         return Math.pow(2, Math.pow(2, 7) - mask);
     };
 
     var temp = function(numIps) {
+        //return numIps;
         return Math.log(Math.log(numIps + 1) + 1);
     };
     

@@ -99,13 +99,16 @@
                 ulat: ulat
                 })
                 .query()
+                .$promise
+                .then(tabulate)
+                //.then(validate); // testing purposes
         };
         
         // class method?
         var linearize = function(coordFreq) {
             return [
                 coordFreq.coords.lat,
-                coordFreq.coords.lng,
+                coordFreq.coords.long,
                 1 - coordFreq.alpha // Leaflet wants intensity
             ];
         };
@@ -113,6 +116,33 @@
         var tabulate = function(coordFreqs) {
             return coordFreqs.map(linearize);
         };
+        
+        /*
+        var validate = function(coordFreqs) {
+            var anyLat = true;
+            var anyLng = true
+            var anyInt = true;
+            for (var i in coordFreqs) {
+                var cf = coordFreqs[i];
+                if (Math.abs(cf[0]) > 90) {
+                    anyLat = false;
+                    console.log(cf);
+                }
+                if (Math.abs(cf[1]) > 180) {
+                    anyLng = false;
+                    console.log(cf);
+                }
+                if (cf[2] > 1 || cf[2] < 0) {
+                    anyInt = false;
+                    console.log(cf);
+                }
+                if ((typeof cf[0] !== 'number')) throw new Error('0 '+String(cf));
+                if ((typeof cf[1] !== 'number')) throw new Error('1 '+String(cf));
+                if ((typeof cf[2] !== 'number')) throw new Error('2 '+String(cf));
+                console.log(anyLat, anyLng, anyInt);
+            }
+        };
+        */
         
         return {
             fetchBBox: fetchBBox,
@@ -229,15 +259,11 @@
         };
         
         // ^ quite unnecessary, because I haven't
-        //   set up mongoose to do file streaming
-        //   yet. But y'know, scalability.
+        //   set up mongoose to do streaming yet
         
         var dropAll = function() {
             data = [seed];
         };
-        
-        // deleting one would not nearly be worth the
-        // time. Arrays in js are very, very odd...
         
         return {
             layer: layer,
@@ -275,8 +301,11 @@
             'iphm.heat'
         ])
         .constant('defCenter', {
-            lat: 37.774546,
-            lng: -122.433523,
+            lat: 30.6667,
+            lng: 104.0667,
+            
+            //lat: 37.774546,
+            //lng: -122.433523,
             zoom: 12
         });
     
@@ -286,7 +315,7 @@
     
     MapCtrl.$inject = [
         '$scope', // sadly angular-leaflet-directives does not
-                  // support 'controller as' syntax
+                  // support 'controller as' syntax afaict
         '$http',
         'defCenter',
         'CoordFreqs',
@@ -342,6 +371,14 @@
             });
         */
         
+        /*
+        var llng = -122.608451843262;
+        var rlng = -122.258262634277;
+        var dlat = 37.7093561353369;
+        var ulat = 37.8396145727522;
+        */
+        
+        /*
         $http
             .get('/json/heat-test.json')
             .success(function(data) {
@@ -355,6 +392,42 @@
                             radius: 20,
                             blur: 10
                         },
+                        visible: true
+                    }
+                };
+            });
+        */
+        
+        /*
+        var layerOptions = {
+            radius: 2,
+            maxOpacity: .8,
+            scaleRadius: true,
+            useLocalExtrema: true,
+            
+        };
+        */
+        
+        var layerOptions = {
+            radius: 10,
+            maxZoom: 1,
+            scaleRadius: true,
+            blur: 3,
+            
+        };
+        
+        
+        CoordFreqs
+            .fetchBBox(-179, 179, -89, 89)
+            .then(function(data) {
+                console.log('test');
+                console.log(data);
+                $scope.layers.overlays = {
+                    heat: {
+                        name: 'Heatmap',
+                        type: 'heat',
+                        data: data,
+                        layerOptions: layerOptions,
                         visible: true
                     }
                 };
