@@ -11,7 +11,9 @@
     var cf = require('./cf.js');
     var CoordFreq = mongoose.model('CoordFreq');
     
-    cf.names.csv = 'arch'
+    if (process.env.CSV_TO_READ) {
+        cf.names.csv = process.env.CSV_TO_READ;
+    }
     
     var drop = function() {
         return CoordFreq
@@ -20,7 +22,6 @@
             .exec();
     };
     var upsertCoordFreq = function(lat, long, numIps) {
-        console.log('u');
         return CoordFreq
             .update({
                 'coords.lat': lat,
