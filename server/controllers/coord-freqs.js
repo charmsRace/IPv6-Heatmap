@@ -2,18 +2,26 @@
     'use strict';
     
     var mongoose = require('mongoose');
-    var co = require('co');
-    var rs;//respond
     var CoordFreq = require('../models/coord-freq.js');
     
     exports.reqBBox = function (req, res) {
         console.log('Received bbox request with params ' + JSON.stringify(req.params));
+        console.log('qs?:', req.query.lim);
+        console.log('num:', Number(req.query.lim));
+        var lim;
+        console.log(lim);
+        if (req.query.lim) {
+            console.log(lim);
+            lim = Number(req.query.lim);
+            console.log(lim);
+        }
         var llng = Number(req.params[0]);
         var rlng = Number(req.params[1]);
         var dlat = Number(req.params[2]);
         var ulat = Number(req.params[3]);
+        console.log('outgoing lim:', lim);
         CoordFreq
-            .fetchBBox(llng, rlng, dlat, ulat)
+            .fetchBBox(llng, rlng, dlat, ulat, lim)
             .then(function(cfs) {
                 res.json(cfs);
             })

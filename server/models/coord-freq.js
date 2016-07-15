@@ -29,11 +29,12 @@
     });
     
     CoordFreqSchema.statics = {
-        fetchBBox: function(llng, rlng, dlat, ulat) {
+        fetchBBox: function(llng, rlng, dlat, ulat, lim) {
             console.log('inside');
+            console.log('lim:', lim);
             var ls = String(llng);
             var rs = String(rlng);
-            var longExp = '((' + ls + ' <= this.coords.long)' // I am
+            var inLong = '((' + ls + ' <= this.coords.long)' // I am
                 + ' && (this.coords.long <= ' + rs + '))'     // *so*
                 + ' === (' + ls + ' <= ' + rs + ')';          // sorry
             // mongo has some *serious* problem with this kind of query...
@@ -41,14 +42,21 @@
             // kind of blows my mind you have to eval() JS to do it
             // even though it's just a === or XOR...
             // $where is quite slow, so there's more thinking to be done
+            //
+            // I don't know whether a 2d-geospatial would even be more
+            // efficient when the intersecting/bounding region is just
+            // a rectangle and there is no complication in the geometry
+            // 
+            // but I'll configure it at some point to see
             return this
                 .find()
                 .where('coords.lat')
                 .gte(dlat)
                 .lte(ulat)
-                .$where(longExp)
+                .$where(inLong)
                 .select('-_id coords alpha')
                 .lean()
+                .limit(lim)
                 .exec();
         }
     };

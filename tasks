@@ -1,0 +1,22 @@
+still to do:
+
+dns
+front-end
+    bootstrap css
+    github
+    larger
+readme
+attribution
+geojson mongoose
+schema
+indices (all, 2d geospatial)
+ensure sorting
+box listeners
+protocol buffers
+mongoose streaming
+sync
+
+clean up comments
+sort
+split angular
+browserify

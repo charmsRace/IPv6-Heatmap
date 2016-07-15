@@ -11,8 +11,6 @@
     require('angular-leaflet-directive');
     var Promise = require('bluebird');
     
-    // require all '*.module.js'
-    
     console.log('past req');
     
     angular
@@ -91,12 +89,13 @@
     
     function CoordFreqs($resource, cfCf) {
         
-        var fetchBBox = function(llng, rlng, dlat, ulat) {
+        var fetchBBox = function(llng, rlng, dlat, ulat, lim) {
             return $resource(cfCf.apiSpec, {
                 llng: llng,
                 rlng: rlng,
                 dlat: dlat,
-                ulat: ulat
+                ulat: ulat,
+                lim: lim
                 })
                 .query()
                 .$promise
@@ -325,12 +324,18 @@
     
     function MapCtrl($scope, $http, defCenter, CoordFreqs, MapboxTiles, Heat) {
         
+        var bounds = leafletBoundsHelpers.createBoundsFromArray([
+                [ 104.0667, -30.6667 ],
+                [ 104.0667, -30.6667 ]
+            ]);
+        
         var layers = {
             baselayers: MapboxTiles.layer,
-            //overlays: Heat.layer
+            overlays: Heat.layer
         };
         
         angular.extend($scope, {
+            bounds: bounds,
             center: defCenter,
             layers: layers
         });
@@ -418,7 +423,7 @@
         
         
         CoordFreqs
-            .fetchBBox(-179, 179, -89, 89)
+            .fetchBBox(-179, 179, -89, 89, 1000)
             .then(function(data) {
                 console.log('test');
                 console.log(data);
