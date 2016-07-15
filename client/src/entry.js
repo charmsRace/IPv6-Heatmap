@@ -324,10 +324,12 @@
     
     function MapCtrl($scope, $http, defCenter, CoordFreqs, MapboxTiles, Heat) {
         
+        /*
         var bounds = leafletBoundsHelpers.createBoundsFromArray([
                 [ 104.0667, -30.6667 ],
                 [ 104.0667, -30.6667 ]
             ]);
+        */
         
         var layers = {
             baselayers: MapboxTiles.layer,
@@ -335,7 +337,7 @@
         };
         
         angular.extend($scope, {
-            bounds: bounds,
+            //bounds: bounds,
             center: defCenter,
             layers: layers
         });
@@ -415,7 +417,7 @@
         
         var layerOptions = {
             radius: 10,
-            maxZoom: 1,
+            maxZoom: 4,
             scaleRadius: true,
             blur: 3,
             
@@ -423,7 +425,7 @@
         
         
         CoordFreqs
-            .fetchBBox(-179, 179, -89, 89, 1000)
+            .fetchBBox(-179, 179, -89, 89, 5000)
             .then(function(data) {
                 console.log('test');
                 console.log(data);
