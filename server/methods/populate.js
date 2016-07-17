@@ -11,13 +11,6 @@
     var through = require('through');
     var arrayEqual = require('array-equal'); // Oh, javascript...
     
-    var logThrough = (function() {
-        return through(function(data) {
-            console.log(data);
-            this.queue(data);
-        })
-    }());
-    
     var cf = require('./cf.js');
     var CoordFreq = mongoose.model('CoordFreq');
     
@@ -30,319 +23,126 @@
             .exec();
     };
     
-    var processed = 0;
-
-    /* This is the memory leak
-    var upsertCoordFreq = function(lat, long, numIps) {
-        CoordFreq
-            .update({
-                'coords.lat': lat,
-                'coords.long': long
-            }, {
-                $inc: {
-                    numIps: numIps
-                }
-            }, {
-                upsert: true
-            }, function(){});
-    };
-    */
-
-    var upsertCoordFreq = function(lat, long, numIps) {
-        return CoordFreq.findOneAndUpdate({
-            'coords.lat': lat,
-            'coords.long': long
-        }, {
-            $inc: {
-                numIps: numIps
+    // not a true dao since it has nothing to do with
+    // the actual stored object, but it keeps track
+    // of maxTemp at least
+    var dao = (function() {
+        
+        var maxTemp = 0;
+        
+        var getNumIps = function(network) {
+            var mask = Number(/\/(\d+)$/.exec(network)[1]);
+            var blockSize = Math.pow(2, Math.pow(2, 7) - mask);
+            return blockSize;
+        };
+        
+        var getTemp = function(numIps) {
+            var temp = Math.log(numIps + 1);
+            if (temp > maxTemp) {
+                maxTemp = temp;
             }
-        }, {
-            upsert: true
-        }).exec();
-    };
-
-    var getTemp = function(numIps) {
-        //return numIps;
-        return Math.log(Math.log(numIps + 1) + 1);
-    };
-    
-    var getAlpha = function(temp, maxTemp) {
-        return ((maxTemp - temp) / maxTemp);
-    };
-    
-    // crash at 379000
-    // 396000...
-    // 441000!
-    // several hours later, 884000!
-    
-    var counter = 0;
-    var n = 0;
-    var nModified = 0;
-    var current = 0;
-    var queries = 0;
-    
-    var times = [0 + Date.now(),,];
-    
-    var maxConcurrency = Infinity;
-    
-    // closure for memory leak
-    
-    var lastrow = [0,0,0];
-    
-    /*
-     *  I should probably move this to 
-     *  the CoordFreq controller as a static
-     *  
-     *  singleton closure
-     *  handles all delays and control flow for adding to mongo
-     *  basically a big wrapper for
-     *    `mongoose('Model').update(...{upsert: true}).exec()`
-     *  but doesn't send all the queries at once,
-     *  because mongoose db queries are *slooow*
-     *  and totally memory-leak no matter what they say
-     *  
-     *  I could also probably make this a 
-     *  stream, but that does not sound fun
-     *  
-     */
-    var coordFreqBuffer = (function() {
-        
-        var cf = {
-            maxAtOnce: Infinity,
-            waitTime: 10000,
-            vb: true,
-            mod: 1000,
-            hist: 30
+            return temp;
         };
         
-        // we'll keep track of the last few so we can
-        // upsert on the location, since the data
-        // appear to be sorted. note these won't be in
-        // order, so we'll have to sum up at the end anyway
-        var prev = Array(cf.hist).fill(Array(4).fill(null));
-        var counter = 0;
-        var processed = 0;
-        
-        var contents = [];
-        
-        
-        // ended up not being required
-        var router = (function() {
-            var buffer = [
-                [ [], [] ],
-                [ [], [] ]
-            ];
-            
-            var r = [ 0, 0 ];
-            
-            var swapDest = function() {
-                var x = r[!(r[0] === r[1])]; // r[0] -> r[1] -> r[0]...
-                x = +!x; // 0 -> 1 -> 0...
-            };
-            
-            var add = function(data) {};
-                
-                // buffer[r[0]][r[1]].push
-            
-            return {
-                add: add
-            };
-        }());
-        
-        // not implemented/exposed
-        var get = function(which) {
-            return cf[which];
-        };
-        
-        // shimmed
-        var set = function(which, what) {
-            cf.stream = what;
-            //cf[which] = what;
-            //return this;
-        };
-        
-        var drop = function() {
-            if (cf.vb) console.log('drop', contents.length);
-            contents = [];
-        };
-        
-        var wait = function() {
-            return new Promise(function(res) {
-                if (cf.vb) console.log('pause');
-                setTimeout(function() {
-                    if (cf.vb) console.log('resume');
-                    res();
-                }, cf.waitTime);
-            });
-        };
-        
-        var insert = function(row) {
-            prev.shift();
-            contents.push(row);
-            row.push(contents.length - 1);
-            prev.push(row);
-            processed++;
-        };
-        
-        var save = function() {
-            drain();
-            drop();
-        };
-        
-        var checkBuffer = function() {
-            if ((cf.vb) && (contents.length % cf.mod/100 === 0)) {
-                console.log(
-                    'buffer',
-                    contents.length + '/' + cf.maxAtOnce
-                );
-            }
-            if (contents.length === cf.maxAtOnce) {
-                cf.stream.pause();
-                save();
-                wait();
-                cf.stream.resume();
-            }
-        };
-        
-        var getBlockSize = function(network) {
-            var mask = /\/(\d+)$/.exec(network)[1];
-            return Math.pow(2, Math.pow(2, 7) - mask);
-        };
-        
-        var upsert = function(row) {
-            counter++;
-            if ((cf.vb) && (counter % cf.mod === 0)) console.log('parse', counter);
-            if ((cf.vb) && (processed % cf.mod === 0)) console.log('proc', processed);
-            if (row.network === 'network') {
-                return;
-            }
-            row = [row.lat, row.long, getBlockSize(row.network)].map(Number);
-            
-            var which = prev.find(function(old) {
-                return arrayEqual(
-                    old.slice(0, 2),
-                    row.slice(0, 2)
-                );
-            });
-            if (which) {
-                //console.log('ex', contents[which[3]]);
-                //console.log('nw', row);
-                contents[which[3]][2] += row[2];
-                processed++;
-            } else {
-                insert(row);
-                //checkBuffer();
-            }
-        };
-        
-        var toDoc = function(row) {
-            return {
-                coords: {
-                    lat: row[0],
-                    long: row[1]
-                },
-                    numIps: row[2]
-            };
-        };
-        
-        var drain = function() {
-            var docs = contents.map(toDoc);
-            if (cf.vb) console.log('saving', docs.length);
-            CoordFreq.insertMany(docs);
-            drop();
+        var getMaxTemp = function() {
+            return maxTemp;
         };
         
         return {
-            upsert: upsert,
-            save: save,
-            // get: get,
-            set: set
+            getNumIps: getNumIps,
+            getTemp: getTemp,
+            getMaxTemp: getMaxTemp
         };
     }());
     
-    /*
-    var parseRow = function(cb, row) {
-        if (counter < 5) {
-            console.log(row);
-        }
-        if (counter % 1000 === 0) {
-            times[1] = 0 + Date.now();
-            console.log('cou: ', counter, 'pro: ', processed, 'cur: ', current, 't: ', times[1] - times[0], 'q: ', queries);
-            times[0] = times[1];
-            //console.log(row);
-        }
-        counter++;
-        current++;
-        if (row.network === 'network') {
-            cb(null);
+    // let's just let JS do what it does best
+    // and damn can it lookup object keys
+    var total = 0;
+    var uniques = 0;
+    var tab = {}; // after the dry run,
+                  // tab[String(lat) + '&&' + String(long)] = numIps
+    var hashmod = 10000;
+    // move this into closure
+    var hash = function(row) {
+        //console.log(row);
+        total++;
+        if (row.lat === 'latitude') {
             return;
         }
-        var lat = Number(row.lat);
-        var long = Number(row.long);
-        var numIps = blockSize(row.network);
-        if (lastrow && ((lat === lastrow[0]) && (long === lastrow[1]))) {
-            lastrow[2] += numIps;
-            cb(null);
+        if (total % hashmod === 0) console.log('t', total, 'u', uniques)
+        var key = [row.lat, row.long]
+            .map(Number) // the keys' uniquness will be evaluated
+                         // as a number eventually, so cast it 
+                         // there and back up front
+            .map(String)
+            .join('&&');
+        var numIps = dao.getNumIps(row.network);
+        if (!tab.hasOwnProperty(key)) {
+            tab[key] = {};
+            tab[key].lat = Number(row.lat);
+            tab[key].long = Number(row.long);
+            tab[key].numIps = numIps
+            uniques++;
         } else {
-            queries++;
-            upsertCoordFreq(lastrow[0], lastrow[1], lastrow[2])
-                .then(function() {
-                    if (typeof numIps === 'number') lastrow = [lat, long, numIps];
-                    setTimeout(function() {
-                        cb(null);
-                    }, 1000);
-                });
-            lastrow = [lat, long, numIps];
+            tab[key].numIps += numIps;
         }
     };
     
-    /*
-    var oldParseRow = function(cb, row, csvStream) {
-        if (counter % 1000 === 0) {
-            times[1] = 0 + Date.now();
-            console.log('cou: ', counter, 'pro: ', processed, 'cur: ', current, 't: ', times[1] - times[0]);
-            times[0] = times[1];
-            //console.log(row);
-        }
-        counter++;
-        current++;
-        /*
-        if (show) {
-            times.push(Number(0 + Date.now()));
-            console.log('c: ', counter, 'n: ', n, 'nM: ', nModified, 'p: ', processed);
-        }
-        ///
-        if (row.network === 'network') {
-            cb(null);
-            return;
-        }
-        var lat = Number(row.lat);
-        var long = Number(row.long);
-        var numIps = blockSize(row.network);
-        upsertCoordFreq(lat, long, numIps)
-        ///*
-            .then(function(res) {
-                processed++;
-                current--;
-                if (res.nModified === 1) nModified++;
-                //if (res.n === 1) n++;
-                cb(null);
+    var format = function() {
+        return Object.keys(tab)
+            .map(function setTemp(key) {
+                tab[key].temp = dao.getTemp(tab[key].numIps);
+                return key;
             })
-            .catch(function(err) {
-                console.log('Error parsing row:');
-                console.log(counter, processed, current, nModified, n);
-                console.log(err);
+            /*
+            .map(function setAlpha(key) {
+                tab[key].alpha = dao.getAlpha(tab[key].temp);
+                tab[key].intensity = dao.getIntensity(tab[key].numIps);
+                return key;
+            })
+            */
+            .map(function convertToDoc(key) {
+                var maxTemp = dao.getMaxTemp();
+                return {
+                    coords: {
+                        lat: tab[key].lat,
+                        long: tab[key].long
+                    },
+                    numIps: tab[key].numIps,
+                    intensity: tab[key].temp / maxTemp
+                };
             });
-        ///
+            /*
+            .map(function concertToDoc(key) {
+                var doc = {
+                    coords: {
+                        lat: tab[key].lat,
+                        long: tab[key].long
+                    },
+                    numIps: tab[key].numIps,
+                    temp: tab[key].temp,
+                    alpha: tab[key].alpha,
+                    intensity: tab[key].intensity
+                };
+                //console.log(doc);
+                return doc;
+            });
+            */
     };
-    */
     
-    var importCsv = function() {
+    var upload = function(docs) {
+        console.log('Saving ' + docs.length);
+        return CoordFreq.insertMany(docs)
+            .then(function() {
+                console.log('Done.');
+            });
+    };
+    
+    var importCsv = function(dryRun) {
         return new Promise(function(resolve) {
             var dest = path.join(cf.dir, cf.names.csv);
             var filestream = fs
                 .createReadStream(dest, {
-                    //highWaterMark: 200
                 });
             var csvStream = fastCsv.parse({
                 headers: [
@@ -361,111 +161,23 @@
             filestream
                 .pipe(csvStream);
             
-            coordFreqBuffer.set('stream', csvStream);
-            
             csvStream
-                .on('data', coordFreqBuffer.upsert)
-                /*
-                .on('data', function(row) {
-                    //console.log(row);
-                    async.series([
-                        /*function(cb) {
-                            //if (current >= maxConcurrency) {
-                            //    csvStream.pause()
-                            //}
-                            cb(null);
-                        },
-                        ///
-                        function(cb) {
-                            parseRow(cb, row);
-                        },
-                        /*
-                        function(cb) {
-                            //if (current < maxConcurrency) {
-                            //    csvStream.resume();
-                            //}
-                            cb(null);
-                        }
-                        ///
-                    ]);
-                })
-                */
+                .on('data', hash)
                 .on('end', function() {
-                    coordFreqBuffer.save();
                     console.log('End csv stream');
                     resolve();
                 });
         });
     };
     
-    var setTemp = function(cf) {
-        var up = {
-            $set: {
-                temp: getTemp(cf.numIps)
-            }
-        };
-        return CoordFreq
-            .update({_id: cf._id}, up)
-            .exec();
-    };
-    
-    var setTemps = function(cb) {
-        return CoordFreq
-            .find()
-            .snapshot()
-            .exec()
-            .then(function(cfs) {
-                return Promise.all(cfs.map(setTemp));
-            })
-            .catch(function(e) {
-                console.log('Error setting temps:');
-                console.log(e);
-            });
-    };
-    
-    var setAlpha = function(cf, maxTemp) {
-        var up = {
-            $set: {
-                alpha: getAlpha(cf.temp, maxTemp)
-            }
-        };
-        return CoordFreq
-            .update({_id: cf._id}, up)
-            .exec();
-    };
-    
-    var setAlphas = function(cb) {
-        var maxTemp;
-        return CoordFreq
-            .findOne()
-            .sort('-temp')
-            .exec()
-            .then(function(cf) {
-                maxTemp = cf.temp;
-                return;
-            })
-            .then(function() {
-                return CoordFreq
-                    .find()
-                    .snapshot()
-                    .exec();
-            })
-            .then(function(cfs) {
-                return Promise.all(cfs.map(function(cf) {
-                    return setAlpha(cf, maxTemp);
-                }));
-            })
-            .catch(function(e) {
-                console.log('Error setting alphas:');
-                console.log(e);
-            });
-    };
-    
     var populate = function() {
         return drop()
             .then(importCsv)
-            .then(setTemps)
-            .then(setAlphas);
+            .then(format)
+            .then(upload)
+            .then(function() {
+                console.log('done');
+            });
     };
     
     module.exports = populate;

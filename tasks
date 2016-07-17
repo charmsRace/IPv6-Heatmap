@@ -5,6 +5,8 @@ front-end
     bootstrap css
     github
     larger
+    api
+    
 readme
 attribution
 geojson mongoose
@@ -14,7 +16,13 @@ ensure sorting
 box listeners
 protocol buffers
 mongoose streaming
-sync
+sync (worker)
+--task-io?
+gulp, lint
+db log count
+forever
+
+db online symbol
 
 clean up comments
 sort

@@ -7,25 +7,34 @@
     height="480px">
   </leaflet>
   <h3>
-    Heatmap example!
+    Heatmap example! Still loading: {{ loading }}
   </h3>
-  <h2>
-    Southleft
-  </h2>
-  <form>
-    Lat : <input type="number" step="any" ng-model="bounds.southWest.lat" />
-    Lng : <input type="number" step="any" ng-model="bounds.southWest.lng" />
-  </form>
-  <h2>
-    Northright
-  </h2>
-  <form>
-    Lat : <input type="number" step="any" ng-model="bounds.northEast.lat" />
-    Lng : <input type="number" step="any" ng-model="bounds.northEast.lng" />
-  </form>
+  
+  <div class="mapcontrol">
+    <div>
+      <h2>
+        Southleft
+      </h2>
+      <form>
+        Lat : <input type="number" step="any" ng-model="bounds.southWest.lat" />
+        Lng : <input type="number" step="any" ng-model="bounds.southWest.lng" />
+      </form>
+    </div>
+    <div>
+      <h2>
+        Northright
+      </h2>
+      <form>
+        Lat : <input type="number" step="any" ng-model="bounds.northEast.lat" />
+        Lng : <input type="number" step="any" ng-model="bounds.northEast.lng" />
+      </form>
+    </div>
+  </div>
+  <button ng-click="testFun()">OK</button>
   <p>
-    This example uses the <a href="https://github.com/Leaflet/Leaflet.heat">Leaflet.heat</a> library.
+    {{ count }}
   </p>
-  <p>The example is inspired in <a href="https://developers.google.com/maps/documentation/javascript/examples/layer-heatmap?hl=es">this</a> Google Maps Heat example.
+  <p>
+    Stuff
   </p>
 </div>

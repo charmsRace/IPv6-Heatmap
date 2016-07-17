@@ -8,21 +8,22 @@
             type: {
                 lat: {
                     type: Number
-                },
-                long: {
+                }, long : {
                     type: Number
                 }
+            }, index: {
+                unique: true
             }
-        },
-        numIps: {
+        }, numIps: {
             type: Number,
             default: 0
-        },
-        temp: {
+        }, temp: {
+            type: Number,   
+            default: 0
+        }, alpha: {
             type: Number,
             default: 0
-        },
-        alpha: {
+        }, intensity: {
             type: Number,
             default: 0
         }
@@ -30,7 +31,8 @@
     
     CoordFreqSchema.statics = {
         fetchBBox: function(llng, rlng, dlat, ulat, lim) {
-            console.log('inside');
+            // add qs for heatmap
+            console.log('inside2');
             console.log('lim:', lim);
             var ls = String(llng);
             var rs = String(rlng);
@@ -48,15 +50,19 @@
             // a rectangle and there is no complication in the geometry
             // 
             // but I'll configure it at some point to see
+            //
             return this
+                
                 .find()
+                
                 .where('coords.lat')
                 .gte(dlat)
                 .lte(ulat)
                 .$where(inLong)
-                .select('-_id coords alpha')
+                .select('-_id coords numIps intensity')
                 .lean()
-                .limit(lim)
+                //.limit(lim)
+                
                 .exec();
         }
     };

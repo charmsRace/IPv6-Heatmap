@@ -90,6 +90,7 @@
     function CoordFreqs($resource, cfCf) {
         
         var fetchBBox = function(llng, rlng, dlat, ulat, lim) {
+            console.log('fetch');
             return $resource(cfCf.apiSpec, {
                 llng: llng,
                 rlng: rlng,
@@ -103,12 +104,22 @@
                 //.then(validate); // testing purposes
         };
         
+        var temp = function(numIps) {
+            return Math.log(numIps + 1);
+        };
+        
+        var maxTemp;
+        
+        var intensity = function(numIps) {
+            return temp(numIps) / maxTemp;
+        };
+        
         // class method?
         var linearize = function(coordFreq) {
             return [
                 coordFreq.coords.lat,
                 coordFreq.coords.long,
-                1 - coordFreq.alpha // Leaflet wants intensity
+                coordFreq.intensity
             ];
         };
         
@@ -236,15 +247,15 @@
                 name: 'Heatmap',
                 type: 'heat',
                 data: data,
-                layerOptions: {
-                    radius: 100,
-                    blur: 15,
-                    gradient: {
-                        0.4: 'blue',
-                        0.65: 'lime',
-                        1: 'red'
-                    }
-                },
+                //layerOptions: {
+                //    radius: 100,
+                //    blur: 15,
+                //    gradient: {
+                //        0.4: 'blue',
+                //        0.65: 'lime',
+                //        1: 'red'
+                //    }
+                //},
                 visible: true
             }
         };
@@ -300,12 +311,14 @@
             'iphm.heat'
         ])
         .constant('defCenter', {
-            lat: 30.6667,
-            lng: 104.0667,
+            lat: 0,
+            lng: 0,
+            //lat: 30.6667,
+            //lng: 104.0667,
             
             //lat: 37.774546,
             //lng: -122.433523,
-            zoom: 12
+            zoom: 1
         });
     
     angular
@@ -333,7 +346,7 @@
         
         var layers = {
             baselayers: MapboxTiles.layer,
-            overlays: Heat.layer
+            //overlays: Heat.layer
         };
         
         angular.extend($scope, {
@@ -342,7 +355,10 @@
             layers: layers
         });
         
-        
+        $scope.count = 0;
+        $scope.testFun = function() {
+            $scope.count++;
+        };
         
         /*
         angular.extend($scope, {
@@ -385,81 +401,31 @@
         var ulat = 37.8396145727522;
         */
         
-        /*
-        $http
-            .get('/json/heat-test.json')
-            .success(function(data) {
-                console.log(data);
-                $scope.layers.overlays = {
-                    heat: {
-                        name: 'Heatmap',
-                        type: 'heat',
-                        data: data,
-                        layerOptions: {
-                            radius: 20,
-                            blur: 10
-                        },
-                        visible: true
-                    }
-                };
-            });
-        */
         
-        /*
-        var layerOptions = {
-            radius: 2,
-            maxOpacity: .8,
-            scaleRadius: true,
-            useLocalExtrema: true,
-            
-        };
-        */
-        
-        var layerOptions = {
-            radius: 10,
-            maxZoom: 4,
-            scaleRadius: true,
-            blur: 3,
-            
-        };
-        
+        $scope.loading = true;
         
         CoordFreqs
             .fetchBBox(-179, 179, -89, 89, 5000)
             .then(function(data) {
-                console.log('test');
-                console.log(data);
+                $scope.loading = false;
+                console.log('received', data);
                 $scope.layers.overlays = {
                     heat: {
                         name: 'Heatmap',
                         type: 'heat',
-                        data: data,
-                        layerOptions: layerOptions,
-                        visible: true
-                    }
-                };
-            });
-        
-        
-        
-        /*
-        $http
-            .get('/json/heat-test.json')
-            .success(function(data) {
-                console.log(data);
-                $scope.layers.overlays = {
-                    heat: {
-                        name: 'Heatmap',
-                        type: 'heat',
-                        data: data,
+                        data: [
+                            [0, 0, 0]
+                        ],
                         layerOptions: {
-                            radius: 1000,
-                            blur: 10
+                            minOpacity: 0.5,
+                            maxZoom: 5,
+                            radius: 7,
+                            blur: 7,
                         },
                         visible: true
                     }
                 };
             });
-        */
+        
     }
 }());

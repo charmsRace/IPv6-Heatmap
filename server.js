@@ -59,14 +59,8 @@
         .connect()
         .once('open', function() {
             console.log('Online!');
+            //db.populate()
         });
-        /*
-            db.drop()
-                .then(db.log)
-                .then(db.populate)
-                .then(db.log)
-        });
-        */
     
     /*
     var connect = function() {
