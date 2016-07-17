@@ -73,6 +73,14 @@ var cf = {
             './src/api'
         ]
     },
+    fonts: {
+        src: [
+            path.join(dir.clisrc, 'fonts/**/*')
+        ],
+        paths: [
+            './src/fonts'
+        ]
+    },
     vendor: {
         js: [
             '?'
@@ -197,6 +205,12 @@ gulp.task('json', function() {
         .pipe(gulp.dest(path.join(dir.clibuild, 'json/')));
 });
 
+gulp.task('fonts', function() {
+    gulp
+        .src(cf.fonts.src)
+        .pipe(gulp.dest(path.join(dir.clibuild, 'fonts/')));
+});
+
 gulp.task('api', function() {
     gulp
         .src(cf.api.src)
@@ -217,6 +231,7 @@ gulp.task('build', function(done) {
         'html',
         'images',
         'css',
+        'fonts',
         'js',
         'json',
         'api'

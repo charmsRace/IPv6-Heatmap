@@ -1,0 +1,56 @@
+<div class="container-fluid jumbotron text-center">
+  <leaflet
+    bounds="bounds"
+    lf-center="center"
+    layers="layers"
+    width="100%"
+    height="480px">
+  </leaflet>
+  <h3>
+    Heatmap example! Still loading: {{ loading }}
+  </h3>
+  
+  <div class="mapcontrol">
+  
+    <div class="mapcoords">
+      <div>
+        <h2>
+          Southleft
+        </h2>
+        Latitude: {{ bounds.southWest.lat }}
+        Longitude: {{ bounds.southWest.lng }}
+      </div>
+      <div>
+        <h2>
+          Northright
+        </h2>
+        <form>
+          Lat : <input type="number" step="any" ng-model="bounds.northEast.lat" />
+          Lng : <input type="number" step="any" ng-model="bounds.northEast.lng" />
+        </form>
+      </div>
+    </div>
+    
+    <div class="mapbuttons">
+      <div>
+        <a
+          href="#"
+          class="btn btn-info btn-lg">
+          <span class="glyphicon glyphicon-map-marker"></span>
+          Set map bounds
+        </a>
+      </div>
+      <div>
+        - or -
+      </div>
+      <div>
+        <a
+          href="#"
+          class="btn btn-info btn-lg">
+          <span class="glyphicon glyphicon-download-alt"></span>
+          Download data
+        </a>
+      </div>
+    </div>
+  </div> <!-- mapcontrols -->
+</div>

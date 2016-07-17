@@ -323,6 +323,41 @@
     
     angular
         .module('iphm.map')
+        .directive('iphmMapOption'
+
+/*
+              <div class="row">
+                <div class="col-md-1"></div>
+                <label
+                  for="radius"
+                  class="col-md-4 vcenter">
+                  Radius
+                </label>
+                <div class="input-group col-md-6 vcenter">
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="radius"
+                    placeholder="0">
+                  <span class="input-group-addon">
+                    def: 2
+                  </span>
+                </div>
+                <div class="col-md-1"></div>
+              </div>
+*/
+
+    angular
+        .module('iphm.map')
+        .constant('defHMOptions', {
+            radius: 7,
+            blur: 7,
+            minOpacity: 0.5,
+            maxZoom: 5
+        });
+    
+    angular
+        .module('iphm.map')
         .controller('MapCtrl', MapCtrl);
     
     MapCtrl.$inject = [
@@ -330,27 +365,39 @@
                   // support 'controller as' syntax afaict
         '$http',
         'defCenter',
+        'defHMOptions',
+        'leafletData',
+        'leafletBoundsHelpers',
         'CoordFreqs',
         'MapboxTiles',
         'Heat'
     ];
     
-    function MapCtrl($scope, $http, defCenter, CoordFreqs, MapboxTiles, Heat) {
+    function MapCtrl(
+        $scope,
+        $http,
+        defCenter,
+        defHMOptions,
+        leafletData,
+        leafletBoundsHelpers,
+        CoordFreqs,
+        MapboxTiles,
+        Heat) {
         
-        /*
+        
         var bounds = leafletBoundsHelpers.createBoundsFromArray([
                 [ 104.0667, -30.6667 ],
                 [ 104.0667, -30.6667 ]
             ]);
-        */
+        
+        
+        $scope.heatMapOptions = defHMOptions;
         
         var layers = {
             baselayers: MapboxTiles.layer,
-            //overlays: Heat.layer
         };
         
         angular.extend($scope, {
-            //bounds: bounds,
             center: defCenter,
             layers: layers
         });

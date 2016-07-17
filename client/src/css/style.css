@@ -1,15 +1,36 @@
 * {
-    
+    /*
+    border:1px solid #F00;
+    */
 }
 
 .mapcontrol {
     
 }
 
-.mapcontrol div {
-    float: left
+.mapcontrol > div {
+    float: left;
+    width: 50%;
+    margin: 0 auto;
 }
 
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+
+.vertical-align {
+  display: flex;
+  flex-direction: row;
+}
+
+.vertical-align > [class^="col-"],
+.vertical-align > [class*=" col-"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 
 
