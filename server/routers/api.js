@@ -24,8 +24,6 @@
         + maybeSlash
     );
     
-    // /^(?:\/)?coord-freqs&llng=([+-]?(?:\d{0,3}\.\d+|\d{1,3}))&rlng=([+-]?(?:\d{0,3}\.\d+|\d{1,3}))&dlat=([+-]?(?:\d{0,2}\.\d+|\d{1,2}))&ulat=([+-]?(?:\d{0,2}\.\d+|\d{1,2}))(?:\/)?$/
-    
     var apiRouter = express.Router();
     
     apiRouter

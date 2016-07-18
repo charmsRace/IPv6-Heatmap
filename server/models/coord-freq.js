@@ -28,14 +28,47 @@
             default: 0
         }
     });
+    /*
+    {
+        llng : ,
+        rlng : ,
+        dlat : ,
+        ulat : ,
+        lim : ,
+        inten : ,
+        head : ,
+        dig : ,
+        nl : 
+    }
+    */
+    
+    
     
     CoordFreqSchema.statics = {
-        fetchBBox: function(llng, rlng, dlat, ulat, lim) {
+        fetchBBox: function(params) {
             // add qs for heatmap
-            console.log('inside2');
-            console.log('lim:', lim);
-            var ls = String(llng);
-            var rs = String(rlng);
+            var p = params;
+            var tabulate = function(cfs) {
+                var third = p.inten ? 'intensity' : 'numIps';
+                var selector = '-_id coords ' + third;
+                var thirdName = p.inten ? 'Intensity' : 'Num. IPs';
+                var list = p.head ? [['Latitude', 'Longitude', thirdname]] : [];
+                var linearize = function(cf) {
+                    return [
+                        cf.coords.lat,
+                        cf.coords.long,
+                        cf[third]
+                    ];
+                };
+                var next = function(list, cf) {
+                    list.push(linearize(cf));
+                    return list;
+                }
+                return cfs.reduce(next, list);
+            };
+            
+            var ls = String(p.llng);
+            var rs = String(p.rlng);
             var inLong = '((' + ls + ' <= this.coords.long)' // I am
                 + ' && (this.coords.long <= ' + rs + '))'     // *so*
                 + ' === (' + ls + ' <= ' + rs + ')';          // sorry
@@ -57,16 +90,21 @@
                 .find()
                 
                 .where('coords.lat')
-                .gte(dlat)
-                .lte(ulat)
+                .gte(p.dlat)
+                .lte(p.ulat)
                 .$where(inLong)
                 .select('-_id coords numIps intensity')
                 .lean()
-                //.limit(lim)
+                .limit()
                 
-                .exec();
+                .exec()
+                .then(tabulate);
         }
     };
+    
+    /* old api
+    [{"coords":{"long":168.3764,"lat":-46.4382},"intensity":0.7235620261894251,"numIps":1.8133887294219438e+24},{"coords":{"long":168.35,"lat":-46.4},"intensity":0.7093308515028848,"numIps":6.044629098073146e+23},{"coords":{"long":168.3722,"lat":-46.3894},"intensity":0.7487689053961837,"numIps":1.2693721105953606e+25},{"coords":{"long":168.3333,"lat":-46.15},"intensity":0.7093308515028848,"numIps":6.044629098073146e+23},{"coords":{"long":170.4912,"lat":-45.9059},"intensity":0.7345377307096435,"numIps":4.231240368651202e+24}]
+    */
     
     module.exports = mongoose.model('CoordFreq', CoordFreqSchema);
     

@@ -99,6 +99,7 @@
         var standingReq = null;
         
         var initiateReq = function(params) {
+            params['inten'] = 1;
             standingReq = $resource(apiSpec, params, {
                 'fetch': {
                     method: 'GET',
@@ -108,7 +109,7 @@
                                                    // up .$promise metadata
                 }
             })
-                .fetch()
+                .fetch();
             status.downloading = true;
             standingReq
                 .$promise
@@ -136,7 +137,9 @@
             initiateReq(params);
             return standingReq
                 .$promise
-                .then(tabulate);
+                .then(function(data) {
+                    return data;
+                });
         };
         
         var tabulate = function(cfs) {
@@ -539,7 +542,7 @@
                 if ((typeof data[i][0] !== 'number')
                     || (typeof data[i][1] !== 'number')
                     || (typeof data[i][2] !== 'number')) {
-                        throw new Error(i, data[i]);
+                        console.log(i, data[i]);
                 }
             }
             /*
@@ -595,9 +598,16 @@
             CoordFreqs
                 .fetchBBox(params)
                 .then(function(data) {
-                    console.log(typeof data, data);
-                    console.log(typeof data[0], data[0]);
-                    console.log(typeof data[0][0], data[0][0]);
+                    delete data.$promise;
+                    delete data.$resolved;
+                    delete data.$cancelRequest;
+                    data = data.map(function(obj) {
+                        return Object
+                            .keys(obj)
+                            .map(function(key) {
+                                return obj[key];
+                            });
+                        });
                     mapCtrl.setData(data);
                 })
                             
@@ -643,7 +653,6 @@
             rlng: 180,
             dlat: -90,
             ulat: 90,
-            lim: 5000
         };
         
         mapCtrl.toggleDynamic = function() {
