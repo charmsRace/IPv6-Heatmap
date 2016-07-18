@@ -82,65 +82,59 @@
     ];
     
     function CoordFreqs($resource) {
+        
+        var CF = this;
+        
         var apiSpec = '/api/v0.1/coord-freqs'
             + '&llng=:llng'
             + '&rlng=:rlng'
             + '&dlat=:dlat'
             + '&ulat=:ulat';
         
-        var downloaded = true;
-        var downloading = false;
-        var start = function() {
-            downloading = true;
-        };
-        var finish = function() {
-            downloaded = true;
-            downloading = false;
-        };
-        var cancel = function() {
-            downloading = false;
-        };
-        var isDownloading = function() {
-            return downloading;
-        };
-        var isDownloaded = function() {
-            return downloaded;
+        var status = {
+            downloaded: false,
+            downloading: true
         };
         
-        var standing = null;
+        var standingReq = null;
         
-        var fetchBBox = function(llng, rlng, dlat, ulat, lim) {
-            console.log('start');
-            cancel();
-            initiate(llng, rlng, dlat, ulat, lim);
-            console.log('standing', standing);
-            console.log('promise', standing.$promise);
-            return standing;
-        };
-        
-        var cancel = function() {
-            if (standing) {
-                standing.$cancelRequest();
-            }
-        };
-        
-        var initiate = function(llng, rlng, dlat, ulat, lim) {
-            standing = $resource(apiSpec, {
-                llng: llng,
-                rlng: rlng,
-                dlat: dlat,
-                ulat: ulat,
-                lim: lim
-            }, {
+        var initiateReq = function(params) {
+            standingReq = $resource(apiSpec, params, {
                 'fetch': {
                     method: 'GET',
                     isArray: true,
                     cancellable: true,
                     // transformResponse: tabulate // doing this here screws
-                                                   // up promise data
+                                                   // up .$promise metadata
                 }
             })
                 .fetch()
+            status.downloading = true;
+            standingReq
+                .$promise
+                .then(function() {
+                    status.downloading = false;
+                    status.downloaded = true;
+                })
+                .catch(function() {
+                    status.downloading = false;
+                    status.downloaded = false;
+                });
+                    
+        };
+        
+        var cancelReq = function() {
+            if (standingReq) {
+                standingReq.$cancelRequest();
+                status.downloading = false;
+            }
+        };
+        
+        var fetchBBox = function(params) {
+            console.log('start');
+            cancelReq();
+            initiateReq(params);
+            return standingReq
                 .$promise
                 .then(tabulate);
         };
@@ -266,9 +260,10 @@
         */
         
         return {
-            x: 2,
-            standing: standing,
-            fetchBBox: fetchBBox
+            status: status,
+            standingReq: standingReq,
+            fetchBBox: fetchBBox,
+            cancelReq: cancelReq
         };
     }
     
@@ -325,6 +320,8 @@
     // map layer from the CoordFreqs i/o stream,
     // so we can add and remove points
     // after we've set the layer
+    // 
+    // deprecated
     
     angular
         .module('iphm.heat', [])
@@ -454,25 +451,28 @@
         .controller('MapCtrl', MapCtrl);
     
     MapCtrl.$inject = [
+        '$scope',
         '$http',
         'defCenter',
         'defHMSettings',
         'leafletData',
         'leafletBoundsHelpers',
         'leafletLayerHelpers',
+        'leafletMapEvents',
         'CoordFreqs',
         'MapboxTiles',
         'Heat'
     ];
     
     function MapCtrl(
-        //$scope,
+        $scope,
         $http,
         defCenter,
         defHMSettings,
         leafletData,
         leafletBoundsHelpers,
         leafletLayerHelpers,
+        leafletMapEvents,
         CoordFreqs,
         MapboxTiles,
         Heat) {
@@ -593,9 +593,9 @@
                 });
             */
         
-        mapCtrl.acceptRequest = function(llng, rlng, dlat, ulat, lim) {
+        mapCtrl.request = function(params) {
             CoordFreqs
-                .fetchBBox(llng, rlng, dlat, ulat, lim)
+                .fetchBBox(params)
                 .then(function(data) {
                     console.log(typeof data, data);
                     console.log(typeof data[0], data[0]);
@@ -619,22 +619,52 @@
                 });
         };
         
-        console.log('standing', CoordFreqs.standing);
+        console.log('standing', CoordFreqs.standingReq);
         
-        mapCtrl.testbutton = function() {
-            /*
-            mapCtrl.acceptRequest(-179, 179, -89, 89, 5000);
-            */
-        };
-        mapCtrl.testbutton2 = function() {
-            console.log(mapCtrl.data);
-            console.log(mapCtrl
-                .layers
-                .overlays
-                .heat);
+        mapCtrl.getCoords = function() {
+            return {
+                llng: mapCtrl.bounds.southWest.lng,
+                rlng: mapCtrl.bounds.northEast.lng,
+                dlat: mapCtrl.bounds.southWest.lat,
+                ulat: mapCtrl.bounds.northEast.lat
+            }
         };
         
-        mapCtrl.acceptRequest(-179, 179, -89, 89, 5000);
+        $scope.$on('leafletDirectiveMap.moveend', function() {
+            if (mapCtrl.dynamic) {
+                mapCtrl.request(mapCtrl.getCoords());
+            }
+        });
+        
+        mapCtrl.status = CoordFreqs.status;
+        
+        mapCtrl.dynamic = 0;
+        
+        mapCtrl.globe = {
+            llng: -180,
+            rlng: 180,
+            dlat: -90,
+            ulat: 90,
+            lim: 5000
+        };
+        
+        mapCtrl.toggleDynamic = function() {
+            mapCtrl.dynamic ^= 1;
+            CoordFreqs.cancelReq();
+            var coords;
+            if (mapCtrl.dynamic) {
+                mapCtrl.setData([]);
+                mapCtrl.status.downloaded = false;
+                coords = mapCtrl.getCoords();
+            } else {
+                coords = mapCtrl.globe;
+            }
+            mapCtrl.request(coords);
+        };
+        
+        if (!mapCtrl.dynamic) {
+            mapCtrl.request(mapCtrl.globe);
+        }
         
         /*
         CoordFreqs

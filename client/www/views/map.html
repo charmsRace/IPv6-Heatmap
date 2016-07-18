@@ -11,9 +11,18 @@
     </div>
     
     <div class="col-md-4"><div>
-      
-      
-      
+      <div class="row">
+        <div class="col-md-6">
+          <p>
+            Downloading: {{ mapCtrl.status.downloading }}
+          </p>
+        </div>
+        <div class="col-md-6">
+          <p>
+            Downloaded: {{ mapCtrl.status.downloaded }}
+          </p>
+        </div>
+      </div>
       <div class="row"> <!-- Settings -->
         <div class="col-md-12">
           <form class="row form-inline">
@@ -111,7 +120,7 @@
                 </div>
                 <div class="col-md-8">
                   <p><small>
-                    {{ map.bounds.northEast.lat }}
+                    {{ mapCtrl.bounds.northEast.lat }}
                   </p></small>
                 </div>
               </div>
@@ -123,7 +132,7 @@
                 </div>
                 <div class="col-md-8">
                   <p><small>
-                    {{ map.bounds.southWest.lat }}
+                    {{ mapCtrl.bounds.southWest.lat }}
                   </p></small>
                 </div>
               </div>
@@ -148,7 +157,7 @@
                 </div>
                 <div class="col-md-8">
                   <p><small>
-                    {{ bounds.southWest.lng }}
+                    {{ mapCtrl.bounds.southWest.lng }}
                   </p></small>
                 </div>
               </div>
@@ -160,7 +169,7 @@
                 </div>
                 <div class="col-md-8">
                   <p><small>
-                    {{ heatMapOptions.radius }}
+                    {{ mapCtrl.bounds.northEast.lng }}
                   </p></small>
                 </div>
               </div>
@@ -171,11 +180,12 @@
       
       <div class="row"> <!-- Actions -->
         <div class="col-md-6">
-          <button ng-click="mapCtrl.testbutton()">
+          <button ng-click="mapCtrl.testbutton();">
             Test MapCtrl
           </button>
-          <button ng-click="mapCtrl.testbutton2()">
-            Test MapCtrl
+          <button ng-click="mapCtrl.toggleDynamic();">
+            Toggle dynamic loading<br>
+            (currently {{ !!mapCtrl.dynamic }})
           </button>
           <a
             href="#"
