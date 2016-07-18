@@ -3,16 +3,16 @@
   <label
     for="radius"
     class="col-md-4 vcenter">
-    Radius
+    {{ opCtrl.setting.name }}
   </label>
   <div class="input-group col-md-6 vcenter">
     <input
       type="number"
       class="form-control"
       id="radius"
-      ng-model="opCtrl.value">
+      ng-model="opCtrl.setting.value">
     <span class="input-group-addon">
-      def: 2
+      def: {{ opCtrl.setting.def }}
     </span>
   </div>
   <div class="col-md-1"></div>

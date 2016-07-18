@@ -6,97 +6,65 @@
         lf-center="mapCtrl.center"
         layers="mapCtrl.layers"
         width="100%"
-        height="480px">
+        height="700px">
       </leaflet>
     </div>
     
     <div class="col-md-4"><div>
       <div class="row">
         <div class="col-md-6">
-          <p>
+          <h3>
             Downloading: {{ mapCtrl.status.downloading }}
-          </p>
+          </h3>
         </div>
         <div class="col-md-6">
-          <p>
+          <h3>
             Downloaded: {{ mapCtrl.status.downloaded }}
-          </p>
+          </h3>
         </div>
       </div>
       <div class="row"> <!-- Settings -->
         <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-12">
+              <h3>
+                Map Configuration<a
+              </h3>
+            </div>
+          </div>
           <form class="row form-inline">
             <div class="form-group col-md-6">
-              <iphm-map-option value="mapCtrl.hmSettings.radius"></iphm-map-option>
+              <iphm-map-option setting="mapCtrl.hmSettings.radius"></iphm-map-option>
             </div>
             <div class="form-group col-md-6">
               <!-- v directive -->
-              <div class="row">
-                <div class="col-md-1"></div>
-                <label
-                  for="blur"
-                  class="col-md-4 vcenter">
-                  Blur
-                </label>
-                <div class="input-group col-md-6 vcenter">
-                  <input
-                    type="number"
-                    class="form-control"
-                    id="blur"
-                    placeholder="0">
-                  <span class="input-group-addon">
-                    def: 2
-                  </span>
-                </div>
-                <div class="col-md-1"></div>
-              </div>
+              <iphm-map-option setting="mapCtrl.hmSettings.blur"></iphm-map-option>
               <!-- ^ directive -->
             </div>
           </form>
           <form class="row form-inline">
             <div class="form-group col-md-6">
-              <div class="row">
-                <div class="col-md-1"></div>
-                <label
-                  for="minopacity"
-                  class="col-md-4 vcenter">
-                  Min. Opacity
-                </label>
-                <div class="input-group col-md-6 vcenter">
-                  <input
-                    type="number"
-                    class="form-control"
-                    id="minopacity"
-                    placeholder="0">
-                  <span class="input-group-addon">
-                    def: 2
-                  </span>
-                </div>
-                <div class="col-md-1"></div>
-              </div>
+              <iphm-map-option setting="mapCtrl.hmSettings.minOpacity"></iphm-map-option>
             </div>
             <div class="form-group col-md-6">
-              <div class="row">
-                <div class="col-md-1"></div>
-                <label
-                  for="maxzoom"
-                  class="col-md-4 vcenter">
-                  Max. Zoom
-                </label>
-                <div class="input-group col-md-6 vcenter">
-                  <input
-                    type="number"
-                    class="form-control"
-                    id="maxzoom"
-                    placeholder="0">
-                  <span class="input-group-addon">
-                    def: 2
-                  </span>
-                </div>
-                <div class="col-md-1"></div>
-              </div>
+              <iphm-map-option setting="mapCtrl.hmSettings.maxZoom"></iphm-map-option>
             </div>
           </form>
+          
+          <div class="row">
+            <div class="col-md-12">
+              <a
+                href="#"
+                class="btn btn-info btn-lg"
+                ng-click="mapCtrl.setOptions();">
+                <span class="glyphicon glyphicon-cog"></span>
+                Set Options
+              </a>
+            </div>
+          </div>
+          
+          
+          
         </div>
       </div>
       
@@ -180,18 +148,13 @@
       
       <div class="row"> <!-- Actions -->
         <div class="col-md-6">
-          <button ng-click="mapCtrl.testbutton();">
-            Test MapCtrl
-          </button>
-          <button ng-click="mapCtrl.toggleDynamic();">
-            Toggle dynamic loading<br>
-            (currently {{ !!mapCtrl.dynamic }})
-          </button>
           <a
             href="#"
-            class="btn btn-info btn-lg">
-            <span class="glyphicon glyphicon-map-marker"></span>
-            Set map bounds
+            class="btn btn-info btn-lg"
+            ng-click="mapCtrl.toggleDynamic();">
+            <span class="glyphicon glyphicon-pushpin"></span>
+            Toggle dynamic loading<br>
+            (currently {{ mapCtrl.dynamic ? 'dynamic' : 'global' }})
           </a>
         </div>
         <div class="col-md-6">
@@ -199,7 +162,9 @@
             href="#"
             class="btn btn-info btn-lg">
             <span class="glyphicon glyphicon-download-alt"></span>
-            Download data
+            Download .json for<br>
+            these bounds<br>
+            (not implemented)
           </a>
         </div>
       </div></div>

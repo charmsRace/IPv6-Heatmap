@@ -311,14 +311,9 @@
             'iphm.heat'
         ])
         .constant('defCenter', {
-            lat: 0,
-            lng: 0,
-            //lat: 30.6667,
-            //lng: 104.0667,
-            
-            //lat: 37.774546,
-            //lng: -122.433523,
-            zoom: 1
+            lat: 35.7596,
+            lng: -79.0193,
+            zoom: 4
         });
     
     angular
@@ -331,11 +326,9 @@
         return {
             restrict: 'E',
             scope: {},
-            /*
             bindToController: {
-                value: '='
+                setting: '='
             },
-            */
             controller: function() {
                 var set = function() {
                     this.testvalue = 7;
@@ -350,8 +343,8 @@
     angular
         .module('iphm.map')
         .constant('defHMSettings', {
-            radius: 9,
-            blur: 7,
+            radius: 7,
+            blur: 6,
             minOpacity: 0.5,
             maxZoom: 5
         });
@@ -396,7 +389,35 @@
             [ 104.0667, -30.6667 ]
         ]);
         
-        var hmSettings = Object.assign({}, defHMSettings);
+        mapCtrl.hmSettings = {};
+        
+        Object
+            .keys(defHMSettings)
+            .map(function(setting) {
+                mapCtrl.hmSettings[setting] = {
+                    value: defHMSettings[setting],
+                    def: defHMSettings[setting]
+                };
+            });
+        
+        console.log(mapCtrl.hmSettings);
+        
+        angular.merge(mapCtrl.hmSettings, {
+            radius: {
+                name: 'Radius',
+            },
+            blur: {
+                name: 'Blur',
+            },
+            minOpacity: {
+                name: 'Min. Opacity',
+            },
+            maxZoom: {
+                name: 'Max. Zoom',
+            }
+        });
+        
+        console.log(mapCtrl.hmSettings);
         
         var layers = {
             baselayers: {
@@ -407,7 +428,7 @@
                     name: 'Heatmap',
                     type: 'heat',
                     data: [],
-                    layerOptions: hmSettings,
+                    layerOptions: defHMSettings,
                     visible: true
                 }
             }
@@ -419,29 +440,25 @@
             layers: layers
         });
         
-        /*
-        var heatmapLayer = {
-            heat: {
-                name: 'Heatmap',
-                type: 'heat',
-                data: [],
-                layerOptions: mapCtrl.hmSettings,
-                visible: true
-            }
+        mapCtrl.setOptions = function() {
+            var newOptions = {};
+            
+            Object
+                .keys(mapCtrl.hmSettings)
+                .map(function(setting) {
+                    newOptions[setting] = mapCtrl.hmSettings[setting].value;
+                });
+            
+            leafletData
+                .getLayers()
+                .then(function(layers) {
+                    layers
+                        .overlays
+                        .heat
+                        .setOptions(newOptions);
+                });
         };
         
-        
-        var heatmapLayer = {
-            name: 'Heatmap',
-            type: 'heat',
-            data: [],
-            layerOptions: mapCtrl.hmSettings,
-            visible: true
-        };
-        */
-        /*
-            Object.assign(mapCtrl.data, data);
-        */
         mapCtrl.setData = function(data) {
             console.log('type', typeof data);
             var n = 0;
@@ -579,15 +596,5 @@
         if (!mapCtrl.dynamic) {
             mapCtrl.request(mapCtrl.globe);
         }
-        
-        /*
-        CoordFreqs
-            .fetchBBox(-179, 179, -89, 89, 5000)
-            .then(function(res) {
-                console.log('after');
-                console.log('res', res);
-            })
-            .then(mapCtrl.setData);
-        */
     }
 }());

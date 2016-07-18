@@ -52,7 +52,7 @@
                 var third = p.inten ? 'intensity' : 'numIps';
                 var selector = '-_id coords ' + third;
                 var thirdName = p.inten ? 'Intensity' : 'Num. IPs';
-                var list = p.head ? [['Latitude', 'Longitude', thirdname]] : [];
+                var list = p.head ? [['Latitude', 'Longitude', thirdName]] : [];
                 var linearize = function(cf) {
                     return [
                         cf.coords.lat,
@@ -95,7 +95,7 @@
                 .$where(inLong)
                 .select('-_id coords numIps intensity')
                 .lean()
-                .limit()
+                .limit(p.lim)
                 
                 .exec()
                 .then(tabulate);
