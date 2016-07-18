@@ -1,172 +1,166 @@
-(function() {
-    'use strict';
-    
-    var angular = require('angular');
-    
-    require('angular-resource');
-    require('./vendor/angular-route/angular-route.js');
-    var leaflet = require('leaflet');
-    require('./vendor/leaflet-heat/leaflet-heat.js');
-    require('angular-leaflet-directive');
-    
-    // require all '*.module.js'
-    
-    console.log('past req');
+    angular
+        .module('iphm.resources.coordfreqs', [
+            'ngResource',
+            'iphm.heat'
+        ])
+        .constant('cfCf', {
+            apiSpec: '/api/v0.1/coord-freqs'
+                + '&llng=:llng'
+                + '&rlng=:rlng'
+                + '&dlat=:dlat'
+                + '&ulat=:ulat'
+        });
     
     angular
-        .module('iphm', [
-            // 'iphm.cf',
-            'iphm.view',
-            'iphm.map',
-            'iphm.resources',
-            'ngRoute',
-            'leaflet-directive'
-        ])
-        .config(routeConfig);
-        
-    routeConfig.$inject = [
-        '$routeProvider',
-        '$locationProvider'
+        .module('iphm.resources.coordfreqs')
+        .factory('CoordFreqs', CoordFreqs);
+    
+    CoordFreqs.$inject = [
+        '$resource',
+        'cfCf',
+        'Heat'
     ];
     
-    function routeConfig($routeProvider, $locationProvider) {
-        console.log('configged');
-        $routeProvider
-            .when('/', {
-                templateUrl: '/views/home.html',
-                controller: 'FrameCtrl',
-                controllerAs: 'frameCtrl'
-            })
-            .when('/api', {
-                templateUrl: '/views/apispec.html',
-                controller: 'FrameCtrl',
-                controllerAs: 'frameCtrl'
-            })
-            .when('/spec', {
-                templateUrl: '/views/spec.html',
-                controller: 'FrameCtrl',
-                controllerAs: 'frameCtrl'
-            })
-            .when('/git', {
-                templateUrl: '/views/git.html',
-                controller: 'FrameCtrl',
-                controllerAs: 'frameCtrl'
-            })
-            .otherwise({
-                redirectTo: '/'
-            });
-        $locationProvider.html5Mode(true);
-    }
-    
-/**********************************************
-**********************************************/
-
-    angular
-        .module('iphm.resources', [])
-        .service('CoordFreqs', CoordFreqs);
-    
-    CoordFreqs.$inject = ['$resource'];
-    
-    function CoordFreqs($resource) {
-        var apiSpec = '/api/v0.1/coordfreqs'
-            + '&llng=:llng'
-            + '&rlng=:rlng'
-            + '&dlat=:dlat'
-            + '&ulat=:ulat';
-        this.fetchBBox = function(llng, rlng, dlat, ulat) {
-            return $resource(apiSpec, {
-                llng: llng,
-                rlng: rlng,
-                dlat: dlat,
-                ulat: ulat
-                })
-                .query()
-                .$promise;
+    function CoordFreqs($resource, cfCf, Heat) {
+        
+        var status = (function() {
+            var downloaded = false;
+            var downloading = false;
+            var start = function() {
+                downloading = true;
+            };
+            var finish = function() {
+                downloaded = true;
+                downloading = false;
+            };
+            var cancel = function() {
+                downloading = false;
+            };
+            var isDownloading = function() {
+                return downloading;
+            };
+            var isDownloaded = function() {
+                return downloaded;
+            };
+            return {
+                start: start,
+                finish: finish,
+                cancel: cancel,
+                downloaded: downloaded,
+                downloading: downloading
+            };
+        }());
+        
+        var request = (function() {
+            
+            var standing = null;
+            
+            var fetchBBox = function(llng, rlng, dlat, ulat, lim) {
+                console.log('fetch');
+                standing = $resource(cfCf.apiSpec, {
+                    llng: llng,
+                    rlng: rlng,
+                    dlat: dlat,
+                    ulat: ulat,
+                    lim: lim
+                    }, {
+                        'fetch': {
+                            method: 'GET',
+                            isArray: true,
+                            cancellable: true
+                        }
+                    })
+                    .fetch();
+            };
+            
+            var once = true;
+            
+            var linearize = function(coordFreq) {
+                if (once) {
+                    console.log('here', coordFreq);
+                    once = false;
+                }
+                return [
+                    coordFreq.coords.lat,
+                    coordFreq.coords.long,
+                    coordFreq.intensity
+                ];
+            };
+            
+            var flattenRequest = function(data) {
+                return data
+            };
+            
+            var start = function(llng, rlng, dlat, ulat, lim) {
+                cancel();
+                fetchBBox(llng, rlng, dlat, ulat, lim);
+                standing
+                    .$promise
+                    .then(function(data) {
+                        console.log('received', data);
+                        return data;
+                    })
+                
+            };
+            
+            var cancel = function() {
+                if (standing) {
+                    standing.$cancelRequest();
+                    //this.status.cancel();
+                }
+            };
+            
+            
+            return {
+                start: start,
+                cancel: cancel
+            };
+        }());
+        
+        // class method?
+        var linearize = function(coordFreq) {
+            return [
+                coordFreq.coords.lat,
+                coordFreq.coords.long,
+                coordFreq.intensity
+            ];
+        };
+        
+        var tabulate = function(coordFreqs) {
+            return coordFreqs.map(linearize);
+        };
+        
+        /*
+        var validate = function(coordFreqs) {
+            var anyLat = true;
+            var anyLng = true
+            var anyInt = true;
+            for (var i in coordFreqs) {
+                var cf = coordFreqs[i];
+                if (Math.abs(cf[0]) > 90) {
+                    anyLat = false;
+                    console.log(cf);
+                }
+                if (Math.abs(cf[1]) > 180) {
+                    anyLng = false;
+                    console.log(cf);
+                }
+                if (cf[2] > 1 || cf[2] < 0) {
+                    anyInt = false;
+                    console.log(cf);
+                }
+                if ((typeof cf[0] !== 'number')) throw new Error('0 '+String(cf));
+                if ((typeof cf[1] !== 'number')) throw new Error('1 '+String(cf));
+                if ((typeof cf[2] !== 'number')) throw new Error('2 '+String(cf));
+                console.log(anyLat, anyLng, anyInt);
+            }
+        };
+        */
+        
+        return {
+            status: status,
+            request: request,
+            linearize: linearize,
+            tabulate: tabulate
         };
     }
-    
-/**********************************************
-**********************************************/
-    
-    angular
-        .module('iphm.view', [])
-        .controller('FrameCtrl', FrameCtrl);
-    
-    FrameCtrl.$inject = [];
-    
-    function FrameCtrl() {
-        console.log(333);
-        this.tagline = 'foo!';
-    }
-    
-/**********************************************
-**********************************************/
-    
-    angular
-        .module('iphm.map', [
-            'iphm.resources',
-            'leaflet-directives'
-        ])
-        .constant('mapCf', {
-            url: 'http://api.mapbox.com/v4/{map_id}'
-                + '/{z}/{x}/{y}{@2x}.{format}?access_token={apikey}',
-            mapid: 'mapbox.streets',
-            highDPI: false,
-            format: 'png',
-            apikey: 'pk.eyJ1IjoiY2FsYW1pdGl6ZXIiLCJhIjoiY2lxaTQzcm5iMDVoemZ5bnB6NXdpYnVlNyJ9.HGpHUJPiNRP75L5SaCZV5Q'
-        })
-    
-    angular
-        .module('iphm')
-        .controller('MapCtrl', MapCtrl);
-    
-    MapCtrl.$inject = [
-        '$scope', // sadly angular-leaflet-directives does not
-                  // support 'controller as' syntax
-        '$http'
-    ];
-    
-    function MapCtrl($scope, $http) {
-        var url = 'http://api.mapbox.com/v4/{map_id}'
-            + '/{z}/{x}/{y}{@2x}.{format}?access_token={apikey}';
-        var map_id = 'mapbox.streets';
-        var highDPI = false;
-        var format = 'png'; // or 'grid.json' or 'vector.pbf'
-        var apikey = 'pk.eyJ1IjoiY2FsYW1pdGl6ZXIiLCJhIjoiY2lxaTQzcm5iMDVoemZ5bnB6NXdpYnVlNyJ9.HGpHUJPiNRP75L5SaCZV5Q';
-
-        angular.extend($scope, {
-            center: {
-                lat: 37.774546,
-                lng: -122.433523,
-                zoom: 12
-            },
-            layers: {
-                baselayers: {
-                    mapboxStreets: {
-                        name: 'Mapbox Streets',
-                        url: 'https://api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiY2FsYW1pdGl6ZXIiLCJhIjoiY2lxaTQzcm5iMDVoemZ5bnB6NXdpYnVlNyJ9.HGpHUJPiNRP75L5SaCZV5Q',
-                        type: 'xyz'
-                    }
-                }
-            }
-        });
-        
-        $http
-            .get('/json/heat-test.json')
-            .success(function(data) {
-                console.log(data);
-                $scope.layers.overlays = {
-                    heat: {
-                        name: 'Heatmap',
-                        type: 'heat',
-                        data: data,
-                        layerOptions: {
-                            radius: 1000,
-                            blur: 10
-                        },
-                        visible: true
-                    }
-                };
-            });
-    }
-}());

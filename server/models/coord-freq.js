@@ -39,6 +39,7 @@
             var inLong = '((' + ls + ' <= this.coords.long)' // I am
                 + ' && (this.coords.long <= ' + rs + '))'     // *so*
                 + ' === (' + ls + ' <= ' + rs + ')';          // sorry
+            // 
             // mongo has some *serious* problem with this kind of query...
             // it's extremely hard to compare two values of the same property
             // kind of blows my mind you have to eval() JS to do it

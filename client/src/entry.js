@@ -8,7 +8,7 @@
     require('leaflet');
     var leafletHeat = require('./vendor/leaflet-heat/leaflet-heat.js');
     require('./vendor/leaflet-heat/leaflet-heat.js');
-    require('angular-leaflet-directive');
+    require('./vendor/angular-leaflet-directive/dist/angular-leaflet-directive.js');
     var Promise = require('bluebird');
     
     console.log('past req');
@@ -40,6 +40,7 @@
             .when('/map', {
                 templateUrl: '/views/map.html',
                 controller: 'MapCtrl',
+                controllerAs: 'mapCtrl'
             })
             .when('/api', {
                 templateUrl: '/views/apispec.html',
@@ -68,51 +69,161 @@
 
     angular
         .module('iphm.resources.coordfreqs', [
-            'ngResource'
+            'ngResource',
+            'iphm.heat'
         ])
-        .constant('cfCf', {
-            apiSpec: '/api/v0.1/coord-freqs'
-                + '&llng=:llng'
-                + '&rlng=:rlng'
-                + '&dlat=:dlat'
-                + '&ulat=:ulat'
-        });
     
     angular
         .module('iphm.resources.coordfreqs')
         .factory('CoordFreqs', CoordFreqs);
     
     CoordFreqs.$inject = [
-        '$resource',
-        'cfCf'
+        '$resource'
     ];
     
-    function CoordFreqs($resource, cfCf) {
+    function CoordFreqs($resource) {
+        var apiSpec = '/api/v0.1/coord-freqs'
+            + '&llng=:llng'
+            + '&rlng=:rlng'
+            + '&dlat=:dlat'
+            + '&ulat=:ulat';
+        
+        var downloaded = true;
+        var downloading = false;
+        var start = function() {
+            downloading = true;
+        };
+        var finish = function() {
+            downloaded = true;
+            downloading = false;
+        };
+        var cancel = function() {
+            downloading = false;
+        };
+        var isDownloading = function() {
+            return downloading;
+        };
+        var isDownloaded = function() {
+            return downloaded;
+        };
+        
+        var standing = null;
         
         var fetchBBox = function(llng, rlng, dlat, ulat, lim) {
-            console.log('fetch');
-            return $resource(cfCf.apiSpec, {
+            console.log('start');
+            cancel();
+            initiate(llng, rlng, dlat, ulat, lim);
+            console.log('standing', standing);
+            console.log('promise', standing.$promise);
+            return standing;
+        };
+        
+        var cancel = function() {
+            if (standing) {
+                standing.$cancelRequest();
+            }
+        };
+        
+        var initiate = function(llng, rlng, dlat, ulat, lim) {
+            standing = $resource(apiSpec, {
                 llng: llng,
                 rlng: rlng,
                 dlat: dlat,
                 ulat: ulat,
                 lim: lim
-                })
-                .query()
+            }, {
+                'fetch': {
+                    method: 'GET',
+                    isArray: true,
+                    cancellable: true,
+                    // transformResponse: tabulate // doing this here screws
+                                                   // up promise data
+                }
+            })
+                .fetch()
                 .$promise
-                .then(tabulate)
-                //.then(validate); // testing purposes
+                .then(tabulate);
         };
         
-        var temp = function(numIps) {
-            return Math.log(numIps + 1);
+        var tabulate = function(cfs) {
+            var x = angular.fromJson(cfs);
+            return angular.fromJson(cfs).map(linearize);
         };
         
-        var maxTemp;
-        
-        var intensity = function(numIps) {
-            return temp(numIps) / maxTemp;
+        var linearize = function(cf) {
+            return [
+                cf.coords.lat,
+                cf.coords.long,
+                cf.intensity
+            ];
         };
+            
+        /*
+        var request = (function() {
+            
+            var standing = null;
+            
+            var fetchBBox = function(llng, rlng, dlat, ulat, lim) {
+                console.log('fetch');
+                standing = $resource(cfCf.apiSpec, {
+                    llng: llng,
+                    rlng: rlng,
+                    dlat: dlat,
+                    ulat: ulat,
+                    lim: lim
+                    }, {
+                        'fetch': {
+                            method: 'GET',
+                            isArray: true,
+                            cancellable: true
+                        }
+                    })
+                    .fetch();
+            };
+            
+            var once = true;
+            
+            var linearize = function(coordFreq) {
+                if (once) {
+                    console.log('here', coordFreq);
+                    once = false;
+                }
+                return [
+                    coordFreq.coords.lat,
+                    coordFreq.coords.long,
+                    coordFreq.intensity
+                ];
+            };
+            
+            var flattenRequest = function(data) {
+                return data
+            };
+            
+            var start = function(llng, rlng, dlat, ulat, lim) {
+                cancel();
+                fetchBBox(llng, rlng, dlat, ulat, lim);
+                standing
+                    .$promise
+                    .then(function(data) {
+                        console.log('received', data);
+                        return data;
+                    })
+                
+            };
+            
+            var cancel = function() {
+                if (standing) {
+                    standing.$cancelRequest();
+                    //this.status.cancel();
+                }
+            };
+            
+            
+            return {
+                start: start,
+                cancel: cancel
+            };
+        }());
         
         // class method?
         var linearize = function(coordFreq) {
@@ -155,30 +266,11 @@
         */
         
         return {
-            fetchBBox: fetchBBox,
-            linearize: linearize,
-            tabulate: tabulate
+            x: 2,
+            standing: standing,
+            fetchBBox: fetchBBox
         };
     }
-        /*
-        $http
-            .get('/json/heat-test.json')
-            .success(function(data) {
-                console.log(data);
-                $scope.layers.overlays = {
-                    heat: {
-                        name: 'Heatmap',
-                        type: 'heat',
-                        data: data,
-                        layerOptions: {
-                            radius: 1000,
-                            blur: 10
-                        },
-                        visible: true
-                    }
-                };
-            });
-        */
     
     angular
         .module('iphm.resources.mapboxtiles', [])
@@ -205,13 +297,20 @@
             + mbTCf.mapId + '/{z}/{x}/{y}'
             + mbTCf.highDPI + '.' + mbTCf.format
             + '?access_token=' + mbTCf.apikey;
-        
+        /*
         var layer = {
             mapboxStreets : {
                 name: mbTCf.mapName,
                 url: url,
                 type: 'xyz'
             }
+        };
+        */
+        
+        var layer = {
+            name: mbTCf.mapName,
+            url: url,
+            type: 'xyz'
         };
         
         return {
@@ -234,7 +333,6 @@
     Heat.$inject = [];
     
     function Heat() {
-        // an invisible point to populate the layer
         var seed = [0, 0, 0];
         // we want `data` to be stored so that
         // the methods below continue affecting
@@ -261,28 +359,23 @@
         };
         
         var set = function(heat) {
-            data = heat;
+            console.log('first', data);
+            data.length = 0;
+            Object.assign(data, heat);
+            console.log('then', data);
         };
-        
-        var addOne = function(heat) {
-            data.push(heat);
-        };
-        
-        // ^ quite unnecessary, because I haven't
-        //   set up mongoose to do streaming yet
         
         var dropAll = function() {
-            data = [seed];
+            data.length = 0;
+            data.push(seed);
         };
         
         return {
+            data: data,
             layer: layer,
             set: set,
-            addOne: addOne,
             dropAll: dropAll
         };
-        
-        // I love the revealing module pattern...
         
     }
     
@@ -323,34 +416,34 @@
     
     angular
         .module('iphm.map')
-        .directive('iphmMapOption'
-
-/*
-              <div class="row">
-                <div class="col-md-1"></div>
-                <label
-                  for="radius"
-                  class="col-md-4 vcenter">
-                  Radius
-                </label>
-                <div class="input-group col-md-6 vcenter">
-                  <input
-                    type="number"
-                    class="form-control"
-                    id="radius"
-                    placeholder="0">
-                  <span class="input-group-addon">
-                    def: 2
-                  </span>
-                </div>
-                <div class="col-md-1"></div>
-              </div>
-*/
-
+        .directive('iphmMapOption', iphmMapOption);
+    
+    iphmMapOption.$inject = [];
+    
+    function iphmMapOption() {
+        return {
+            restrict: 'E',
+            scope: {},
+            /*
+            bindToController: {
+                value: '='
+            },
+            */
+            controller: function() {
+                var set = function() {
+                    this.testvalue = 7;
+                };
+                this.set = set;
+            },
+            controllerAs: 'opCtrl',
+            templateUrl: '/map/map-option.template.html'
+        };
+    }
+    
     angular
         .module('iphm.map')
-        .constant('defHMOptions', {
-            radius: 7,
+        .constant('defHMSettings', {
+            radius: 9,
             blur: 7,
             minOpacity: 0.5,
             maxZoom: 5
@@ -361,118 +454,192 @@
         .controller('MapCtrl', MapCtrl);
     
     MapCtrl.$inject = [
-        '$scope', // sadly angular-leaflet-directives does not
-                  // support 'controller as' syntax afaict
         '$http',
         'defCenter',
-        'defHMOptions',
+        'defHMSettings',
         'leafletData',
         'leafletBoundsHelpers',
+        'leafletLayerHelpers',
         'CoordFreqs',
         'MapboxTiles',
         'Heat'
     ];
     
     function MapCtrl(
-        $scope,
+        //$scope,
         $http,
         defCenter,
-        defHMOptions,
+        defHMSettings,
         leafletData,
         leafletBoundsHelpers,
+        leafletLayerHelpers,
         CoordFreqs,
         MapboxTiles,
         Heat) {
         
+        var mapCtrl = this;
+        
+        var center = Object.assign({}, defCenter);
         
         var bounds = leafletBoundsHelpers.createBoundsFromArray([
-                [ 104.0667, -30.6667 ],
-                [ 104.0667, -30.6667 ]
-            ]);
+            [ 104.0667, -30.6667 ],
+            [ 104.0667, -30.6667 ]
+        ]);
         
-        
-        $scope.heatMapOptions = defHMOptions;
+        var hmSettings = Object.assign({}, defHMSettings);
         
         var layers = {
-            baselayers: MapboxTiles.layer,
+            baselayers: {
+                mapboxStreets: MapboxTiles.layer
+            },
+            overlays: {
+                heat: {
+                    name: 'Heatmap',
+                    type: 'heat',
+                    data: [
+                        [0, 0, 0]
+                    ],
+                    layerOptions: hmSettings,
+                    visible: true
+                }
+            }
         };
         
-        angular.extend($scope, {
-            center: defCenter,
+        angular.extend(mapCtrl, {
+            center: center,
+            bounds: bounds,
             layers: layers
         });
         
-        $scope.count = 0;
-        $scope.testFun = function() {
-            $scope.count++;
+        /*
+        var heatmapLayer = {
+            heat: {
+                name: 'Heatmap',
+                type: 'heat',
+                data: [],
+                layerOptions: mapCtrl.hmSettings,
+                visible: true
+            }
+        };
+        
+        
+        var heatmapLayer = {
+            name: 'Heatmap',
+            type: 'heat',
+            data: [],
+            layerOptions: mapCtrl.hmSettings,
+            visible: true
+        };
+        */
+        /*
+            Object.assign(mapCtrl.data, data);
+        */
+        mapCtrl.setData = function(data) {
+            console.log('type', typeof data);
+            var n = 0;
+            for (var i in data) {
+                if ((typeof data[i][0] !== 'number')
+                    || (typeof data[i][1] !== 'number')
+                    || (typeof data[i][2] !== 'number')) {
+                        throw new Error(i, data[i]);
+                }
+            }
+            /*
+            for (var i in data) {
+                if (n % 1000 === 0) console.log(n);
+                var cf = data[i];
+                if (typeof cf[0] !== 'number') console.log('TE0', cf);
+                if (typeof cf[1] !== 'number') console.log('TE1', cf);
+                if (typeof cf[2] !== 'number') console.log('TE2', cf);
+                if (Math.abs(cf[0]) > 90) console.log('RE0', cf);
+                if (Math.abs(cf[0]) > 180) console.log('RE1', cf);
+                if ((cf[2] < 0) || (cf[2] > 1)) console.log('RE2', cf);
+            }
+            */
+            leafletData
+                .getLayers()
+                .then(function(layers) {
+                    var heat = layers
+                        .overlays
+                        .heat;
+                    heat.setLatLngs(data);
+                });
+        };
+            /*
+            mapCtrl
+                .layers
+                .overlays
+                .heat
+                .data = [
+                    [90, 45, 1]
+                ];
+            */
+            /*
+            leafletData
+                .getLayers()
+                .then(function(layers) {
+                    var heat = layers
+                        .overlays
+                        .heat;
+                    heat.setLatLngs(data);
+                })
+                .then(function() {
+                    mapCtrl
+                        .layers
+                        .overlays
+                        .heat
+                        .doRefresh = true;
+                
+                });
+            */
+        
+        mapCtrl.acceptRequest = function(llng, rlng, dlat, ulat, lim) {
+            CoordFreqs
+                .fetchBBox(llng, rlng, dlat, ulat, lim)
+                .then(function(data) {
+                    console.log(typeof data, data);
+                    console.log(typeof data[0], data[0]);
+                    console.log(typeof data[0][0], data[0][0]);
+                    mapCtrl.setData(data);
+                })
+                            
+                        
+                        /*
+                        .update(); // angular-leaflet-directive automatically
+                                   // updates heatmap layers with type
+                                   // 'heatmap', but does not allow layers
+                                   // of that type; only 'heat'. whoops.
+                        */
+                .then(function() {
+                    console.log('data:', mapCtrl
+                        .layers
+                        .overlays
+                        .heat
+                        .data);
+                });
+        };
+        
+        console.log('standing', CoordFreqs.standing);
+        
+        mapCtrl.testbutton = function() {
+            mapCtrl.acceptRequest(-179, 179, -89, 89, 5000);
+        };
+        mapCtrl.testbutton2 = function() {
+            console.log(mapCtrl.data);
+            console.log(mapCtrl
+                .layers
+                .overlays
+                .heat);
         };
         
         /*
-        angular.extend($scope, {
-            center: {
-                lat: 37.774546,
-                lng: -122.433523,
-                zoom: 12
-            },
-            layers: {
-                baselayers: {
-                    mapboxStreets: {
-                        name: 'Mapbox Streets',
-                        url: 'https://api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiY2FsYW1pdGl6ZXIiLCJhIjoiY2lxaTQzcm5iMDVoemZ5bnB6NXdpYnVlNyJ9.HGpHUJPiNRP75L5SaCZV5Q',
-                        type: 'xyz'
-                    }
-                }
-            }
-        });
-        */
-        
-        // // will populate the layer as it arrives thanks to `$resource`
-        // Heat.set(CoordFreqs.fetchBBox(-179, 179, -89, 89));
-        
-        /*
-        CoordFreqs
-            .fetchBBox(-179, 179, -89, 89)
-            .$promise
-            .then(function(coordFreqs) {
-                Heat.set(CoordFreqs.tabulate(coordFreqs));
-            })
-            .catch(function(reason) {
-                console.log(reason);
-            });
-        */
-        
-        /*
-        var llng = -122.608451843262;
-        var rlng = -122.258262634277;
-        var dlat = 37.7093561353369;
-        var ulat = 37.8396145727522;
-        */
-        
-        
-        $scope.loading = true;
-        
         CoordFreqs
             .fetchBBox(-179, 179, -89, 89, 5000)
-            .then(function(data) {
-                $scope.loading = false;
-                console.log('received', data);
-                $scope.layers.overlays = {
-                    heat: {
-                        name: 'Heatmap',
-                        type: 'heat',
-                        data: [
-                            [0, 0, 0]
-                        ],
-                        layerOptions: {
-                            minOpacity: 0.5,
-                            maxZoom: 5,
-                            radius: 7,
-                            blur: 7,
-                        },
-                        visible: true
-                    }
-                };
-            });
-        
+            .then(function(res) {
+                console.log('after');
+                console.log('res', res);
+            })
+            .then(mapCtrl.setData);
+        */
     }
 }());
