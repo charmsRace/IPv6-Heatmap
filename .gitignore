@@ -70,5 +70,6 @@ server/mmdb/GeoLite2-City-CSV.zip
 #server/mmdb/GeoLite2-City-CSV/GeoLite2-City-Blocks-IPv6.csv
 
 # Scratchwork
+crypt
 scratch.js
 tasks
