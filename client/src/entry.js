@@ -13,6 +13,14 @@
     
     console.log('past req');
     
+    /*
+     * Note: I would normally move all of these angular
+     * components to separate files, but I feel like
+     * that would just be frustrating since this is
+     * for review.
+     * 
+     */
+    
     angular
         .module('iphm', [
             'ngRoute',
@@ -35,7 +43,6 @@
     ];
     
     function routeConfig($routeProvider, $locationProvider) {
-        console.log('configged');
         $routeProvider
             .when('/map', {
                 templateUrl: '/views/map.html',
@@ -48,11 +55,6 @@
                 controllerAs: 'frameCtrl'
             })
             /*
-            .when('/spec', {
-                templateUrl: '/views/spec.html',
-                controller: 'FrameCtrl',
-                controllerAs: 'frameCtrl'
-            })
             .when('/git', {
                 templateUrl: '/views/git.html',
                 controller: 'FrameCtrl',
@@ -126,13 +128,12 @@
         
         var cancelReq = function() {
             if (standingReq) {
-                standingReq.$cancelRequest();
+                //standingReq.$cancelRequest(); // slightly broken
                 status.downloading = false;
             }
         };
         
         var fetchBBox = function(params) {
-            console.log('start');
             cancelReq();
             initiateReq(params);
             return standingReq
