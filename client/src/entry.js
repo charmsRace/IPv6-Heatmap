@@ -622,7 +622,9 @@
         console.log('standing', CoordFreqs.standing);
         
         mapCtrl.testbutton = function() {
+            /*
             mapCtrl.acceptRequest(-179, 179, -89, 89, 5000);
+            */
         };
         mapCtrl.testbutton2 = function() {
             console.log(mapCtrl.data);
@@ -631,6 +633,8 @@
                 .overlays
                 .heat);
         };
+        
+        mapCtrl.acceptRequest(-179, 179, -89, 89, 5000);
         
         /*
         CoordFreqs
