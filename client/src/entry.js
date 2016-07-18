@@ -6,7 +6,7 @@
     require('angular-resource');
     require('./vendor/angular-route/angular-route.js');
     require('leaflet');
-    var leafletHeat = require('./vendor/leaflet-heat/leaflet-heat.js');
+    require('./vendor/leaflet-heat/leaflet-heat.js');
     require('./vendor/leaflet-heat/leaflet-heat.js');
     require('./vendor/angular-leaflet-directive/dist/angular-leaflet-directive.js');
     var Promise = require('bluebird');
@@ -47,6 +47,7 @@
                 controller: 'FrameCtrl',
                 controllerAs: 'frameCtrl'
             })
+            /*
             .when('/spec', {
                 templateUrl: '/views/spec.html',
                 controller: 'FrameCtrl',
@@ -57,6 +58,7 @@
                 controller: 'FrameCtrl',
                 controllerAs: 'frameCtrl'
             })
+            */
             .otherwise({
                 templateIrl: '/views/map.html',
                 redirectTo: '/map'
@@ -104,9 +106,7 @@
                 'fetch': {
                     method: 'GET',
                     isArray: true,
-                    cancellable: true,
-                    // transformResponse: tabulate // doing this here screws
-                                                   // up .$promise metadata
+                    cancellable: true
                 }
             })
                 .fetch();
@@ -142,116 +142,23 @@
                 });
         };
         
-        var tabulate = function(cfs) {
-            var x = angular.fromJson(cfs);
-            return angular.fromJson(cfs).map(linearize);
-        };
-        
-        var linearize = function(cf) {
-            return [
-                cf.coords.lat,
-                cf.coords.long,
-                cf.intensity
-            ];
-        };
-            
-        /*
-        var request = (function() {
-            
-            var standing = null;
-            
-            var fetchBBox = function(llng, rlng, dlat, ulat, lim) {
-                console.log('fetch');
-                standing = $resource(cfCf.apiSpec, {
-                    llng: llng,
-                    rlng: rlng,
-                    dlat: dlat,
-                    ulat: ulat,
-                    lim: lim
-                    }, {
-                        'fetch': {
-                            method: 'GET',
-                            isArray: true,
-                            cancellable: true
-                        }
-                    })
-                    .fetch();
-            };
-            
-            var once = true;
-            
-            var linearize = function(coordFreq) {
-                if (once) {
-                    console.log('here', coordFreq);
-                    once = false;
-                }
-                return [
-                    coordFreq.coords.lat,
-                    coordFreq.coords.long,
-                    coordFreq.intensity
-                ];
-            };
-            
-            var flattenRequest = function(data) {
-                return data
-            };
-            
-            var start = function(llng, rlng, dlat, ulat, lim) {
-                cancel();
-                fetchBBox(llng, rlng, dlat, ulat, lim);
-                standing
-                    .$promise
-                    .then(function(data) {
-                        console.log('received', data);
-                        return data;
-                    })
-                
-            };
-            
-            var cancel = function() {
-                if (standing) {
-                    standing.$cancelRequest();
-                    //this.status.cancel();
-                }
-            };
-            
-            
-            return {
-                start: start,
-                cancel: cancel
-            };
-        }());
-        
-        // class method?
-        var linearize = function(coordFreq) {
-            return [
-                coordFreq.coords.lat,
-                coordFreq.coords.long,
-                coordFreq.intensity
-            ];
-        };
-        
-        var tabulate = function(coordFreqs) {
-            return coordFreqs.map(linearize);
-        };
-        
         /*
         var validate = function(coordFreqs) {
-            var anyLat = true;
-            var anyLng = true
-            var anyInt = true;
+            var anyLat = false;
+            var anyLng = false
+            var anyInt = false;
             for (var i in coordFreqs) {
                 var cf = coordFreqs[i];
                 if (Math.abs(cf[0]) > 90) {
-                    anyLat = false;
+                    anyLat = true;
                     console.log(cf);
                 }
                 if (Math.abs(cf[1]) > 180) {
-                    anyLng = false;
+                    anyLng = true;
                     console.log(cf);
                 }
                 if (cf[2] > 1 || cf[2] < 0) {
-                    anyInt = false;
+                    anyInt = true;
                     console.log(cf);
                 }
                 if ((typeof cf[0] !== 'number')) throw new Error('0 '+String(cf));
