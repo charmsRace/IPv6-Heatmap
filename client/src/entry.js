@@ -496,9 +496,7 @@
                 heat: {
                     name: 'Heatmap',
                     type: 'heat',
-                    data: [
-                        [0, 0, 0]
-                    ],
+                    data: [],
                     layerOptions: hmSettings,
                     visible: true
                 }
