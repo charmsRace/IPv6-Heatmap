@@ -9,7 +9,7 @@
         return validate()
             .then(function(current) {
                 return current
-                    ? 'continue'
+                    ? 'up-to-date'
                     : update().then(populate);
             });
     };

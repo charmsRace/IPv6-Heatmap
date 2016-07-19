@@ -491,33 +491,6 @@
                     heat.setLatLngs(data);
                 });
         };
-            /*
-            mapCtrl
-                .layers
-                .overlays
-                .heat
-                .data = [
-                    [90, 45, 1]
-                ];
-            */
-            /*
-            leafletData
-                .getLayers()
-                .then(function(layers) {
-                    var heat = layers
-                        .overlays
-                        .heat;
-                    heat.setLatLngs(data);
-                })
-                .then(function() {
-                    mapCtrl
-                        .layers
-                        .overlays
-                        .heat
-                        .doRefresh = true;
-                
-                });
-            */
         
         mapCtrl.request = function(params) {
             CoordFreqs
@@ -534,15 +507,8 @@
                             });
                         });
                     mapCtrl.setData(data);
-                })
-                            
-                        
-                        /*
-                        .update(); // angular-leaflet-directive automatically
-                                   // updates heatmap layers with type
-                                   // 'heatmap', but does not allow layers
-                                   // of that type; only 'heat'. whoops.
-                        */
+                });
+                /*
                 .then(function() {
                     console.log('data:', mapCtrl
                         .layers
@@ -550,6 +516,7 @@
                         .heat
                         .data);
                 });
+                */
         };
         
         console.log('standing', CoordFreqs.standingReq);
@@ -563,11 +530,14 @@
             }
         };
         
-        $scope.$on('leafletDirectiveMap.moveend', function() {
+        mapCtrl.redraw = function() {
             if (mapCtrl.dynamic) {
                 mapCtrl.request(mapCtrl.getCoords());
             }
-        });
+        };
+        
+        $scope.$on('leafletDirectiveMap.moveend', mapCtrl.redraw);
+        $scope.$on('leafletDirectiveMap.zoomend', mapCtrl.redraw);
         
         mapCtrl.status = CoordFreqs.status;
         

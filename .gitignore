@@ -69,6 +69,17 @@ npm-debug.log
 server/mmdb/GeoLite2-City-CSV.zip
 #server/mmdb/GeoLite2-City-CSV/GeoLite2-City-Blocks-IPv6.csv
 
+#server/mmdb/GeoLite2-City-CSV_20160705.zip
+#client/www
+#server/mmdb
+#client/src/ng-tree.gen.js
+#client/src/fonts
+#client/src/grunt
+#client/src/$resource.js
+#angularhelp.js
+#client/src/css/leaflet.css
+#client/src/json/heat-test.json
+
 # Scratchwork
 crypt
 scratch.js

@@ -21,7 +21,6 @@ var buffer = require('vinyl-buffer');
 var gutil = require('gulp-util');
 var debug = require('gulp-debug');
 var concat = require('gulp-concat');
-var dbcf = require('./server/methods/dbcf.js');
 //var syncDb = require('./server/methods/syncDb.js');
 
 var dir = {
