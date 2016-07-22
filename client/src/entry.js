@@ -11,8 +11,6 @@
     require('./vendor/angular-leaflet-directive/dist/angular-leaflet-directive.js');
     var Promise = require('bluebird');
     
-    console.log('past req');
-    
     /*
      * Note: I would normally move all of these angular
      * components to separate files, but I feel like
@@ -396,17 +394,8 @@
         };
         
         mapCtrl.setData = function(data) {
-            console.log('type', typeof data);
             /*
             var n = 0;
-            for (var i in data) {
-                if ((typeof data[i][0] !== 'number')
-                    || (typeof data[i][1] !== 'number')
-                    || (typeof data[i][2] !== 'number')) {
-                        console.log(i, data[i]);
-                }
-            }
-            
             for (var i in data) {
                 if (n % 1000 === 0) console.log(n);
                 var cf = data[i];
@@ -414,7 +403,6 @@
                 if (typeof cf[1] !== 'number') console.log('TE1', cf);
                 if (typeof cf[2] !== 'number') console.log('TE2', cf);
                 if (Math.abs(cf[0]) > 90) console.log('RE0', cf);
-                if (Math.abs(cf[0]) > 180) console.log('RE1', cf);
                 if ((cf[2] < 0) || (cf[2] > 1)) console.log('RE2', cf);
             }
             */
@@ -426,7 +414,6 @@
                         var llng = bounds.llng;
                         var rlng = bounds.rlng;
                         var length = data.length;
-                        console.log('left:', llng, 'right:', rlng);
                         if (llng < -180) {
                             for (var i = 0; i < length; i++) {
                                 var cf = data[i];
@@ -479,8 +466,6 @@
                 });
         };
         
-        console.log('standing', CoordFreqs.standingReq);
-        
         mapCtrl.getBounds = function() {
             // returns [a promise for] the bounds that the
             // next api response should cover. longitudes are
@@ -504,7 +489,6 @@
                             dlat: bounds.getSouth(),
                             ulat: bounds.getNorth()
                         };
-                        console.log(coords);
                         return coords;
                     });
         };
