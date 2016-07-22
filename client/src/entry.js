@@ -390,8 +390,12 @@
             [ 104.0667, -30.6667 ]
         ]);
         
-        mapCtrl.hmSettings = {};
         
+        // wrangle options into a structure the map-option
+        // directive can get the relevant info from, so
+        // each component only has access to one setting
+        // and not the whole configuration hash
+        mapCtrl.hmSettings = {};
         Object
             .keys(defHMSettings)
             .map(function(setting) {
@@ -400,9 +404,6 @@
                     def: defHMSettings[setting]
                 };
             });
-        
-        console.log(mapCtrl.hmSettings);
-        
         angular.merge(mapCtrl.hmSettings, {
             radius: {
                 name: 'Radius',
@@ -417,8 +418,6 @@
                 name: 'Max. Zoom',
             }
         });
-        
-        console.log(mapCtrl.hmSettings);
         
         var layers = {
             baselayers: {
@@ -484,18 +483,51 @@
                 if ((cf[2] < 0) || (cf[2] > 1)) console.log('RE2', cf);
             }
             */
-            leafletData
-                .getLayers()
+            
+            mapCtrl
+                .getBounds()
+                .then(function(bounds) {
+                    if (mapCtrl.options.wrap) {
+                        var llng = bounds.llng;
+                        var rlng = bounds.rlng;
+                        var length = data.length;
+                        console.log('left:', llng, 'right:', rlng);
+                        if (llng < -180) {
+                            for (var i = 0; i < length; i++) {
+                                var cf = data[i];
+                                var long = cf[1];
+                                if (llng + 360 <= long) {
+                                    data.push([cf[0], long - 360, cf[2]]);
+                                }
+                            }
+                        }
+                        if (180 < rlng) { // these loops can't ever both activate
+                                          // because of the minZoom of the map
+                                          // (max longitudinal width ~= 200)
+                            for (var i = 0; i < length; i++) {
+                                var cf = data[i];
+                                var long = cf[1];
+                                if (long <= rlng - 360) {
+                                    data.push([cf[0], long + 360, cf[2]]);
+                                }
+                            }
+                        }
+                    }
+                })
+                .then(leafletData.getLayers)
                 .then(function(layers) {
-                    var heat = layers
+                    layers
                         .overlays
-                        .heat;
-                    heat.setLatLngs(data);
+                        .heat
+                        .setLatLngs(data);
                 });
         };
         
-        mapCtrl.request = function(coordProm) {
-            coordProm
+        mapCtrl.request = function(paramProm) {
+            CoordFreqs.cancelReq();
+            mapCtrl.setData([]); // this is really just for visual confirmation
+            mapCtrl.status.downloaded = false;
+            paramProm
                 .then(CoordFreqs.fetchBBox)
                 .then(function(data) {
                     delete data.$promise;
@@ -514,33 +546,64 @@
         
         console.log('standing', CoordFreqs.standingReq);
         
-        mapCtrl.getCoords = function() {
-            return leafletData
-                .getMap()
-                .then(function(map) {
-                    var bounds = map.getBounds();
-                    var coords =  {
-                        llng: bounds.getWest(),
-                        rlng: bounds.getEast(),
-                        dlat: bounds.getSouth(),
-                        ulat: bounds.getNorth()
-                    };
-                    console.log(coords);
-                    return coords;
-                });
+        mapCtrl.getBounds = function() {
+            // returns [a promise for] the bounds that the
+            // next api response should cover. longitudes are
+            // not always less than 180 in magnitude because
+            // of wrapping. if dynamic is off but wrap is on,
+            // we're proactive and snag an extra bit of padding
+            return (!mapCtrl.options.dynamic)
+                ? Promise.resolve({
+                    llng: -280,
+                    rlng: 280,
+                    dlat: -90,
+                    ulat: 90
+                })
+                : leafletData
+                    .getMap()
+                    .then(function(map) {
+                        var bounds = map.getBounds();
+                        var coords =  {
+                            llng: bounds.getWest(),
+                            rlng: bounds.getEast(),
+                            dlat: bounds.getSouth(),
+                            ulat: bounds.getNorth()
+                        };
+                        console.log(coords);
+                        return coords;
+                    });
+        };
+        
+        mapCtrl.wrapLong = function(long) {
+            // forces a longitude into [-180, +180)
+            // javascript's % is stupid with negative numbers
+            // or else ((long + 180) % 360) - 180 would suffice
+            return ((((long + 180) % 360) + 360) % 360) - 180;
+        };
+        
+        mapCtrl.getParams = function() {
+            // retrieves [a promise for] the params the api should
+            // be fed to update the map based on current settings
+            return (!mapCtrl.options.dynamic)
+                ? Promise.resolve(mapCtrl.globe)
+                : mapCtrl
+                    .getBounds()
+                    .then(function(bounds) {
+                        bounds.llng = mapCtrl.wrapLong(bounds.llng);
+                        bounds.rlng = mapCtrl.wrapLong(bounds.rlng);
+                        return bounds;
+                    });
         };
         
         mapCtrl.redraw = function() {
-            if (mapCtrl.dynamic) {
+            if (mapCtrl.options.dynamic) {
                 CoordFreqs.cancelReq();
-                mapCtrl.request(mapCtrl.getCoords());
+                mapCtrl.request(mapCtrl.getParams());
             }
         };
         
         mapCtrl.init = function() {
-            if (!mapCtrl.dynamic) {
-                mapCtrl.request(mapCtrl.globe);
-            }
+            mapCtrl.request(mapCtrl.getParams());
             leafletData
                 .getMap()
                 .then(function(map) {
@@ -557,27 +620,26 @@
         
         mapCtrl.status = CoordFreqs.status;
         
-        mapCtrl.dynamic = 0;
+        mapCtrl.options = {
+            dynamic: 0,
+            wrap: 0
+        };
         
-        mapCtrl.globe = Promise.resolve({
+        mapCtrl.globe = {
             llng: -180,
             rlng: 180,
             dlat: -90,
             ulat: 90,
-        });
+        };
         
         mapCtrl.toggleDynamic = function() {
-            mapCtrl.dynamic ^= 1;
-            CoordFreqs.cancelReq();
-            var coords;
-            if (mapCtrl.dynamic) {
-                mapCtrl.setData([]);
-                mapCtrl.status.downloaded = false;
-                coords = mapCtrl.getCoords();
-            } else {
-                coords = mapCtrl.globe;
-            }
-            mapCtrl.request(coords);
+            mapCtrl.options.dynamic ^= 1;
+            mapCtrl.request(mapCtrl.getParams());
+        };
+        
+        mapCtrl.toggleWrap = function() {
+            mapCtrl.options.wrap ^= 1;
+            mapCtrl.request(mapCtrl.getParams());
         };
     }
 }());

@@ -148,23 +148,39 @@
       </div>
       
       <div class="row"> <!-- Actions -->
-        <div class="col-md-6">
+        <div class="col-md-4">
+          <a
+            href="#"
+            class="btn btn-info btn-lg"
+            ng-click="mapCtrl.toggleWrap();">
+            <span class="glyphicon glyphicon-pushpin"></span>
+            Toggle<br>
+            heatmap<br>
+            wrapping<br>
+            (currently<br>
+            {{ (mapCtrl.options.wrap ? 'en' : 'dis') + 'abled' }})
+          </a>
+        </div>
+        <div class="col-md-4">
           <a
             href="#"
             class="btn btn-info btn-lg"
             ng-click="mapCtrl.toggleDynamic();">
             <span class="glyphicon glyphicon-pushpin"></span>
-            Toggle dynamic loading<br>
-            (currently {{ mapCtrl.dynamic ? 'dynamic' : 'global' }})
+            Toggle<br>
+            dynamic<br>
+            loading<br>
+            (currently<br>
+            {{ mapCtrl.options.dynamic ? 'dynamic' : 'global' }})
           </a>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <a
             href="#"
             class="btn btn-info btn-lg">
             <span class="glyphicon glyphicon-download-alt"></span>
-            Download .json for<br>
-            these bounds<br>
+            Download .json<br>
+            for these bounds<br>
             (not implemented)
           </a>
         </div>

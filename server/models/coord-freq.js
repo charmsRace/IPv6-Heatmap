@@ -60,6 +60,17 @@
                 }
                 return cfs.reduce(next, list);
             };
+            /*
+            var longQuery = function() {
+                if (p.llng <= p.rlng) {
+                    
+                    return
+                } else {
+                    
+                    return
+                }
+            };
+            */
             
             var longQuery = (p.llng <= p.rlng)
                 ? {
