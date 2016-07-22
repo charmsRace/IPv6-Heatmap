@@ -102,16 +102,20 @@
         
         var standingReq = null;
         
+        var BBox = $resource(apiSpec, {
+            inten: 1
+        }, {
+            'fetch': {
+                method: 'GET',
+                isArray: true,
+                cancellable: true
+            }
+        }, {
+            cancellable: true
+        });
+        
         var initiateReq = function(params) {
-            params['inten'] = 1;
-            standingReq = $resource(apiSpec, params, {
-                'fetch': {
-                    method: 'GET',
-                    isArray: true,
-                    cancellable: true
-                }
-            })
-                .fetch();
+            standingReq = BBox.fetch(params);
             status.downloading = true;
             standingReq
                 .$promise
@@ -127,8 +131,11 @@
         };
         
         var cancelReq = function() {
-            if (standingReq) {
-                //standingReq.$cancelRequest(); // slightly broken
+            if (standingReq && standingReq.$cancelRequest) {
+                // if .$cancelRequest isn't there,
+                // the request has already been completed
+                // and the data has been processed
+                standingReq.$cancelRequest();
                 status.downloading = false;
             }
         };
@@ -137,10 +144,7 @@
             cancelReq();
             initiateReq(params);
             return standingReq
-                .$promise
-                .then(function(data) {
-                    return data;
-                });
+                .$promise;
         };
         
         /*
@@ -376,7 +380,7 @@
         
         var defaults = {
             worldCopyJump: true,
-            minZoom: 2
+            minZoom: 3
         };
         
         var center = Object.assign({}, defCenter);
@@ -489,8 +493,8 @@
                 });
         };
         
-        mapCtrl.request = function(getCoords) {
-            getCoords
+        mapCtrl.request = function(coordProm) {
+            coordProm
                 .then(CoordFreqs.fetchBBox)
                 .then(function(data) {
                     delete data.$promise;
