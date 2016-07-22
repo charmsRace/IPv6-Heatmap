@@ -188,12 +188,12 @@ gulp.task('js', function() {
             .on('error', function(e) {
                 console.log(e);
             })
-//            .pipe(sourcemaps.init({loadMaps: true}))
+            .pipe(sourcemaps.init({loadMaps: true}))
 //            .pipe(ngAnnotate())
-//            .pipe(uglify())
+            .pipe(uglify())
             .pipe(rename({suffix: '.min'}))
             .on('error', gutil.log)
-//            .pipe(sourcemaps.write('./'))
+            .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest(path.join(dir.clibuild, 'js/')))
     );
 });
