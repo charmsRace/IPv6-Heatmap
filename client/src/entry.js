@@ -29,7 +29,6 @@
             'iphm.resources.coordfreqs',
             'iphm.resources.mapboxtiles',
             'iphm.map',
-            'iphm.heat'
             // 'iphm.cf',
         ]);
     
@@ -73,8 +72,7 @@
 
     angular
         .module('iphm.resources.coordfreqs', [
-            'ngResource',
-            'iphm.heat'
+            'ngResource'
         ])
     
     angular
@@ -211,75 +209,17 @@
         var layer = {
             name: mbTCf.mapName,
             url: url,
-            type: 'xyz'
+            type: 'xyz',
+            layerOptions: {
+                attribution: '© <a href=\'https://www.mapbox.com/map-feedback/\'>Mapbox</a>'
+                + ' | '
+                + '© <a href=\'http://www.openstreetmap.org/copyright\'>OpenStreetMap</a>'
+            }
         };
         
         return {
             layer: layer
         };
-    }
-    
-/**********************************************
-**********************************************/
-    
-    // an abstract data type to decouple the
-    // map layer from the CoordFreqs i/o stream,
-    // so we can add and remove points
-    // after we've set the layer
-    // 
-    // deprecated
-    
-    angular
-        .module('iphm.heat', [])
-        .factory('Heat', Heat);
-    
-    Heat.$inject = [];
-    
-    function Heat() {
-        var seed = [0, 0, 0];
-        // we want `data` to be stored so that
-        // the methods below continue affecting
-        // `Heat.layer`, which is a (nested)
-        // member of the 2-way-bound `leaflet`
-        // directive's `$scope.layer`
-        var data = [seed];
-        var layer = {
-            heat: {
-                name: 'Heatmap',
-                type: 'heat',
-                data: data,
-                //layerOptions: {
-                //    radius: 100,
-                //    blur: 15,
-                //    gradient: {
-                //        0.4: 'blue',
-                //        0.65: 'lime',
-                //        1: 'red'
-                //    }
-                //},
-                visible: true
-            }
-        };
-        
-        var set = function(heat) {
-            console.log('first', data);
-            data.length = 0;
-            Object.assign(data, heat);
-            console.log('then', data);
-        };
-        
-        var dropAll = function() {
-            data.length = 0;
-            data.push(seed);
-        };
-        
-        return {
-            data: data,
-            layer: layer,
-            set: set,
-            dropAll: dropAll
-        };
-        
     }
     
 /**********************************************
@@ -292,8 +232,6 @@
     FrameCtrl.$inject = [];
     
     function FrameCtrl() {
-        console.log(333);
-        this.tagline = 'foo!';
     }
     
 /**********************************************
@@ -303,8 +241,7 @@
         .module('iphm.map', [
             'leaflet-directive',
             'iphm.resources.coordfreqs',
-            'iphm.resources.mapboxtiles',
-            'iphm.heat'
+            'iphm.resources.mapboxtiles'
         ])
         .constant('defCenter', {
             lat: 35.7596,
@@ -339,9 +276,9 @@
     angular
         .module('iphm.map')
         .constant('defHMSettings', {
-            radius: 7,
-            blur: 6,
-            minOpacity: 0.5,
+            radius: 6,
+            blur: 4,
+            minOpacity: 0.2,
             maxZoom: 5
         });
     
@@ -359,8 +296,7 @@
         'leafletLayerHelpers',
         'leafletMapEvents',
         'CoordFreqs',
-        'MapboxTiles',
-        'Heat'
+        'MapboxTiles'
     ];
     
     function MapCtrl(
@@ -373,8 +309,7 @@
         leafletLayerHelpers,
         leafletMapEvents,
         CoordFreqs,
-        MapboxTiles,
-        Heat) {
+        MapboxTiles) {
         
         var mapCtrl = this;
         
@@ -525,7 +460,7 @@
         
         mapCtrl.request = function(paramProm) {
             CoordFreqs.cancelReq();
-            mapCtrl.setData([]); // this is really just for visual confirmation
+            //mapCtrl.setData([]); // this is really just for visual confirmation
             mapCtrl.status.downloaded = false;
             paramProm
                 .then(CoordFreqs.fetchBBox)
@@ -550,8 +485,8 @@
             // returns [a promise for] the bounds that the
             // next api response should cover. longitudes are
             // not always less than 180 in magnitude because
-            // of wrapping. if dynamic is off but wrap is on,
-            // we're proactive and snag an extra bit of padding
+            // of wrapping. if dynamic is off, we're proactive
+            // and snag an extra bit of padding
             return (!mapCtrl.options.dynamic)
                 ? Promise.resolve({
                     llng: -280,
@@ -621,8 +556,8 @@
         mapCtrl.status = CoordFreqs.status;
         
         mapCtrl.options = {
-            dynamic: 0,
-            wrap: 0
+            dynamic: 1,
+            wrap: 1
         };
         
         mapCtrl.globe = {
