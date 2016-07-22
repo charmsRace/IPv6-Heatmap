@@ -67,36 +67,40 @@
                 return cfs.reduce(next, list);
             };
             
-            var ls = String(p.llng);
-            var rs = String(p.rlng);
-            var inLong = '((' + ls + ' <= this.coords.long)' // I am
-                + ' && (this.coords.long <= ' + rs + '))'     // *so*
-                + ' === (' + ls + ' <= ' + rs + ')';          // sorry
-            // 
-            // mongo has some *serious* problem with this kind of query...
-            // it's extremely hard to compare two values of the same property
-            // kind of blows my mind you have to eval() JS to do it
-            // even though it's just a === or XOR...
-            // $where is quite slow, so there's more thinking to be done
-            //
-            // I don't know whether a 2d-geospatial would even be more
-            // efficient when the intersecting/bounding region is just
-            // a rectangle and there is no complication in the geometry
-            // 
-            // but I'll configure it at some point to see
-            //
+            var longQuery = (p.llng <= p.rlng)
+                ? {
+                    "coords.long" : {
+                        "$gte" : p.llng,
+                        "$lte" : p.rlng
+                    }
+                }
+                : {
+                    "$or" : [
+                        {
+                            "coords.long" : {
+                                "$not" : {
+                                    "$lte" : p.llng
+                                }
+                            }
+                        },
+                        {
+                            "coords.long" : {
+                                "$not" : {
+                                    "$gte" : p.rlng
+                                }
+                            }
+                        }
+                    ]
+                };
+            
             return this
-                
-                .find()
-                
+                .find(longQuery)
                 .where('coords.lat')
                 .gte(p.dlat)
                 .lte(p.ulat)
-                .$where(inLong)
                 .select('-_id coords numIps intensity')
                 .lean()
                 .limit(p.lim)
-                
                 .exec()
                 .then(tabulate);
         }

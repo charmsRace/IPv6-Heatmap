@@ -21,7 +21,7 @@
     };
     
     var getLiveMd5 = function() {
-        return request('GEt', cf.url + cf.names.md5)
+        return request('GET', cf.url + cf.names.md5)
             .getBody('ascii')
             .then(function(md5) {
                 console.log('Live md5 for ' + cf.names.zip + ': ' + md5);
