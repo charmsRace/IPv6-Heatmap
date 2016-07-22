@@ -203,15 +203,6 @@
             + mbTCf.mapId + '/{z}/{x}/{y}'
             + mbTCf.highDPI + '.' + mbTCf.format
             + '?access_token=' + mbTCf.apikey;
-        /*
-        var layer = {
-            mapboxStreets : {
-                name: mbTCf.mapName,
-                url: url,
-                type: 'xyz'
-            }
-        };
-        */
         
         var layer = {
             name: mbTCf.mapName,
@@ -541,8 +532,24 @@
             }
         };
         
+        mapCtrl.init = function() {
+            if (!mapCtrl.dynamic) {
+                mapCtrl.request(mapCtrl.globe);
+            }
+            leafletData
+                .getMap()
+                .then(function(map) {
+                    map.setMaxBounds([
+                        [-85, -Infinity],
+                        [85, Infinity]
+                    ]);
+                });
+        };
+        
         $scope.$on('leafletDirectiveMap.moveend', mapCtrl.redraw);
         $scope.$on('leafletDirectiveMap.zoomend', mapCtrl.redraw);
+        
+        $scope.$on('leafletDirectiveMap.load', mapCtrl.init);
         
         mapCtrl.status = CoordFreqs.status;
         
@@ -568,9 +575,5 @@
             }
             mapCtrl.request(coords);
         };
-        
-        if (!mapCtrl.dynamic) {
-            mapCtrl.request(mapCtrl.globe);
-        }
     }
 }());
