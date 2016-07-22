@@ -498,9 +498,9 @@
                 });
         };
         
-        mapCtrl.request = function(params) {
-            CoordFreqs
-                .fetchBBox(params)
+        mapCtrl.request = function(getCoords) {
+            getCoords
+                .then(CoordFreqs.fetchBBox)
                 .then(function(data) {
                     delete data.$promise;
                     delete data.$resolved;
@@ -514,30 +514,29 @@
                         });
                     mapCtrl.setData(data);
                 });
-                /*
-                .then(function() {
-                    console.log('data:', mapCtrl
-                        .layers
-                        .overlays
-                        .heat
-                        .data);
-                });
-                */
         };
         
         console.log('standing', CoordFreqs.standingReq);
         
         mapCtrl.getCoords = function() {
-            return {
-                llng: mapCtrl.bounds.southWest.lng,
-                rlng: mapCtrl.bounds.northEast.lng,
-                dlat: mapCtrl.bounds.southWest.lat,
-                ulat: mapCtrl.bounds.northEast.lat
-            }
+            return leafletData
+                .getMap()
+                .then(function(map) {
+                    var bounds = map.getBounds();
+                    var coords =  {
+                        llng: bounds.getWest(),
+                        rlng: bounds.getEast(),
+                        dlat: bounds.getSouth(),
+                        ulat: bounds.getNorth()
+                    };
+                    console.log(coords);
+                    return coords;
+                });
         };
         
         mapCtrl.redraw = function() {
             if (mapCtrl.dynamic) {
+                CoordFreqs.cancelReq();
                 mapCtrl.request(mapCtrl.getCoords());
             }
         };
@@ -549,12 +548,12 @@
         
         mapCtrl.dynamic = 0;
         
-        mapCtrl.globe = {
+        mapCtrl.globe = Promise.resolve({
             llng: -180,
             rlng: 180,
             dlat: -90,
             ulat: 90,
-        };
+        });
         
         mapCtrl.toggleDynamic = function() {
             mapCtrl.dynamic ^= 1;
