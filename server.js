@@ -59,7 +59,7 @@
         .connect()
         .once('open', function() {
             console.log('Online!');
-            //db.populate()
+            db.populate()
         });
     
     /*

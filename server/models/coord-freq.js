@@ -17,12 +17,6 @@
         }, numIps: {
             type: Number,
             default: 0
-        }, temp: {
-            type: Number,   
-            default: 0
-        }, alpha: {
-            type: Number,
-            default: 0
         }, intensity: {
             type: Number,
             default: 0
@@ -57,7 +51,7 @@
                     return [
                         cf.coords.lat,
                         cf.coords.long,
-                        +cf[third].toFixed(4)
+                        cf[third]
                     ];
                 };
                 var next = function(list, cf) {

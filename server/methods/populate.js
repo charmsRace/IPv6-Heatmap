@@ -41,7 +41,7 @@
             if (temp > maxTemp) {
                 maxTemp = temp;
             }
-            return temp;
+            return +temp.toFixed(4);
         };
         
         var getMaxTemp = function() {
