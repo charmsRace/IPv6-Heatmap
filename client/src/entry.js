@@ -383,6 +383,11 @@
         
         var mapCtrl = this;
         
+        var defaults = {
+            worldCopyJump: true,
+            minZoom: 2
+        };
+        
         var center = Object.assign({}, defCenter);
         
         var bounds = leafletBoundsHelpers.createBoundsFromArray([
@@ -436,6 +441,7 @@
         };
         
         angular.extend(mapCtrl, {
+            defaults: defaults,
             center: center,
             bounds: bounds,
             layers: layers
