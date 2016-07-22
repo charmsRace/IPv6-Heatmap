@@ -57,7 +57,7 @@
                     return [
                         cf.coords.lat,
                         cf.coords.long,
-                        cf[third]
+                        +cf[third].toFixed(4)
                     ];
                 };
                 var next = function(list, cf) {
