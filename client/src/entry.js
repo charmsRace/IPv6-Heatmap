@@ -127,7 +127,7 @@
                     status.downloading = false;
                     status.downloaded = false;
                 });
-                    
+                
         };
         
         var cancelReq = function() {
@@ -551,7 +551,6 @@
         };
         
         $scope.$on('leafletDirectiveMap.moveend', mapCtrl.redraw);
-        $scope.$on('leafletDirectiveMap.zoomend', mapCtrl.redraw);
         
         $scope.$on('leafletDirectiveMap.load', mapCtrl.init);
         
