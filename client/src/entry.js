@@ -463,6 +463,7 @@
         
         mapCtrl.setData = function(data) {
             console.log('type', typeof data);
+            /*
             var n = 0;
             for (var i in data) {
                 if ((typeof data[i][0] !== 'number')
@@ -471,7 +472,7 @@
                         console.log(i, data[i]);
                 }
             }
-            /*
+            
             for (var i in data) {
                 if (n % 1000 === 0) console.log(n);
                 var cf = data[i];
