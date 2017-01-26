@@ -59,7 +59,6 @@
             })
             */
             .otherwise({
-                templateIrl: '/views/map.html',
                 redirectTo: '/map'
             });
         $locationProvider.html5Mode(true);
@@ -185,7 +184,7 @@
             mapName: 'Mapbox Streets',
             mapId: 'mapbox.streets',
             highDPI: false ? '@2x' : '',
-            format:'png',
+            format: 'png',
             // inject later:
             apikey: 'pk.eyJ1IjoiY2FsYW1pdGl6ZXIiLCJhIjoiY2lxaTQzcm5iMDVoemZ5bnB6NXdpYnVlNyJ9.HGpHUJPiNRP75L5SaCZV5Q'
         });

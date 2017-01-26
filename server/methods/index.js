@@ -15,7 +15,6 @@
             require(path.join(modelDir, file));
         });
     
-    //var connect = require('./connect.js');
     var cf = require('./cf.js');
     //var models = require('./models.js');
     var connect = require('./connect.js');
@@ -27,7 +26,7 @@
     module.exports = {
         cf: cf,
         connect: connect,
-        drop:drop,
+        drop: drop,
         sync: sync,
         populate: populate,
         log: log

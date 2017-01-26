@@ -1,4 +1,4 @@
-GET /api/v0.1/coord-freqs&llng={l}&rlng={r}&dlat={d}&ulat={u}?lim(n}&inten={i}&head={h}
+GET /api/v0.1/coord-freqs&llng={l}&rlng={r}&dlat={d}&ulat={u}?lim{n}&inten={i}&head={h}
 
 l - left longitude
 r - right longitude

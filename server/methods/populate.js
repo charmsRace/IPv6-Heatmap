@@ -9,7 +9,7 @@
     var fastCsv = require('fast-csv');
     var async = require('async');
     var through = require('through');
-    var arrayEqual = require('array-equal'); // Oh, javascript...
+    var arrayEqual = require('array-equal'); // Oh, js...
     
     var cf = require('./cf.js');
     var CoordFreq = mongoose.model('CoordFreq');
@@ -71,7 +71,7 @@
         }
         if (total % hashmod === 0) console.log('t', total, 'u', uniques)
         var key = [row.lat, row.long]
-            .map(Number) // the keys' uniquness will be evaluated
+            .map(Number) // the keys' uniqueness will be evaluated
                          // as a number eventually, so cast it 
                          // there and back up front
             .map(String)
