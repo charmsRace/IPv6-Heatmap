@@ -245,7 +245,30 @@
             lng: -79.0193,
             zoom: 4
         });
-    
+
+    angular
+        .module('iphm.map')
+        .filter('coordFilter', coordFilter);
+
+    coordFilter.$inject = [];
+
+    function coordFilter() {
+        return function(coord) {
+            var digits = 4; // accurate to within 11.132 m
+            var out = coord || 0;
+            out += 180; // force longitudes into the range [-180, 180).
+            out %= 360; // latitudes don't need this because they take
+            out += 360; // singular values, but this is the identity
+            out %= 360; // function on [-90, 90], so we don't care that
+            out -= 180; // they get transformed too.
+            out = Math.round(out * Math.pow(10, digits)) / Math.pow(10, digits);
+            out = '' + out + '\u00b0';
+            return out;
+        };
+    }
+
+
+
     angular
         .module('iphm.map')
         .directive('iphmMapOption', iphmMapOption);
@@ -295,7 +318,7 @@
         'CoordFreqs',
         'MapboxTiles'
     ];
-    
+
     function MapCtrl(
         $scope,
         $http,
@@ -306,10 +329,11 @@
         leafletLayerHelpers,
         leafletMapEvents,
         CoordFreqs,
-        MapboxTiles) {
-        
+        MapboxTiles
+    ) {
+
         var mapCtrl = this;
-        
+
         var defaults = {
             worldCopyJump: true,
             minZoom: 3
@@ -491,7 +515,7 @@
                         return coords;
                     });
         };
-        
+
         mapCtrl.wrapLong = function(long) {
             // forces a longitude into [-180, +180)
             // javascript's % is stupid with negative numbers
