@@ -378,7 +378,7 @@
             },
             maxZoom: {
                 name: 'Max. Zoom',
-                desc: 'The zoom level at which the points reach maximum intensity. 
+                desc: 'The zoom level at which the points reach maximum intensity.'
             }
         });
 
