@@ -11,9 +11,15 @@
       class="form-control"
       id="radius"
       ng-model="opCtrl.setting.value">
-    <span class="input-group-addon">
-      def: {{ opCtrl.setting.def }}
-    </span>
+    <a
+      href
+      class="input-group-addon"
+      uib-popover-template="'map/map-option-popover.template.html'"
+      popover-placement="bottom"
+      popover-trigger="'outsideClick'"
+      popover-class="option-popover">
+        <span class="glyphicon glyphicon-info-sign"></span>
+    </a>
   </div>
   <div class="col-md-1"></div>
 </div>

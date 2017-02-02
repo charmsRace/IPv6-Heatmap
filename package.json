@@ -47,6 +47,7 @@
     "glob": "^7.0.5",
     "gulp": "^3.9.1",
     "gulp-gunzip": "0.0.3",
+    "jquery": "^3.1.1",
     "leaflet": "^0.7.7",
     "leaflet.heat": "^0.2.0",
     "line-input-stream": "^1.0.1",

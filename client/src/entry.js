@@ -1,16 +1,17 @@
 (function() {
     'use strict';
-    
+
     var angular = require('angular');
-    
+
     require('angular-resource');
     require('./vendor/angular-route/angular-route.js');
     require('leaflet');
     require('./vendor/leaflet-heat/leaflet-heat.js');
     require('./vendor/leaflet-heat/leaflet-heat.js');
     require('./vendor/angular-leaflet-directive/dist/angular-leaflet-directive.js');
+    require('./vendor/ui-bootstrap/ui-bootstrap-custom-tpls-2.4.0.min.js');
     var Promise = require('bluebird');
-    
+
     /*
      * Note: I would normally move all of these angular
      * components to separate files, but I feel like
@@ -27,7 +28,7 @@
             'iphm.resources.coordfreqs',
             'iphm.resources.mapboxtiles',
             'iphm.map',
-            // 'iphm.cf',
+            'ui.bootstrap'
         ]);
     
     angular
@@ -283,23 +284,25 @@
                 setting: '='
             },
             controller: function() {
-                var set = function() {
-                    this.testvalue = 7;
+                var opCtrl = this;
+                opCtrl.getDesc = function() {
+                    return opCtrl.setting.desc
+                        + '<br /><br />Default: '
+                        + opCtrl.setting.default;
                 };
-                this.set = set;
             },
             controllerAs: 'opCtrl',
             templateUrl: '/map/map-option.template.html'
         };
     }
-    
+
     angular
         .module('iphm.map')
         .constant('defHMSettings', {
-            radius: 6,
-            blur: 4,
+            radius: 8,
+            blur: 10,
             minOpacity: 0.2,
-            maxZoom: 5
+            maxZoom: 1
         });
     
     angular
@@ -363,18 +366,22 @@
         angular.merge(mapCtrl.hmSettings, {
             radius: {
                 name: 'Radius',
+                desc: 'The radius of each data point.'
             },
             blur: {
                 name: 'Blur',
+                desc: 'The degree to which points are blurred together, i.e. how large of an area around a point is included in the computation for its visual temperature. If increasing blur causes the entire heatmap to fade, increase radius as well, so that less empty space is included in the calculation.'
             },
             minOpacity: {
                 name: 'Min. Opacity',
+                desc: 'The opacity of the coldest points.'
             },
             maxZoom: {
                 name: 'Max. Zoom',
+                desc: 'The zoom level at which the points reach maximum intensity. 
             }
         });
-        
+
         var layers = {
             baselayers: {
                 mapboxStreets: MapboxTiles.layer

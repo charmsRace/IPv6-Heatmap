@@ -32,7 +32,10 @@
   justify-content: center;
 }
 
-
+.option-popover {
+    max-width: 400px;
+    width: 250%;
+}
 
 
 
