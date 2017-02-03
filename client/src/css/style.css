@@ -5,6 +5,10 @@
     font-family: 'Nunito', sans-serif;
 }
 
+body {
+    background: url(../img/cartographer.png) repeat 0 0;
+}
+
 .mapcontrol {
     
 }
@@ -38,15 +42,29 @@
     width: 250%;
 }
 
+.view-container {
+    padding: 1.5vh 3.5vw;
+    opacity: .9;
+}
+
+.map-container {
+    /*background: url(../img/cloth_alike.png) repeat 0 0;*/
+    /*background-color: rgba(250, 243, 254, .8);*/
+    background-color: rgba(245, 230, 255, .8);
+}
+
 .map {
     border-style: solid;
-    border-width: 3px;
-    border-color: #bfbfbf;
+    border-width: 2px;
+    border-color: #00518B;
     border-radius: 10px;
+    box-shadow: 0 0 3px 0px #109CFF;
+    z-index: 0;
 }
 
 .title-box {
     font-family: 'Ubuntu', sans-serif;
+    font-size: 4em;
 }
 
 

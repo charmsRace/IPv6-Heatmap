@@ -124,8 +124,8 @@ gulp.task('clean', function() {
 gulp.task('images', function() {
     return (
         gulp
-            .src(path.join(dir.clisrc, 'images/**/*'))
-            .pipe(gulp.dest(path.join(dir.clibuild, 'images')))
+            .src(path.join(dir.clisrc, 'img/**/*'))
+            .pipe(gulp.dest(path.join(dir.clibuild, 'img')))
     );
 });
 

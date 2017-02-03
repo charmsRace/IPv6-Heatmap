@@ -1,6 +1,6 @@
-<div class="container-fluid jumbotron text-center">
+<div class="container-fluid jumbotron text-center map-container">
   <div class="row vertical-align">
-    <div class="map-container col-md-8">
+    <div class="map-col col-md-8">
       <leaflet
         defaults="mapCtrl.defaults"
         bounds="mapCtrl.bounds"
@@ -16,9 +16,9 @@
 
       <div class="row">
         <div class="col-md-12">
-          <h1 class="title-box">
+          <h2 class="title-box">
             IPv6 Heatmap
-          </h1>
+          </h2>
         </div>
       </div>
 
@@ -165,11 +165,13 @@
             class="btn btn-info btn-lg"
             ng-click="mapCtrl.toggleWrap();">
             <span class="glyphicon glyphicon-pushpin"></span>
-            Toggle<br>
-            heatmap<br>
-            wrapping<br>
-            (currently<br>
-            {{ (mapCtrl.options.wrap ? 'en' : 'dis') + 'abled' }})
+            <small>
+              Toggle<br>
+              heatmap<br>
+              wrapping<br>
+              (currently<br>
+              {{ (mapCtrl.options.wrap ? 'en' : 'dis') + 'abled' }})
+            </small>
           </a>
         </div>
         <div class="col-md-4">
@@ -178,11 +180,13 @@
             class="btn btn-info btn-lg"
             ng-click="mapCtrl.toggleDynamic();">
             <span class="glyphicon glyphicon-pushpin"></span>
-            Toggle<br>
-            dynamic<br>
-            loading<br>
-            (currently<br>
-            {{ mapCtrl.options.dynamic ? 'dynamic' : 'global' }})
+            <small>
+              Toggle<br>
+              dynamic<br>
+              loading<br>
+              (currently<br>
+              {{ mapCtrl.options.dynamic ? 'dynamic' : 'global' }})
+            </small>
           </a>
         </div>
         <div class="col-md-4">
@@ -190,9 +194,11 @@
             href="#"
             class="btn btn-info btn-lg">
             <span class="glyphicon glyphicon-download-alt"></span>
-            Download .json<br>
-            for these bounds<br>
-            (not implemented)
+            <small>
+              Download .json<br>
+              for these bounds<br>
+              (not implemented)
+            </small>
           </a>
         </div>
       </div>
