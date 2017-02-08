@@ -43,7 +43,12 @@
     function routeConfig($routeProvider, $locationProvider) {
         $routeProvider
             .when('/map', {
-                templateUrl: '/views/map.html',
+                templateUrl: '/views/map2.html',
+                controller: 'MapCtrl',
+                controllerAs: 'mapCtrl'
+            })
+            .when('/map2', {
+                templateUrl: '/views/map2.html',
                 controller: 'MapCtrl',
                 controllerAs: 'mapCtrl'
             })

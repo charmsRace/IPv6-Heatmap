@@ -1,0 +1,158 @@
+* {
+    /*
+    border:1px solid #F00;
+    */
+    font-family: 'Nunito', sans-serif;
+}
+
+body {
+    background: #000000 url(../img/cartographer2.png) repeat 0 0;
+}
+
+.mapcontrol {
+    
+}
+
+.mapcontrol > div {
+    float: left;
+    width: 50%;
+    margin: 0 auto;
+}
+
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+
+.vertical-align {
+  display: flex;
+  flex-direction: row;
+}
+
+.vertical-align > [class^="col-"],
+.vertical-align > [class*=" col-"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.option-popover {
+    max-width: 400px;
+    width: 250%;
+}
+
+.view-container {
+    padding: 1.5vh 3.5vw;
+}
+
+.map-container {
+    /*background: url(../img/cloth_alike.png) repeat 0 0;*/
+    background-color: rgba(209, 155, 246, .3);
+    position: relative;
+}
+
+/*
+.map-container:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: url(../img/cloth_alike.png) repeat 0 0;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    z-index: -1;
+}
+*/
+
+.map {
+    border-style: solid;
+    border-width: 2px;
+    border-color: #00518B;
+    border-radius: 10px;
+    box-shadow: 0 0 3px 0px #109CFF;
+    isolation: isolate;
+    z-index: 0;
+}
+
+.title-box {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 6em;
+    color: #FF3500;
+    text-shadow: 0 0 1px rgba(142, 229, 77, .5), 0 0 1px rgba(148, 199, 215, .5), -1px -1px 0 rgba(255, 255, 255, .3), 1px 1px 0 rgba(0, 0, 0, .8);
+    /*
+    text-shadow: -1px -1px 0px rgba(142, 229, 77, .5), 1px 1px 0px rgba(148, 199, 215, .5);
+    */
+}
+
+.isolate {
+    isolation: isolate;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #FF0000;
+}
+
+.bubble {
+    background: rgba(80, 142, 186, .5);
+    border-style: solid;
+    border-width: 1px;
+    border-color: #000000;
+    border-radius: 10px;
+}
+
+/*
+* {
+    -webkit-border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+    border-radius: 0 !important;
+    font-family: calibri;
+}
+.strike span {
+    text-decoration: line-through;
+    color: $ccc;
+}
+.todos {
+    padding: 20px;
+}
+.todo {
+    padding: 10px;
+    font-size: 21px;
+    border-bottom: 1px solid;
+}
+.todo .btn {
+    margin-left: 5px;
+    width: 72px;
+}
+.todo:hover {
+    background: #e7e7e7;
+}
+@media (max-width: 991px) {
+    .todo .btn {
+        margin-bottom: 10px;
+    }
+    .todo input[type=checkbox] {
+        width: 25px;
+        height: 25px;
+    }
+}
+@media (max-width: 991px) {
+    .todo .btn-warning {
+        margin-top: 10px;
+        margin-left: 0px;
+    }
+}
+@media (max-width: 450px) {
+    .todo .col-xs-8 {
+        width: 85%;
+    }
+    .todo .col-xs-3 {
+        width: 100%;
+        text-align: center;
+        border-top: 1px dashed #aaa;
+        padding-top: 10px;
+        margin-top: 10px;
+    }
+}
+*/

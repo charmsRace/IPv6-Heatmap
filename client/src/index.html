@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1">
+      content="width=device-width, initial-scale=1, scale-to-fit=no">
     <base href="/">
     <title>
       IPv6 Heatmap
@@ -16,7 +16,7 @@
 
     <!-- Fonts -->
     <link
-      href="https://fonts.googleapis.com/css?family=Nunito:300|Ubuntu:700"
+      href="https://fonts.googleapis.com/css?family=Nunito:600|Ubuntu:700"
       rel="stylesheet" />
 
     <!-- CSS -->
@@ -42,39 +42,13 @@
     ng-strict-di
     ng-app="iphm"
     ng-controller="FrameCtrl">
-    <div class="container-fluid">
-      <!-- Header -->
-      <nav class="navbar navbar-inverse">
-        <div class="navbar-header">
-          <a
-            class="navbar-brand"
-            href="/">
-            IPv6 Heatmap
-          </a>
-        </div>
-        <!-- View links -->
-        <ul class="nav navbar-nav">
-          <li>
-            <a href="/map">
-              Map
-            </a>
-          </li>
-          <li>
-            <a href="/apispec">
-              Api Spec.
-            </a>
-          </li>
-          <li>
-            <a href="https://github.com/Calamitizer/IPv6-Heatmap">
-              GitHub
-            </a>
-          </li>
-        </ul>
-      </nav>
-      <div 
-        class="view-container"
-        ng-view>
+    <div class="site-wrapper bg">
+
+      <div class="site-wrapper-inner bg" ng-view>
+
       </div>
+
     </div>
+
   </body>
 </html>
