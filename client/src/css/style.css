@@ -26,16 +26,19 @@ body {
     background: #0000FF;
 }
 
-.brc {
-    border: 5px solid #00FFFF;
+.olc {
+    outline: 2px solid #00FFFF;
+    border: 2px solid #00FFFF;
 }
 
-.brm {
-    border: 5px solid #FF00FF;
+.olm {
+    outline: 2px solid #FF00FF;
+    border: 2px solid #FF00FF;
 }
 
-.bry {
-    border: 5px solid #FFFF00;
+.oly {
+    outline: 2px solid #FFFF00;
+    border: 2px solid #FFFF00;
 }
 
 .mapcontrol {
@@ -81,6 +84,7 @@ body {
     min-height: 100%;
     width: 100%;
     min-width: 100%;
+    margin: 0;
 }
 
 .vcenter {
@@ -115,15 +119,19 @@ body {
     min-width: 100vw;
     height: 100vh;
     min-height: 100vh;
-    margin-left: auto;
-    margin-right: auto;
     /*background: url(../img/cloth_alike.png) repeat 0 0;*/
-    background-color: rgba(209, 155, 246, .3);
+    /*background-color: rgba(209, 155, 246, .3);*/
     position: relative;
 }
 
 .map-col {
-    height: 100%;
+    border-top-left-radius: 1.5rem;
+    border-bottom-left-radius: 1.5rem;
+}
+
+.info-col {
+    border-top-right-radius: 7.5rem;
+    border-bottom-right-radius: 7.5rem;
 }
 
 .inner {
@@ -148,11 +156,8 @@ body {
 .map {
     width: 100%;
     height: 100%;
-    border-style: solid;
-    border-width: 20px;
-    border-color: #00518B;
-    border-radius: 1000px;
-    box-shadow: 0 0 3px 0px #109CFF;
+    /*border: 20px dashed #00518B;*/
+    /*box-shadow: 0 0 3px 0px #109CFF;*/
     isolation: isolate;
     z-index: 0;
 }
@@ -173,7 +178,6 @@ body {
     border-top-right-radius: 0 !important;
     border-bottom-left-radius: 1.5rem !important;
     border-bottom-right-radius: 0 !important;
-    background: rgba(0, 255, 0, 1);
 }
 
 /*

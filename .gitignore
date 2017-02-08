@@ -80,6 +80,9 @@ server/mmdb/GeoLite2-City-CSV.zip
 #client/src/css/leaflet.css
 #client/src/json/heat-test.json
 
+# vim swap files
+*.swp
+
 # Scratchwork
 crypt
 scratch.js
