@@ -25,7 +25,22 @@
         <div class="col-xs-12 text-col">
           <div class="tab-container">
 
-            <!-- Tabs go here -->
+
+
+            <uib-tabset active="active">
+              <uib-tab
+                ng-repeat="tab in mapCtrl.tabs"
+                index="$index"
+                heading="{{ tab.heading }}">
+                <div ng-include="tab.templateUrl"></div>
+              </uib-tab>
+
+              <uib-tab index="3" heading="Static">
+                Static content
+              </uib-tab>
+            </uib-tabset>
+
+
 
           </div>
         </div>

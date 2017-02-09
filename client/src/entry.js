@@ -596,8 +596,17 @@
             mapCtrl.request(mapCtrl.getParams());
         };
 
-        mapCtrl.tabData = [
-
+        mapCtrl.tabs = [
+            {
+                heading: 'Coordinates',
+                templateUrl: '/tabs/coord-tab.template.html'
+            }, {
+                heading: 'Settings',
+                templateUrl: '/tabs/settings-tab.template.html'
+            }, {
+                heading: 'Info',
+                templateUrl: '/tabs/info-tab.template.html'
+            }
         ];
     }
 }());
