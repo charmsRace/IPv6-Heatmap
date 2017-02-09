@@ -3,6 +3,9 @@
     border:1px solid #F00;
     */
     font-family: 'Nunito', sans-serif;
+    font-size: inherit;
+    margin: 0;
+    padding: 0;
 }
 
 html,
@@ -41,10 +44,6 @@ body {
     border: 2px solid #FFFF00;
 }
 
-.mapcontrol {
-
-}
-
 .site-wrapper {
     display: table;
     width: 100%;
@@ -60,21 +59,14 @@ body {
 
 }
 
-.view-container {
-    margin-left: auto;
-    margin-right: auto;
+/*
+.nopad-row {
+    padding: 0 !important;
 }
+*/
 
-
-
-
-.mapcontrol > div {
-    float: left;
-    width: 50%;
-    margin: 0 auto;
-}
-
-.no-padding > [class*="col-"] {
+.nopad-cols > [class^="col-"],
+.nopad-cols > [class*=" col-"] {
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
@@ -93,16 +85,58 @@ body {
     float: none;
 }
 
+.vert-align-cols {
+    font-size: 0; /* To eliminate phantom spaces */
+}
+
+.vert-align-cols > [class^="col-"],
+.vert-align-cols > [class*=" col-"] {
+    height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+    font-size: 1rem;
+}
+
 .vertical-align {
-  display: flex;
-  flex-direction: row;
+    /*display: flex;*/
+    /*flex-direction: row;*/
 }
 
 .vertical-align > [class^="col-"],
 .vertical-align > [class*=" col-"] {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    height: 100%;
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
+}
+
+.text-col {
+    height: 100%;
+    /*padding: 0 !important;*/
+    /*margin: 0 !important;*/
+}
+
+.text-col * {
+    font-size: 3rem;
+}
+
+.size-test {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    background: rgba(127, 127, 0, .5);
+    /*border: 20px solid black;*/
+}
+
+.vc-text {
+    position: absolute;
+    margin: 0;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }
 
 .option-popover {
@@ -119,7 +153,6 @@ body {
     min-width: 100vw;
     height: 100vh;
     min-height: 100vh;
-    /*background: url(../img/cloth_alike.png) repeat 0 0;*/
     /*background-color: rgba(209, 155, 246, .3);*/
     position: relative;
 }
@@ -130,12 +163,21 @@ body {
 }
 
 .info-col {
-    border-top-right-radius: 7.5rem;
-    border-bottom-right-radius: 7.5rem;
+    border-top-right-radius: 1.5rem;
+    border-bottom-right-radius: 1.5rem;
+    background: url(../img/cloth_alike.png) repeat 0 0;
+}
+
+.title-row {
+    height: 20%;
+}
+
+.tab-row {
+    height: 80%;
 }
 
 .inner {
-    padding: 5vh 3.5vw;
+    padding: 5vh 4vw;
 }
 
 /*
@@ -163,8 +205,9 @@ body {
 }
 
 .title-box {
+    white-space: nowrap;
     font-family: 'Ubuntu', sans-serif;
-    font-size: 6em;
+    font-size: 4vw;
     color: #FF3500;
     text-shadow: 0 0 1px rgba(142, 229, 77, .5), 0 0 1px rgba(148, 199, 215, .5), -1px -1px 0 rgba(255, 255, 255, .3), 1px 1px 0 rgba(0, 0, 0, .8);
     /*

@@ -9,7 +9,7 @@
     require('./vendor/leaflet-heat/leaflet-heat.js');
     require('./vendor/leaflet-heat/leaflet-heat.js');
     require('./vendor/angular-leaflet-directive/dist/angular-leaflet-directive.js');
-    require('./vendor/ui-bootstrap/ui-bootstrap-custom-tpls-2.4.0.min.js');
+    require('angular-ui-bootstrap');
     var Promise = require('bluebird');
 
     /*
@@ -128,9 +128,9 @@
                     status.downloading = false;
                     status.downloaded = false;
                 });
-                
+
         };
-        
+
         var cancelReq = function() {
             if (standingReq && standingReq.$cancelRequest) {
                 // if .$cancelRequest isn't there,
@@ -140,14 +140,14 @@
                 status.downloading = false;
             }
         };
-        
+
         var fetchBBox = function(params) {
             cancelReq();
             initiateReq(params);
             return standingReq
                 .$promise;
         };
-        
+
         /*
         var validate = function(coordFreqs) {
             var anyLat = false;
@@ -174,7 +174,7 @@
             }
         };
         */
-        
+
         return {
             status: status,
             standingReq: standingReq,
@@ -182,7 +182,7 @@
             cancelReq: cancelReq
         };
     }
-    
+
     angular
         .module('iphm.resources.mapboxtiles', [])
         .constant('mbTCf', {
@@ -595,5 +595,9 @@
             mapCtrl.options.wrap ^= 1;
             mapCtrl.request(mapCtrl.getParams());
         };
+
+        mapCtrl.tabData = [
+
+        ];
     }
 }());
