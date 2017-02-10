@@ -28,7 +28,8 @@
 }
 
 .tabs-right > .nav-tabs > li {
-    height: 33.33%;
+    height: calc(100% / 3);
+    margin: 0;
     float: none;
 }
 
@@ -40,7 +41,6 @@
     min-width: 74px;
     height: 100%;
     margin-right: 0;
-    margin-bottom: 3px;
 }
 
 .tabs-right > .nav-tabs > li > a::before {
