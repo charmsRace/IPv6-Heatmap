@@ -28,8 +28,12 @@
 }
 
 .tabs-right > .nav-tabs > li {
-    height: 25%;
+    height: 33.33%;
     float: none;
+}
+
+.tabs-right > .nav-tabs > li *:not(.tab-icon) {
+    font-size: 0;
 }
 
 .tabs-right > .nav-tabs > li > a {
@@ -71,4 +75,8 @@
     /*float: left;*/
     border-color: #DDD #DDD #DDD transparent;
     *border-left-color: #FFFFFF;
+}
+
+.tab-icon {
+    font-size: 5rem;
 }

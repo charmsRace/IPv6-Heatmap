@@ -602,13 +602,13 @@
 
         mapCtrl.tabs = [
             {
-                glyphicon: 'glyphicon glyphicon-globe',
+                glyphicon: 'glyphicon glyphicon-globe tab-icon',
                 templateUrl: '/tabs/coord-tab.template.html'
             }, {
-                glyphicon: 'glyphicon glyphicon-wrench',
+                glyphicon: 'glyphicon glyphicon-wrench tab-icon',
                 templateUrl: '/tabs/settings-tab.template.html'
             }, {
-                glyphicon: 'glyphicon glyphicon-question-sign',
+                glyphicon: 'glyphicon glyphicon-question-sign tab-icon',
                 templateUrl: '/tabs/info-tab.template.html'
             }
         ];
