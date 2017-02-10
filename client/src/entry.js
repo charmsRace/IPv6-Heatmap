@@ -596,17 +596,22 @@
             mapCtrl.request(mapCtrl.getParams());
         };
 
+        mapCtrl.tabsetTemplateUrl = '/tabs/right-tabs.template.html';
+
+        mapCtrl.activeTab = 0;
+
         mapCtrl.tabs = [
             {
-                heading: 'Coordinates',
+                glyphicon: 'glyphicon glyphicon-globe',
                 templateUrl: '/tabs/coord-tab.template.html'
             }, {
-                heading: 'Settings',
+                glyphicon: 'glyphicon glyphicon-wrench',
                 templateUrl: '/tabs/settings-tab.template.html'
             }, {
-                heading: 'Info',
+                glyphicon: 'glyphicon glyphicon-question-sign',
                 templateUrl: '/tabs/info-tab.template.html'
             }
         ];
+
     }
 }());

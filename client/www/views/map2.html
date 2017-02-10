@@ -27,11 +27,24 @@
 
 
 
-            <uib-tabset active="active">
+            <uib-tabset
+              active="mapCtrl.activeTab"
+              vertical="true"
+              template-url="/tabs/right-tabs.template.html">
+              <!--
+                Ideally, this would be {{ mapCtrl.tabsetTemplateUrl }},
+                so the tab formatting can be changed dynamically.
+                NTFS: This is difficult because template-url does not
+                automatically interpolate angular expressions, but
+                ng-attr-template-url does not interpolate until after
+                the directive has failed to compile.
+              -->
               <uib-tab
                 ng-repeat="tab in mapCtrl.tabs"
-                index="$index"
-                heading="{{ tab.heading }}">
+                index="$index">
+                <uib-tab-heading>
+                  <span class="{{ tab.glyphicon }}"></span>
+                </uib-tab-heading>
                 <div ng-include="tab.templateUrl"></div>
               </uib-tab>
 
