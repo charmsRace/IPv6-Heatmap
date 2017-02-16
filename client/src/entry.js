@@ -10,6 +10,7 @@
     require('./vendor/leaflet-heat/leaflet-heat.js');
     require('./vendor/angular-leaflet-directive/dist/angular-leaflet-directive.js');
     require('angular-ui-bootstrap');
+    require('color-temperature');
     var Promise = require('bluebird');
 
     /*
@@ -278,27 +279,33 @@
     angular
         .module('iphm.map')
         .directive('iphmMapOption', iphmMapOption);
-    
+
     iphmMapOption.$inject = [];
-    
+
     function iphmMapOption() {
-        return {
+
+        var OpCtrl = function OpCtrl() {
+            console.log('OpCtrl initialized');
+            var opCtrl = this;
+            opCtrl.getDesc = function getDesc() {
+                return opCtrl.setting.desc
+                    + '<br /><br />Default: '
+                    + opCtrl.setting.default;
+            };
+        };
+
+        var dDO = {
             restrict: 'E',
             scope: {},
             bindToController: {
                 setting: '='
             },
-            controller: function() {
-                var opCtrl = this;
-                opCtrl.getDesc = function() {
-                    return opCtrl.setting.desc
-                        + '<br /><br />Default: '
-                        + opCtrl.setting.default;
-                };
-            },
+            controller: OpCtrl,
             controllerAs: 'opCtrl',
             templateUrl: '/map/map-option.template.html'
         };
+
+        return dDO;
     }
 
     angular
@@ -408,16 +415,16 @@
             bounds: bounds,
             layers: layers
         });
-        
+
         mapCtrl.setOptions = function() {
             var newOptions = {};
-            
+
             Object
                 .keys(mapCtrl.hmSettings)
                 .map(function(setting) {
                     newOptions[setting] = mapCtrl.hmSettings[setting].value;
                 });
-            
+
             leafletData
                 .getLayers()
                 .then(function(layers) {
@@ -427,7 +434,20 @@
                         .setOptions(newOptions);
                 });
         };
-        
+
+        mapCtrl.setGradient = function setGradient(newGrad) {
+            leafletData
+                .getLayers()
+                .then(function(layers) {
+                    layers
+                        .overlays
+                        .heat
+                        .setOptions({
+                            gradient: newGrad
+                        });
+                });
+        };
+
         mapCtrl.setData = function(data) {
             /*
             var n = 0;
@@ -576,7 +596,8 @@
         
         mapCtrl.options = {
             dynamic: 1,
-            wrap: 1
+            wrap: 1,
+            color: 1
         };
         
         mapCtrl.globe = {
@@ -585,29 +606,127 @@
             dlat: -90,
             ulat: 90,
         };
-        
+
         mapCtrl.toggleDynamic = function() {
             mapCtrl.options.dynamic ^= 1;
             mapCtrl.request(mapCtrl.getParams());
         };
-        
+
         mapCtrl.toggleWrap = function() {
             mapCtrl.options.wrap ^= 1;
             mapCtrl.request(mapCtrl.getParams());
         };
 
+        mapCtrl.gradients = {
+            default: {
+                0.4: 'blue',
+                0.6: 'cyan',
+                0.7: 'lime',
+                0.8: 'yellow',
+                1.0: 'red'
+            },
+            tri: (function() {
+                var grad = {};
+
+                grad[1/3] = '#FF0000';
+                grad[2/3] = '#00FF00';
+                grad[3/3] = '#0000FF';
+
+                return grad;
+            }()),
+            mono: (function() {
+                var grad = {};
+                '0123456789ABCDEF'
+                    .split('')
+                    .reverse()
+                    .map(function(c, i) {
+                        grad[(i + 1) / 16] = '#' + c.repeat(6);
+                    });
+
+                return grad;
+            }()),
+            temp: (function() {
+                var minT = 1000;
+                var maxT = 12000;
+                var n = 8;
+
+                /*
+                 * A smooth, strictly increasing function on
+                 * the unit closed interval [0, 1], also
+                 * satisfying f(0) = 0 and f(1) = 1). We can
+                 * use this to emphasize the lower region of
+                 * the color temperature scale, since HM
+                 * points of intensity below ~.6 have almost
+                 * no visual effect.
+                 *
+                 * With homeomorphism x -> log2(x + 1), the
+                 * interval [0, .5] is stretched to [0, .585].
+                 * Iterating this 4 times, we pull the white
+                 * band (@ ~.5) up to ~.79, around the midpoint
+                 * of the intensity range that actually affects
+                 * the heatmap layer whatsoever.
+                 */
+
+                var homeo = (function() {
+                    var baseF = function(x) {
+                        return Math.log2(x + 1);
+                    };
+                    var iter = 2;
+
+                    return function(x) {
+                        for (var i = 0; i < iter; i++) {
+                            x = baseF(x);
+                        }
+                        return x;
+                    };
+                }());
+
+                var grad = {};
+
+                Array
+                    .apply(null, {length: n})
+                    .map(Function.call, function(i) {
+                        var r = i / (n - 1);
+                        var temp = minT + (r * (maxT - minT));
+                        // Flip the ends of the scale, so red is higher intensity
+                        var rgb = colorTemperature2rgb(maxT + minT - temp);
+                        var hex = 'rgb('
+                            + rgb.red + ', '
+                            + rgb.green + ', '
+                            + rgb.blue + ')';
+                        grad[homeo(r)] = hex;
+                    });
+
+                console.log(grad);
+                return grad;
+            }())
+        };
+
+        mapCtrl.toggleColor = function toggleColor() {
+            mapCtrl.options.color ^= 1;
+            mapCtrl.setGradient(mapCtrl.gradients[
+                (!!mapCtrl.options.color)
+                ? 'default'
+                : 'temp'
+            ]);
+            //mapCtrl.setGradient(mapCtrl.gradients[mapCtrl.options.color ? 'default : mono]);
+        };
+
         mapCtrl.tabsetTemplateUrl = '/tabs/right-tabs.template.html';
 
-        mapCtrl.activeTab = 0;
+        mapCtrl.activeTab = 1;
 
         mapCtrl.tabs = [
             {
+                name: 'Coordinates',
                 glyphicon: 'glyphicon glyphicon-globe tab-icon',
                 templateUrl: '/tabs/coord-tab.template.html'
             }, {
+                name: 'Settings',
                 glyphicon: 'glyphicon glyphicon-wrench tab-icon',
                 templateUrl: '/tabs/settings-tab.template.html'
             }, {
+                name: 'Info',
                 glyphicon: 'glyphicon glyphicon-question-sign tab-icon',
                 templateUrl: '/tabs/info-tab.template.html'
             }

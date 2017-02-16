@@ -16,6 +16,7 @@
 }
 
 .tab-content {
+    height: 100%;
     overflow: hidden;
 }
 

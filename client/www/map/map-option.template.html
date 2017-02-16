@@ -1,15 +1,15 @@
 <div class="row">
-  <div class="col-md-1"></div>
+  <div class="col-xs-1"></div>
   <label
-    for="radius"
-    class="col-md-4 vcenter">
+    for="{{ opCtrl.setting.name }}"
+    class="col-xs-4 vcenter">
     {{ opCtrl.setting.name }}
   </label>
-  <div class="input-group col-md-6 vcenter">
+  <div class="input-group col-xs-6 vcenter">
     <input
       type="number"
       class="form-control"
-      id="radius"
+      id="{{ opCtrl.setting.name }}"
       ng-model="opCtrl.setting.value">
     <a
       href
@@ -21,5 +21,5 @@
         <span class="glyphicon glyphicon-info-sign"></span>
     </a>
   </div>
-  <div class="col-md-1"></div>
+  <div class="col-xs-1"></div>
 </div>

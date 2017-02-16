@@ -142,8 +142,8 @@ gulp.task('html', function() {
 gulp.task('css', function() {
     gulp
         .src(cf.css.src)
-//        .pipe(mobilizer(...))
-        .pipe(cssmin())
+        //.pipe(mobilizer(...))
+        //.pipe(cssmin())
         .pipe(concat('style.css'))
         .pipe(rename({suffix: '.min'}))
         .pipe(gulp.dest(path.join(dir.clibuild, 'css')));
@@ -193,7 +193,7 @@ gulp.task('js', function() {
             .pipe(uglify())
             .pipe(rename({suffix: '.min'}))
             .on('error', gutil.log)
-            .pipe(sourcemaps.write('./'))
+            //.pipe(sourcemaps.write('./'))
             .pipe(gulp.dest(path.join(dir.clibuild, 'js/')))
     );
 });

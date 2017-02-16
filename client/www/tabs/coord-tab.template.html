@@ -1,54 +1,106 @@
-<!--
-<p>
-unicorns unicorns unicorns unicorns unicorns unicorns unicorns unicorns unicorns unicorns unicorns unicorns unicorns unicorns unicorns unicorns unicorns unicorns unicorns unicorns unicorns unicorns unicorns unicorns unicorns unicorns unicorns
-</p>
--->
+<div class="coord-tab">
 
-<div class="row">
-  <div class="col-xs-6">
-    <p>Test</p>
+  <div class="row tab-title-row">
+    <div class="col-xs-12">
+      <h2>
+        Tab Title
+      </h2>
+    </div>
   </div>
-  <div class="col-xs-6">
-    <p>Test</p>
+
+  <div class="row coordinates-container-row">
+
+    <div class="col-xs-6">
+      <div class="row">
+        <div class="col-xs-12">
+          <h2>
+            Latitude
+          </h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="row">
+            <div class="col-xs-4">
+              <p>
+                North
+              </p>
+            </div>
+            <div class="col-xs-8">
+              <p>
+                <small>
+                  {{ mapCtrl.bounds.northEast.lat | coordFilter }}
+                </small>
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-4">
+              <p>
+                South
+              </p>
+            </div>
+            <div class="col-xs-8">
+              <p>
+                <small>
+                  {{ mapCtrl.bounds.southWest.lat | coordFilter }}
+                </small>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xs-6">
+      <div class="row">
+        <div class="col-xs-12">
+          <h2>
+            Longitude
+          </h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="row">
+            <div class="col-xs-4">
+              <p>
+                Left
+              </p>
+            </div>
+            <div class="col-xs-8">
+              <p>
+                <small>
+                  {{ mapCtrl.bounds.southWest.lng | coordFilter }}
+                </small>
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-4">
+              <p>
+                Right
+              </p>
+            </div>
+            <div class="col-xs-8">
+              <p>
+                <small>
+                  {{ mapCtrl.bounds.northEast.lng | coordFilter }}
+                </small>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <div class="row">
+    
+  </div>
+
 </div>
-<div class="row">
-  <div class="col-xs-4">
-    <p>Test</p>
-  </div>
-  <div class="col-xs-8">
-    <p>Test</p>
-  </div>
-</div>
-<div class="row">
-  <div class="col-xs-9">
-    <p>Test</p>
-  </div>
-  <div class="col-xs-3">
-    <p>Test</p>
-  </div>
-</div>
-<div class="row">
-  <div class="col-xs-6">
-    <p>Test</p>
-  </div>
-  <div class="col-xs-6">
-    <p>Test</p>
-  </div>
-</div>
-<div class="row">
-  <div class="col-xs-4">
-    <p>Test</p>
-  </div>
-  <div class="col-xs-8">
-    <p>Test</p>
-  </div>
-</div>
-<div class="row">
-  <div class="col-xs-9">
-    <p>Test</p>
-  </div>
-  <div class="col-xs-3">
-    <p>Test</p>
-  </div>
-</div>
+
+
+
+

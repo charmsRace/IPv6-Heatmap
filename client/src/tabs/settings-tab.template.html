@@ -1,1 +1,58 @@
-Content 2
+<div class="settings-tab">
+  <div class="row tab-title-row">
+    <div class="col-xs-12">
+      <h2>
+        Settings
+      </h2>
+    </div>
+  </div>
+
+  <div class="row settings-container-row">
+    <div class="col-xs-6">
+      <form class="row form-inline">
+        <div class="col-xs-12 form-group">
+          <p>Test</p>
+          <iphm-map-option setting="mapCtrl.hmSettings.radius"></iphm-map-option>
+        </div>
+      </form>
+      <form class="row form-inline">
+        <div class="col-xs-12 form-group">
+          <iphm-map-option setting="mapCtrl.hmSettings.blur"></iphm-map-option>
+        </div>
+      </form>
+    </div>
+    <div class="col-xs-6">
+      <form class="row form-inline">
+        <div class="col-xs-12 form-group">
+          <iphm-map-option setting="mapCtrl.hmSettings.minOpacity"></iphm-map-option>
+        </div>
+      </form>
+      <form class="row form-inline">
+        <div class="col-xs-12 form-group">
+          <iphm-map-option setting="mapCtrl.hmSettings.maxZoom"></iphm-map-option>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-6">
+      <a
+        href="#"
+        class="btn btn-info btn-lg"
+        ng-click="mapCtrl.toggleColor();">
+        <span class="glyphicon glyphicon-cog"></span>
+        Toggle color
+      </a>
+    </div>
+    <div class="col-xs-6">
+      <a
+        href="#"
+        class="btn btn-info btn-lg"
+        ng-click="mapCtrl.setOptions();">
+        <span class="glyphicon glyphicon-cog"></span>
+        Set options
+      </a>
+    </div>
+  </div>
+
+</div>

@@ -115,18 +115,11 @@ body {
     height: 100%;
     /*padding: 0 !important;*/
     /*margin: 0 !important;*/
+    padding: 0 1vw 2vh;
 }
 
 .text-col * {
     font-size: 1.5vw;
-}
-
-.size-test {
-    position: absolute;
-    width: 50%;
-    height: 50%;
-    background: rgba(127, 127, 0, .5);
-    /*border: 20px solid black;*/
 }
 
 .vc-text {
@@ -168,16 +161,20 @@ body {
     background: url(../img/cloth_alike.png) repeat 0 0;
 }
 
+.info-col > .row {
+    margin: 0;
+}
+
 .title-row {
-    height: 20%;
+    height: 15%;
 }
 
 .tab-row {
-    height: 80%;
+    height: 85%;
 }
 
 .inner {
-    padding: 5vh 4vw;
+    padding: 5vh 5vw;
 }
 
 /*
