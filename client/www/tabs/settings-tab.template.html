@@ -1,5 +1,5 @@
-<div class="settings-tab">
-  <div class="row tab-title-row">
+<div class="tab-template settings-tab">
+  <div class="row nopad-cols tab-title-row">
     <div class="col-xs-12">
       <h2>
         Settings
@@ -7,51 +7,24 @@
     </div>
   </div>
 
-  <div class="row settings-container-row">
-    <div class="col-xs-6">
-      <form class="row form-inline">
-        <div class="col-xs-12 form-group">
-          <p>Test</p>
+  <div class="row nopad-cols settings-container-row">
+    <div class="col-xs-12">
+      <form class="row settings-row form-inline vert-align-cols nopad-cols">
+        <div class="col-xs-6 form-group">
           <iphm-map-option setting="mapCtrl.hmSettings.radius"></iphm-map-option>
         </div>
-      </form>
-      <form class="row form-inline">
-        <div class="col-xs-12 form-group">
-          <iphm-map-option setting="mapCtrl.hmSettings.blur"></iphm-map-option>
-        </div>
-      </form>
-    </div>
-    <div class="col-xs-6">
-      <form class="row form-inline">
-        <div class="col-xs-12 form-group">
+        <div class="col-xs-6 form-group">
           <iphm-map-option setting="mapCtrl.hmSettings.minOpacity"></iphm-map-option>
         </div>
       </form>
-      <form class="row form-inline">
-        <div class="col-xs-12 form-group">
+      <form class="row settings-row form-inline vert-align-cols nopad-cols">
+        <div class="col-xs-6 form-group">
+          <iphm-map-option setting="mapCtrl.hmSettings.blur"></iphm-map-option>
+        </div>
+        <div class="col-xs-6 form-group">
           <iphm-map-option setting="mapCtrl.hmSettings.maxZoom"></iphm-map-option>
         </div>
       </form>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-xs-6">
-      <a
-        href="#"
-        class="btn btn-info btn-lg"
-        ng-click="mapCtrl.toggleColor();">
-        <span class="glyphicon glyphicon-cog"></span>
-        Toggle color
-      </a>
-    </div>
-    <div class="col-xs-6">
-      <a
-        href="#"
-        class="btn btn-info btn-lg"
-        ng-click="mapCtrl.setOptions();">
-        <span class="glyphicon glyphicon-cog"></span>
-        Set options
-      </a>
     </div>
   </div>
 

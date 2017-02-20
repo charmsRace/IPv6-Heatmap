@@ -45,6 +45,7 @@ var cf = {
     css: {
         src: [
             path.join(dir.clisrc, 'vendor/bootstrap/dist/css/bootstrap.min.css'),
+            path.join(dir.clisrc, 'css/style.css'),
             path.join(dir.clisrc, 'css/**/*.css')
         ]
     },

@@ -21,11 +21,20 @@
 }
 
 .tab-content > .tab-pane {
+    height: 100%;
     display: none;
 }
 
 .tab-content > .active {
     display: block;
+}
+
+.tab-template {
+    /* */
+}
+
+.tab-template > .row {
+    margin: 0;
 }
 
 .tabs-right > .nav-tabs > li {
@@ -54,7 +63,7 @@
 .tabs-right > .nav-tabs {
     height: 100%;
     float: right;
-    margin-left: 19px;
+    margin-left: 0;
     border-left: 1px solid #DDD;
 }
 
@@ -83,4 +92,31 @@
     top: 50%;
     transform: translate(-50%, -50%);
     font-size: 5rem;
+}
+
+.tab-title-row {
+    height: 8vh;
+}
+
+.settings-container-row {
+    height: 72vh;
+}
+
+.settings-container-row > [class^="col-"],
+.settings-container-row > [class*=" col-"] {
+    height: 24vh;
+}
+
+.settings-row {
+    height: 50%;
+    margin: 0;
+}
+
+.settings-row > [class^="col-"] > *,
+.settings-row > [class*=" col-"] > * {
+    width: 100%;
+}
+
+.map-option-row {
+    width: 100%;
 }

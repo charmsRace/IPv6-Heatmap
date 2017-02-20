@@ -93,8 +93,8 @@ body {
 .vert-align-cols > [class*=" col-"] {
     height: 100%;
     display: inline-block;
-    vertical-align: middle;
-    float: none;
+    /*vertical-align: middle;*/ /*Does nothing?*/
+    /*float: none;*/ /*Broke setting columns*/
     font-size: 1rem;
 }
 
@@ -115,7 +115,7 @@ body {
     height: 100%;
     /*padding: 0 !important;*/
     /*margin: 0 !important;*/
-    padding: 0 1vw 2vh;
+    /*padding: 0 1vw 2vh;*/
 }
 
 .text-col * {
@@ -123,6 +123,7 @@ body {
 }
 
 .vc-text {
+    width: 100%;
     position: absolute;
     margin: 0;
     top: 50%;
@@ -165,12 +166,17 @@ body {
     margin: 0;
 }
 
+.info-col > .row > [class^="col-"],
+.info-col > .row > [class*=" col-"] {
+    padding: 0;
+}
+
 .title-row {
-    height: 15%;
+    height: 10vh;
 }
 
 .tab-row {
-    height: 85%;
+    height: 80vh;
 }
 
 .inner {
