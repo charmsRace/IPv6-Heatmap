@@ -4,13 +4,11 @@
     class="col-xs-6 option-label">
     {{ opCtrl.setting.name }}
   </label>
-  <div class="input-group col-xs-6">
-    <input
-      type="number"
-      class="form-control"
-      id="{{ opCtrl.setting.name }}"
-      ng-model="opCtrl.setting.value">
-  </div>
+  <input
+    type="number"
+    class="col-xs-6 input-group option-input"
+    id="{{ opCtrl.setting.name }}"
+    ng-model="opCtrl.setting.value">
   <!--
   <div class="col-xs-1">
     <a

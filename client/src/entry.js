@@ -274,7 +274,30 @@
         };
     }
 
+    angular
+        .module('iphm.map')
+        .directive('iphmCenterCoords', iphmCenterCoords);
 
+    iphmCenterCoords.$inject = [];
+
+    function iphmCenterCoords() {
+        var CenterCtrl = function CenterCtrl() {
+            /* */
+        };
+
+        var dDO = {
+            restrict: 'E',
+            scope: {},
+            bindToController: {
+                iphmCenter: '='
+            },
+            controller: CenterCtrl,
+            controllerAs: 'centerCtrl',
+            templateUrl: '/map/center-coords.template.html'
+        };
+
+        return dDO;
+    }
 
     angular
         .module('iphm.map')
@@ -283,7 +306,6 @@
     iphmMapOption.$inject = [];
 
     function iphmMapOption() {
-
         var OpCtrl = function OpCtrl() {
             console.log('OpCtrl initialized');
             var opCtrl = this;
@@ -353,46 +375,51 @@
             worldCopyJump: true,
             minZoom: 3
         };
-        
+
         var center = Object.assign({}, defCenter);
-        
+
         var bounds = leafletBoundsHelpers.createBoundsFromArray([
             [ 104.0667, -30.6667 ],
             [ 104.0667, -30.6667 ]
         ]);
-        
-        
+
         // wrangle options into a structure the map-option
         // directive can get the relevant info from, so
         // each component only has access to one setting
         // and not the whole configuration hash
-        mapCtrl.hmSettings = {};
-        Object
-            .keys(defHMSettings)
-            .map(function(setting) {
-                mapCtrl.hmSettings[setting] = {
-                    value: defHMSettings[setting],
-                    def: defHMSettings[setting]
-                };
+        mapCtrl.hmSettings = (function() {
+            var settings = {};
+
+            Object
+                .keys(defHMSettings)
+                .map(function(setting) {
+                    settings[setting] = {
+                        value: defHMSettings[setting],
+                        def: defHMSettings[setting]
+                    };
+                });
+            angular.merge(settings, {
+                radius: {
+                    name: 'Radius',
+                    desc: 'The radius of each data point.'
+                },
+                blur: {
+                    name: 'Blur',
+                    desc: 'The degree to which points are blurred together, i.e. how large of an area around a point is included in the computation for its visual temperature. If increasing blur auses the entire heatmap to fade, increase radius as well, so less empty space is included.'
+                },
+                minOpacity: {
+                    name: 'Min. Opacity',
+                    desc: 'The opacity of the coldest points.'
+                },
+                maxZoom: {
+                    name: 'Max. Zoom',
+                    desc: 'The zoom level at which points reach maximum intensity.'
+                }
             });
-        angular.merge(mapCtrl.hmSettings, {
-            radius: {
-                name: 'Radius',
-                desc: 'The radius of each data point.'
-            },
-            blur: {
-                name: 'Blur',
-                desc: 'The degree to which points are blurred together, i.e. how large of an area around a point is included in the computation for its visual temperature. If increasing blur causes the entire heatmap to fade, increase radius as well, so that less empty space is included in the calculation.'
-            },
-            minOpacity: {
-                name: 'Min. Opacity',
-                desc: 'The opacity of the coldest points.'
-            },
-            maxZoom: {
-                name: 'Max. Zoom',
-                desc: 'The zoom level at which the points reach maximum intensity.'
-            }
-        });
+
+            return settings;
+
+        }());
 
         var layers = {
             baselayers: {
@@ -408,7 +435,7 @@
                 }
             }
         };
-        
+
         angular.extend(mapCtrl, {
             defaults: defaults,
             center: center,
@@ -416,7 +443,7 @@
             layers: layers
         });
 
-        mapCtrl.setOptions = function() {
+        mapCtrl.setOptions = function setOptions() {
             var newOptions = {};
 
             Object
@@ -432,6 +459,25 @@
                         .overlays
                         .heat
                         .setOptions(newOptions);
+                });
+        };
+
+        mapCtrl.setDefaults = function setDefaults() {
+            var settings = mapCtrl.hmSettings;
+
+            Object
+                .keys(settings)
+                .map(function(setting) {
+                    settings[setting].value = settings[setting].def;
+                });
+
+            leafletData
+                .getLayers()
+                .then(function(layers) {
+                    layers
+                        .overlays
+                        .heat
+                        .setOptions(defHMSettings);
                 });
         };
 
@@ -714,7 +760,7 @@
 
         mapCtrl.tabsetTemplateUrl = '/tabs/right-tabs.template.html';
 
-        mapCtrl.activeTab = 1;
+        mapCtrl.activeTab = 0;
 
         mapCtrl.tabs = [
             {
@@ -725,6 +771,10 @@
                 name: 'Settings',
                 glyphicon: 'glyphicon glyphicon-wrench tab-icon',
                 templateUrl: '/tabs/settings-tab.template.html'
+            }, {
+                name: 'API',
+                glyphicon: 'glyphicon glyphicon-magnet tab-icon',
+                templateUrl: '/tabs/api-tab.template.html'
             }, {
                 name: 'Info',
                 glyphicon: 'glyphicon glyphicon-question-sign tab-icon',

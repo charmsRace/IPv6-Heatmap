@@ -772,10 +772,37 @@ body {
 	border: 1px solid #666;
 	}
 
+.map-option-row {
+    width: 100%;
+    margin: 0;
+    padding: 0 1vw;
+}
+
+.map-option-row * {
+    height: 6vh;
+}
+
 .option-label {
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
     font-size: 1vw;
     text-align: center;
-    color: #FF0000;
+    color: #000000;
+    background-color: #FF3500;
+    margin: 0;
+    position: relative;
+    top: 50%;
+    /*-webkit-transform: translateY(-50%);*/
+    /*-ms-transform: translateY(-50%);*/
+    /*transform: translateY(-50%);*/
+}
+
+.option-input {
+    border: none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
 }
 
 .tab-container {
@@ -798,6 +825,7 @@ body {
 .tab-content {
     height: 100%;
     overflow: hidden;
+    /*padding: 0 1vw;*/
 }
 
 .tab-content > .tab-pane {
@@ -818,7 +846,7 @@ body {
 }
 
 .tabs-right > .nav-tabs > li {
-    height: calc(100% / 3);
+    height: calc(100% / 4);
     margin: 0;
     float: none;
 }
@@ -842,6 +870,7 @@ body {
 
 .tabs-right > .nav-tabs {
     height: 100%;
+    width: 4vw;
     float: right;
     margin-left: 0;
     border-left: 1px solid #DDD;
@@ -894,9 +923,6 @@ body {
 
 .settings-row > [class^="col-"] > *,
 .settings-row > [class*=" col-"] > * {
-    width: 100%;
-}
-
-.map-option-row {
+    height: 12vh;
     width: 100%;
 }

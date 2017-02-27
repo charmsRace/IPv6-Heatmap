@@ -1,5 +1,32 @@
+.map-option-row {
+    width: 100%;
+    margin: 0;
+    padding: 0 1vw;
+}
+
+.map-option-row * {
+    height: 6vh;
+}
+
 .option-label {
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
     font-size: 1vw;
     text-align: center;
-    color: #FF0000;
+    color: #000000;
+    background-color: #FF3500;
+    margin: 0;
+    position: relative;
+    top: 50%;
+    /*-webkit-transform: translateY(-50%);*/
+    /*-ms-transform: translateY(-50%);*/
+    /*transform: translateY(-50%);*/
+}
+
+.option-input {
+    border: none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
 }
