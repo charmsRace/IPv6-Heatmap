@@ -289,7 +289,7 @@
             restrict: 'E',
             scope: {},
             bindToController: {
-                iphmCenter: '='
+                center: '=iphmCenter'
             },
             controller: CenterCtrl,
             controllerAs: 'centerCtrl',
@@ -307,7 +307,6 @@
 
     function iphmMapOption() {
         var OpCtrl = function OpCtrl() {
-            console.log('OpCtrl initialized');
             var opCtrl = this;
             opCtrl.getDesc = function getDesc() {
                 return opCtrl.setting.desc
@@ -371,17 +370,43 @@
 
         var mapCtrl = this;
 
-        var defaults = {
-            worldCopyJump: true,
-            minZoom: 3
-        };
+        (function initialize() {
+            var defaults = {
+                worldCopyJump: true,
+                minZoom: 3
+            };
 
-        var center = Object.assign({}, defCenter);
+            var center = Object.assign({}, defCenter);
+            var storedCenter = Object.assign({}, defCenter);
 
-        var bounds = leafletBoundsHelpers.createBoundsFromArray([
-            [ 104.0667, -30.6667 ],
-            [ 104.0667, -30.6667 ]
-        ]);
+            var bounds = leafletBoundsHelpers.createBoundsFromArray([
+                [ 104.0667, -30.6667 ],
+                [ 104.0667, -30.6667 ]
+            ]);
+
+            var layers = {
+                baselayers: {
+                    mapboxStreets: MapboxTiles.layer
+                },
+                overlays: {
+                    heat: {
+                        name: 'Heatmap',
+                        type: 'heat',
+                        data: [],
+                        layerOptions: defHMSettings,
+                        visible: true
+                    }
+                }
+            };
+
+            angular.extend(mapCtrl, {
+                defaults: defaults,
+                center: center,
+                storedCenter: storedCenter,
+                bounds: bounds,
+                layers: layers
+            });
+        }());
 
         // wrangle options into a structure the map-option
         // directive can get the relevant info from, so
@@ -418,30 +443,11 @@
             });
 
             return settings;
-
         }());
 
-        var layers = {
-            baselayers: {
-                mapboxStreets: MapboxTiles.layer
-            },
-            overlays: {
-                heat: {
-                    name: 'Heatmap',
-                    type: 'heat',
-                    data: [],
-                    layerOptions: defHMSettings,
-                    visible: true
-                }
-            }
+        mapCtrl.centerMap = function centerMap() {
+            angular.extend(mapCtrl.center, mapCtrl.storedCenter);
         };
-
-        angular.extend(mapCtrl, {
-            defaults: defaults,
-            center: center,
-            bounds: bounds,
-            layers: layers
-        });
 
         mapCtrl.setOptions = function setOptions() {
             var newOptions = {};
@@ -507,7 +513,7 @@
                 if ((cf[2] < 0) || (cf[2] > 1)) console.log('RE2', cf);
             }
             */
-            
+
             mapCtrl
                 .getBounds()
                 .then(function(bounds) {
@@ -545,7 +551,7 @@
                         .setLatLngs(data);
                 });
         };
-        
+
         mapCtrl.request = function(paramProm) {
             CoordFreqs.cancelReq();
             //mapCtrl.setData([]); // this is really just for visual confirmation
@@ -566,7 +572,7 @@
                     mapCtrl.setData(data);
                 });
         };
-        
+
         mapCtrl.getBounds = function() {
             // returns [a promise for] the bounds that the
             // next api response should cover. longitudes are
@@ -600,7 +606,7 @@
             // or else ((long + 180) % 360) - 180 would suffice
             return ((((long + 180) % 360) + 360) % 360) - 180;
         };
-        
+
         mapCtrl.getParams = function() {
             // retrieves [a promise for] the params the api should
             // be fed to update the map based on current settings
@@ -614,14 +620,15 @@
                         return bounds;
                     });
         };
-        
+
         mapCtrl.redraw = function() {
+            angular.extend(mapCtrl.storedCenter, mapCtrl.center);
             if (mapCtrl.options.dynamic) {
                 CoordFreqs.cancelReq();
                 mapCtrl.request(mapCtrl.getParams());
             }
         };
-        
+
         mapCtrl.init = function() {
             mapCtrl.request(mapCtrl.getParams());
             leafletData
@@ -633,19 +640,19 @@
                     ]);
                 });
         };
-        
+
         $scope.$on('leafletDirectiveMap.moveend', mapCtrl.redraw);
-        
+
         $scope.$on('leafletDirectiveMap.load', mapCtrl.init);
-        
+
         mapCtrl.status = CoordFreqs.status;
-        
+
         mapCtrl.options = {
             dynamic: 1,
             wrap: 1,
             color: 1
         };
-        
+
         mapCtrl.globe = {
             llng: -180,
             rlng: 180,

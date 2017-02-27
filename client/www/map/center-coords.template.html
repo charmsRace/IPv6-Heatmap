@@ -1,4 +1,4 @@
-<div class="row nopad-cols">
+<div class="row nopad-cols center-coords-container">
   <div class="col-xs-12">
     <div class="row">
       <div class="col-xs-12">
@@ -6,33 +6,33 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-xs-12">
-        <div class="row nopad-cols">
-          <div class="col-xs-4">
-            <span>
-              Lat.
-            </span>
-          </div>
-          <div class="col-xs-8">
-            <span>
-              {{ 2 + 3 }}
-            </span>
-          </div>
+    <form class="row nopad-cols form-inline">
+      <div class="col-xs-12 form-group">
+        <div class="row nopad-cols center-coord-row">
+          <label
+            for="Center Latitude"
+            class="col-xs-3">
+            Lat.
+          </label>
+          <input
+            type="number"
+            class="col-xs-9 input-group center-coord"
+            id="Center Latitude"
+            ng-model="centerCtrl.center.lat">
         </div>
-        <div class="row nopad-cols">
-          <div class="col-xs-4">
-            <span>
-              Lng.
-            </span>
-          </div>
-          <div class="col-xs-8">
-            <span>
-              {{ 3 + 5 }}
-            </span>
-          </div>
+        <div class="row nopad-cols center-coord-row">
+          <label
+            for="Center Longitude"
+            class="col-xs-3">
+            Lng.
+          </label>
+          <input
+            type="number"
+            class="col-xs-9 input-group center-coord"
+            id="Center Longitude"
+            ng-model="centerCtrl.center.lng">
         </div>
       </div>
-    </div>
+    </form>
   </div>
 </div>

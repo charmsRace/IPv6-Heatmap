@@ -926,3 +926,12 @@ body {
     height: 12vh;
     width: 100%;
 }
+
+.center-coords-container,
+.center-coords-container .row {
+    margin: 0;
+}
+
+.center-coord-row {
+    padding: 0 1vw;
+}

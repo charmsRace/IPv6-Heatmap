@@ -95,9 +95,26 @@
     </div>
   </div>
 
+  <!--
+  <div class="row center-container">
+    <div class="col-xs-12"></div>
+  </div>
+  -->
+
   <div class="row">
     <div class="col-xs-12">
-      <iphm-center-coords iphm-center="mapCtrl.defaults"></iphm-center-coords>
+      <iphm-center-coords iphm-center="mapCtrl.storedCenter"></iphm-center-coords>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <a
+        href="#"
+        class="btn btn-info btn-lg"
+        ng-click="mapCtrl.centerMap();">
+        <span class="glyphicon glyphicon-map-marker"></span>
+        Center
+      </a>
     </div>
   </div>
 
