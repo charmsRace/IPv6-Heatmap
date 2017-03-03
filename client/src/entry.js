@@ -820,8 +820,12 @@
                 templateUrl: '/tabs/api-info-group.template.html'
             },
             {
-                title: 'Request Format',
+                title: 'Request Specification',
                 templateUrl: '/tabs/api-request-group.template.html'
+            },
+            {
+                title: 'Response Specification',
+                templateUrl: '/tabs/api-response-group.template.html'
             },
             {
                 title: 'Parameters',
@@ -832,10 +836,6 @@
                 templateUrl: '/tabs/api-qss-group.template.html'
             },
             {
-                title: 'Response Format',
-                templateUrl: '/tabs/api-response-group.template.html'
-            },
-            {
                 title: 'Examples',
                 templateUrl: '/tabs/api-examples-group.template.html'
             }
@@ -844,33 +844,25 @@
         mapCtrl.apiInputs = {
             params: [
                 {
-                    name: 'llng',
-                    desc: 'left longitude of the bounding box'
+                    names: ['llng', 'rlng'],
+                    desc: 'left/right longitudes of bounding box'
                 },
                 {
-                    name: 'rlng',
-                    desc: 'right longitude of the bounding box'
-                },
-                {
-                    name: 'dlat',
-                    desc: 'lower latitude of the bounding box'
-                },
-                {
-                    name: 'ulat',
-                    desc: 'upper latitude of the bounding box'
+                    names: ['dlat', 'ulat'],
+                    desc: 'lower/upper latitudes of bounding box'
                 }
             ],
             qss: [
                 {
-                    name: 'lim',
+                    names: ['lim'],
                     desc: 'max number of data returned (otherwise unlimited)'
                 },
                 {
-                    name: 'inten',
+                    names: ['inten'],
                     desc: 'whether to return relative intensity instead of #IPs (for internal use)'
                 },
                 {
-                    name: 'head',
+                    names: ['head'],
                     desc: 'whether to prepend a header row'
                 }
             ]

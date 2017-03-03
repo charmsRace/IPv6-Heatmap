@@ -946,16 +946,9 @@ body {
 }
 
 .input-list {
-    margin: -10px;
-}
-
-.api-input-name {
-    font-size: 1.8vw;
-}
-
-.api-input-desc {
-    font-size: 1.1vw;
-    text-align: right;
+    margin-left: -10px;
+    margin-right: -10px;
+    margin: 0 -10px
 }
 
 .spec-container {
@@ -963,8 +956,18 @@ body {
 }
 
 .iphm-code {
-    font-size: .9vw;
+    font-size: 1.1vw;
     color: #2684C7;
+}
+
+.api-input-name {
+    font-size: 1.4vw;
+}
+
+.api-input-desc {
+    font-size: 1.1vw;
+    text-align: right;
+    margin: 0;
 }
 
 .codeblock-container * {

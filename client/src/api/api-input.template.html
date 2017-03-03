@@ -1,8 +1,13 @@
 <div class="row">
   <div class="col-xs-2">
-    <code class="iphm-code api-input-name">
-      {{ inputCtrl.input.name }}
-    </code>
+
+    <span ng-repeat="name in inputCtrl.input.names">
+      <code class="iphm-code">
+        {{ name }}
+      </code>
+      <br ng-if="!$last" />
+    </span>
+
   </div>
   <div class="col-xs-10">
     <p class="api-input-desc">
