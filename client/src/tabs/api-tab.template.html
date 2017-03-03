@@ -2,9 +2,102 @@
   <div class="row nopad-cols tab-title-row">
     <div class="col-xs-12">
       <h2>
-        Settings
+        API Specification
       </h2>
     </div>
   </div>
+
+  <div class="row nopad-cols api-container-row">
+    <div class="col-xs-12">
+      <uib-accordion close-others="true">
+        <div
+          uib-accordion-group
+          class="panel-default"
+          heading="{{ group.title }}"
+          template-url="tabs/accordion-group.template.html"
+          ng-repeat="group in mapCtrl.accordionGroups">
+          <div ng-include="group.templateUrl"></div>
+        </div>
+      </uib-accordion>
+    </div>
+  </div>
+
+  <!--
+  <div class="row nopad-cols api-container-row">
+    <div class="col-xs-12">
+
+      <div class="row">
+        <div class="col-xs-12">
+          <p class="api-desc">
+            This app exposes a public API for retrieving all IPv6 data within a given geographical bounding box. Namely, a list of coordinates where IPv6 addresses are reported, and the total number of addresses at each coordinate. The access node is <code class="iphm-code">iphm.herokuapp.com/api/</code>.
+        </div>
+      </div>
+
+
+
+      <div class="row spec-container">
+        <div class="col-xs-12">
+          <div class="row">
+            <div class="col-xs-12">
+              <h3>
+                Format
+              </h3>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="row">
+                <div class="col-xs-12 codeblock-container">
+                  <pre><code class="iphm-code">GET /api/v0.1/coord-freqs<br />&llng={l}&rlng={r}&dlat={d}&ulat={u}</code></pre>
+                </div>
+              </div>
+              <div class="row param-row">
+                <div class="col-xs-12">
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <h4>
+                        Parameters
+                      </h4>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <ul class="list-group">
+                        <li class="list-group-item" ng-repeat="param in mapCtrl.apiInputs.params">
+                          <iphm-api-input iphm-input="param"></iphm-api-input>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row qs-row">
+                <div class="col-xs-12">
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <h4>
+                        Query Strings
+                      </h4>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <p class="api-desc">
+                      rainbows
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+  -->
+
 
 </div>

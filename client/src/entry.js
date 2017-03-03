@@ -331,17 +331,42 @@
 
     angular
         .module('iphm.map')
+        .directive('iphmApiInput', iphmApiInput);
+
+    iphmApiInput.$inject = [];
+
+    function iphmApiInput() {
+        var InputCtrl = function InputCtrl() {
+            var inputCtrl = this;
+        };
+
+        var dDO = {
+            restrict: 'E',
+            scope: {},
+            bindToController: {
+                input: '=iphmInput'
+            },
+            controller: InputCtrl,
+            controllerAs: 'inputCtrl',
+            templateUrl: '/api/api-input.template.html'
+        };
+
+        return dDO;
+    }
+
+    angular
+        .module('iphm.map')
         .constant('defHMSettings', {
             radius: 8,
             blur: 10,
             minOpacity: 0.2,
             maxZoom: 1
         });
-    
+
     angular
         .module('iphm.map')
         .controller('MapCtrl', MapCtrl);
-    
+
     MapCtrl.$inject = [
         '$scope',
         '$http',
@@ -767,7 +792,7 @@
 
         mapCtrl.tabsetTemplateUrl = '/tabs/right-tabs.template.html';
 
-        mapCtrl.activeTab = 0;
+        mapCtrl.activeTab = 2;
 
         mapCtrl.tabs = [
             {
@@ -788,6 +813,68 @@
                 templateUrl: '/tabs/info-tab.template.html'
             }
         ];
+
+        mapCtrl.accordionGroups = [
+            {
+                title: 'Info',
+                templateUrl: '/tabs/api-info-group.template.html'
+            },
+            {
+                title: 'Request Format',
+                templateUrl: '/tabs/api-request-group.template.html'
+            },
+            {
+                title: 'Parameters',
+                templateUrl: '/tabs/api-params-group.template.html'
+            },
+            {
+                title: 'Query Strings',
+                templateUrl: '/tabs/api-qss-group.template.html'
+            },
+            {
+                title: 'Response Format',
+                templateUrl: '/tabs/api-response-group.template.html'
+            },
+            {
+                title: 'Examples',
+                templateUrl: '/tabs/api-examples-group.template.html'
+            }
+        ];
+
+        mapCtrl.apiInputs = {
+            params: [
+                {
+                    name: 'llng',
+                    desc: 'left longitude of the bounding box'
+                },
+                {
+                    name: 'rlng',
+                    desc: 'right longitude of the bounding box'
+                },
+                {
+                    name: 'dlat',
+                    desc: 'lower latitude of the bounding box'
+                },
+                {
+                    name: 'ulat',
+                    desc: 'upper latitude of the bounding box'
+                }
+            ],
+            qss: [
+                {
+                    name: 'lim',
+                    desc: 'max number of data returned (otherwise unlimited)'
+                },
+                {
+                    name: 'inten',
+                    desc: 'whether to return relative intensity instead of #IPs (for internal use)'
+                },
+                {
+                    name: 'head',
+                    desc: 'whether to prepend a header row'
+                }
+            ]
+        };
 
     }
 }());

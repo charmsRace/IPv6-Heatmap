@@ -31,7 +31,7 @@
 }
 
 .tab-template {
-    /* */
+    padding: .5vh .5vw;
 }
 
 .tab-template > .row {
@@ -127,4 +127,41 @@
 
 .center-coord-row {
     padding: 0 1vw;
+}
+
+.api-accordion-header {
+    font-size: 1vw;
+}
+
+.api-desc {
+    font-size: 1.2vw;
+    text-align: left;
+}
+
+.input-list {
+    margin: -10px;
+}
+
+.api-input-name {
+    font-size: 1.8vw;
+}
+
+.api-input-desc {
+    font-size: 1.1vw;
+    text-align: right;
+}
+
+.spec-container {
+    /* */
+}
+
+.iphm-code {
+    font-size: .9vw;
+    color: #2684C7;
+}
+
+.codeblock-container * {
+    line-height: 1;
+    text-align: left;
+    width: 100%;
 }
