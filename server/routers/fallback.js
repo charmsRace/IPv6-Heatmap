@@ -1,12 +1,12 @@
 (function() {
     'use strict';
-    
+
     var express = require('express');
     var path = require('path');
     var root = path.join(__dirname, '../../client/www');
-    
+
     var fallbackRouter = express.Router();
-    
+
     fallbackRouter
         .use(function(req, res, next) {
             console.log('Fallback');
@@ -17,6 +17,6 @@
                 root: root
             });
         });
-    
+
     module.exports = fallbackRouter;
 }());

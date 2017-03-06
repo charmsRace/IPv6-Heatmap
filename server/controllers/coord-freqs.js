@@ -1,9 +1,9 @@
 (function() {
     'use strict';
-    
+
     var mongoose = require('mongoose');
     var CoordFreq = require('../models/coord-freq.js');
-    
+
     exports.reqBBox = function (req, res) {
         console.log('Received bbox request with params ' + JSON.stringify(req.params));
         var lim;
@@ -18,26 +18,26 @@
             'inten',
             'head'
         ];
-        
+
         var params = {
             llng: Number(req.params[0]),
             rlng: Number(req.params[1]),
             dlat: Number(req.params[2]),
             ulat: Number(req.params[3])
         };
-        
+
         for (var i in qs) {
             if (req.query[qs[i]]) {
                 params[qs[i]] = req.query[qs[i]];
             }
         };
-        
+
         Object
             .keys(params)
             .map(function(key) {
                 params[key] = Number(params[key]);
             });
-        
+
         console.log(params);
         CoordFreq
             .fetchBBox(params)

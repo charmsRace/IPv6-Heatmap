@@ -37,7 +37,7 @@
 
     iphm.use(loggingRouter);
     iphm.use('/raw', rawRouter);
-    iphm.use('/api/v0.1', apiRouter);
+    iphm.use('/api/v1.0', apiRouter);
     iphm.use('/', siteRouter);
     iphm.use('/', staticRouter);
     iphm.use(fallbackRouter);

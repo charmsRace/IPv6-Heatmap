@@ -10,10 +10,7 @@
       </div>
       <div class="row">
         <div class="col-xs-12 codeblock-container">
-        <!--<pre><code class="iphm-code">GET /api/v0.1/coord-freqs
-          &amp;llng={l}&amp;rlng={r}
-          &amp;dlat={d}&amp;ulat={u}</code></pre>-->
-          <pre><code class="iphm-code">GET /api/v1.0/cfs/{llng}/{rlng}/{dlat}/{ulat}</code></pre>
+          <pre><code class="iphm-code">GET /api/v1.0/cfs/:llng/:rlng/:dlat/:ulat</code></pre>
         </div>
       </div>
     </div>
@@ -24,7 +21,7 @@
       <div class="row">
         <div class="col-xs-12">
           <h4>
-            Parameters
+            Parameters / Query Strings
           </h4>
         </div>
       </div>
@@ -33,7 +30,7 @@
           <ul class="list-group input-list">
             <li
               class="list-group-item"
-              ng-repeat="param in mapCtrl.apiInputs.params">
+              ng-repeat="param in mapCtrl.apiInputs">
               <iphm-api-input iphm-input="param"></iphm-api-input>
             </li>
           </ul>

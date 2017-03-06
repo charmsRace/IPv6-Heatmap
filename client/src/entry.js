@@ -20,7 +20,7 @@
      * for review.
      * 
      */
-    
+
     angular
         .module('iphm', [
             'ngRoute',
@@ -31,16 +31,16 @@
             'iphm.map',
             'ui.bootstrap'
         ]);
-    
+
     angular
         .module('iphm')
         .config(routeConfig);
-        
+
     routeConfig.$inject = [
         '$routeProvider',
         '$locationProvider'
     ];
-    
+
     function routeConfig($routeProvider, $locationProvider) {
         $routeProvider
             .when('/map', {
@@ -70,7 +70,7 @@
             });
         $locationProvider.html5Mode(true);
     }
-    
+
 /**********************************************
 **********************************************/
 
@@ -78,32 +78,33 @@
         .module('iphm.resources.coordfreqs', [
             'ngResource'
         ])
-    
+
     angular
         .module('iphm.resources.coordfreqs')
         .factory('CoordFreqs', CoordFreqs);
-    
+
     CoordFreqs.$inject = [
         '$resource'
     ];
-    
+
     function CoordFreqs($resource) {
-        
+
         var CF = this;
-        
-        var apiSpec = '/api/v0.1/coord-freqs'
-            + '&llng=:llng'
-            + '&rlng=:rlng'
-            + '&dlat=:dlat'
-            + '&ulat=:ulat';
-        
+
+        var apiSpec = '/api/v1.0/cfs/' + [
+            ':llng',
+            ':rlng',
+            ':dlat',
+            ':ulat'
+        ].join('/');
+
         var status = {
             downloaded: false,
             downloading: true
         };
-        
+
         var standingReq = null;
-        
+
         var BBox = $resource(apiSpec, {
             inten: 1
         }, {
@@ -115,7 +116,7 @@
         }, {
             cancellable: true
         });
-        
+
         var initiateReq = function(params) {
             standingReq = BBox.fetch(params);
             status.downloading = true;
@@ -828,19 +829,35 @@
                 templateUrl: '/tabs/api-response-group.template.html'
             },
             {
-                title: 'Parameters',
-                templateUrl: '/tabs/api-params-group.template.html'
-            },
-            {
-                title: 'Query Strings',
-                templateUrl: '/tabs/api-qss-group.template.html'
-            },
-            {
                 title: 'Examples',
                 templateUrl: '/tabs/api-examples-group.template.html'
             }
         ];
 
+        mapCtrl.apiInputs = [
+            {
+                names: ['llng', 'rlng'],
+                desc: 'left/right longitudes of bounding box'
+            },
+            {
+                names: ['dlat', 'ulat'],
+                desc: 'lower/upper latitudes of bounding box'
+            },
+            {
+                names: ['?lim'],
+                desc: 'max number of data returned (otherwise unlimited)'
+            },
+            {
+                names: ['?inten'],
+                desc: 'whether to return relative intensity instead of #IPs (for internal use)'
+            },
+            {
+                names: ['?head'],
+                desc: 'whether to prepend a header row'
+            }
+        ];
+
+        /*
         mapCtrl.apiInputs = {
             params: [
                 {
@@ -867,6 +884,7 @@
                 }
             ]
         };
+        */
 
     }
 }());
