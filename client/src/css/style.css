@@ -93,9 +93,21 @@ body {
 .vert-align-cols > [class*=" col-"] {
     height: 100%;
     display: inline-block;
-    /*vertical-align: middle;*/ /*Does nothing?*/
-    /*float: none;*/ /*Broke setting columns*/
-    font-size: 1rem;
+    /*vertical-align: middle; /*Does nothing?*/*/
+    /*float: none; /*Broke setting columns*/*/
+    /*font-size: 1rem;*/
+}
+
+.vcenter-cols {
+    font-size: 0 !important;
+}
+
+.vcenter-cols > [class^="col-"],
+.vcenter-cols > [class*=" col-"] {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+    /*font-size: 1rem;*/
 }
 
 .vertical-align {

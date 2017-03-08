@@ -1,8 +1,8 @@
 (function() {
     'use strict';
-    
+
     var mongoose = require('mongoose');
-    
+
     var CoordFreqSchema = new mongoose.Schema({
         coords: {
             type: {
@@ -35,9 +35,9 @@
         nl : 
     }
     */
-    
-    
-    
+
+
+
     CoordFreqSchema.statics = {
         fetchBBox: function(params) {
             // add qs for heatmap
@@ -63,15 +63,15 @@
             /*
             var longQuery = function() {
                 if (p.llng <= p.rlng) {
-                    
+
                     return
                 } else {
-                    
+
                     return
                 }
             };
             */
-            
+
             var longQuery = (p.llng <= p.rlng)
                 ? {
                     "coords.long" : {
@@ -97,7 +97,7 @@
                         }
                     ]
                 };
-            
+
             return this
                 .find(longQuery)
                 .where('coords.lat')
@@ -110,11 +110,11 @@
                 .then(tabulate);
         }
     };
-    
+
     /* old api
     [{"coords":{"long":168.3764,"lat":-46.4382},"intensity":0.7235620261894251,"numIps":1.8133887294219438e+24},{"coords":{"long":168.35,"lat":-46.4},"intensity":0.7093308515028848,"numIps":6.044629098073146e+23},{"coords":{"long":168.3722,"lat":-46.3894},"intensity":0.7487689053961837,"numIps":1.2693721105953606e+25},{"coords":{"long":168.3333,"lat":-46.15},"intensity":0.7093308515028848,"numIps":6.044629098073146e+23},{"coords":{"long":170.4912,"lat":-45.9059},"intensity":0.7345377307096435,"numIps":4.231240368651202e+24}]
     */
-    
+
     module.exports = mongoose.model('CoordFreq', CoordFreqSchema);
-    
+
 }());

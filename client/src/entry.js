@@ -196,15 +196,15 @@
             // inject later:
             apikey: 'pk.eyJ1IjoiY2FsYW1pdGl6ZXIiLCJhIjoiY2lxaTQzcm5iMDVoemZ5bnB6NXdpYnVlNyJ9.HGpHUJPiNRP75L5SaCZV5Q'
         });
-    
+
     angular
         .module('iphm.resources.mapboxtiles')
         .factory('MapboxTiles', MapboxTiles);
-    
+
     MapboxTiles.$inject = [
         'mbTCf'
     ];
-    
+
     function MapboxTiles(mbTCf) {
         var url = 'https://api.mapbox.com/v4/'
             + mbTCf.mapId + '/{z}/{x}/{y}'
@@ -829,6 +829,10 @@
                 templateUrl: '/tabs/api-response-group.template.html'
             },
             {
+                title: 'Notes',
+                templateUrl: '/tabs/api-notes-group.template.html'
+            },
+            {
                 title: 'Examples',
                 templateUrl: '/tabs/api-examples-group.template.html'
             }
@@ -836,24 +840,24 @@
 
         mapCtrl.apiInputs = [
             {
-                names: ['llng', 'rlng'],
-                desc: 'left/right longitudes of bounding box'
+                names: [':llng', ':rlng'],
+                desc: 'left/right longitudes\nof bounding box'
             },
             {
-                names: ['dlat', 'ulat'],
-                desc: 'lower/upper latitudes of bounding box'
+                names: [':dlat', ':ulat'],
+                desc: 'lower/upper latitudes\nof bounding box'
             },
             {
                 names: ['?lim'],
-                desc: 'max number of data returned (otherwise unlimited)'
+                desc: 'max #data returned\n(otherwise unlimited)'
             },
             {
                 names: ['?inten'],
-                desc: 'whether to return relative intensity instead of #IPs (for internal use)'
+                desc: 'whether to return relative\nintensity instead of #IPs'
             },
             {
                 names: ['?head'],
-                desc: 'whether to prepend a header row'
+                desc: 'whether to prepend\na header row'
             }
         ];
 

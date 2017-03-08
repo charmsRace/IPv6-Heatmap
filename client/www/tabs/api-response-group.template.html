@@ -1,7 +1,29 @@
+<!--
 <div class="codeblock-container">
   <pre><code class="iphm-code">[
   &lt;header?&gt;
   [ &lt;lat&gt;, &lt;lng&gt;, &lt;numIPs|inten&gt; ]
   ...
 ]</code></pre>
+</div>
+-->
+
+<div class="row">
+  <div class="col-xs-12">
+    <p class="api-desc">A <code class="iphm-code">GET</code> request sent to the API node above returns a .json object containing all IPv6 data within the geographical bounding box specified by <code class="iphm-code api-input-name">:llng</code>, <code class="iphm-code api-input-name">:rlng</code>, <code class="iphm-code api-input-name">:dlat</code>, and <code class="iphm-code api-input-name">:ulat</code>. The response .json has the following schema (whitespace added):</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-12 codeblock-container">
+    <pre><code class="iphm-code">[
+  &lt;header?&gt;,
+  [
+    &lt;lat&gt;,
+    &lt;lng&gt;,
+    &lt;numIPs|inten&gt;
+  ],
+  ...
+]</code></pre>
+  </div>
 </div>

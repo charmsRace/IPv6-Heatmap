@@ -17,7 +17,9 @@
 
 .tab-content {
     height: 100%;
-    overflow: hidden;
+    /*overflow: hidden;*/
+    overflow-x: hidden;
+    overflow-y: scroll;
     /*padding: 0 1vw;*/
 }
 
@@ -148,23 +150,47 @@
     /* */
 }
 
-.iphm-code {
-    font-size: 1.1vw;
-    color: #2684C7;
-}
-
-.api-input-name {
-    font-size: 1.4vw;
-}
-
-.api-input-desc {
-    font-size: 1.1vw;
-    text-align: right;
-    margin: 0;
-}
-
 .codeblock-container * {
     line-height: 1;
     text-align: left;
     width: 100%;
 }
+
+.iphm-code {
+    font-size: 1.25vw;
+    color: #2684C7;
+}
+
+.api-input-names {
+    text-align: right;
+    font-size: 20px;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.api-input-name {
+    color: #C74626;
+    white-space: nowrap;
+    text-align: right;
+}
+
+.api-input-desc {
+    font-size: 18px;
+    text-align: left;
+    white-space: pre-wrap;
+    margin: 0;
+}
+
+/*
+.api-notes-list > li {
+    text-align: left;
+    display: block;
+}
+
+.api-notes-list > li:before {
+    content: "\002a";
+    font-family: "Glyphicons Halflings";
+    font-size: 18px;
+    padding-right: 7px;
+}
+*/

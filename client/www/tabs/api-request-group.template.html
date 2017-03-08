@@ -1,66 +1,39 @@
-<div>
-  <div class="row">
-    <div class="col-xs-12">
-      <div class="row">
-        <div class="col-xs-12">
-          <h4>
-            URI
-          </h4>
-        </div>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="row">
+      <div class="col-xs-12">
+        <h4>
+          URI
+        </h4>
       </div>
-      <div class="row">
-        <div class="col-xs-12 codeblock-container">
-          <pre><code class="iphm-code">GET /api/v1.0/cfs/:llng/:rlng/:dlat/:ulat</code></pre>
-        </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 codeblock-container">
+        <pre><code class="iphm-code">GET /api/v1.0/cfs/:llng/:rlng/:dlat/:ulat</code></pre>
       </div>
     </div>
   </div>
+</div>
 
-  <div class="row">
-    <div class="col-xs-12">
-      <div class="row">
-        <div class="col-xs-12">
-          <h4>
-            Parameters / Query Strings
-          </h4>
-        </div>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="row">
+      <div class="col-xs-12">
+        <h4>
+          Parameters / Query Strings
+        </h4>
       </div>
-      <div class="row">
-        <div class="col-xs-12">
-          <ul class="list-group input-list">
-            <li
-              class="list-group-item"
-              ng-repeat="param in mapCtrl.apiInputs">
-              <iphm-api-input iphm-input="param"></iphm-api-input>
-            </li>
-          </ul>
-        </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <ul class="list-group input-list">
+          <li
+            class="list-group-item"
+            ng-repeat="param in mapCtrl.apiInputs">
+            <iphm-api-input iphm-input="param"></iphm-api-input>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
-
-  <div class="row">
-    <div class="col-xs-12">
-      <div class="row">
-        <div class="col-xs-12">
-          <h4>
-            Query Strings
-          </h4>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xs-12">
-          <ul class="list-group input-list">
-            <li
-              class="list-group-item"
-              ng-repeat="qs in mapCtrl.apiInputs.qss">
-              <iphm-api-input iphm-input="qs"></iphm-api-input>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
 </div>
