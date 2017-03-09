@@ -793,25 +793,28 @@
 
         mapCtrl.tabsetTemplateUrl = '/tabs/right-tabs.template.html';
 
-        mapCtrl.activeTab = 2;
+        mapCtrl.activeTab = 0;
 
         mapCtrl.tabs = [
+            {
+                name: 'Info',
+                glyphicon: 'glyphicon glyphicon-question-sign tab-icon',
+                templateUrl: '/tabs/info-tab.template.html'
+            },
             {
                 name: 'Coordinates',
                 glyphicon: 'glyphicon glyphicon-globe tab-icon',
                 templateUrl: '/tabs/coord-tab.template.html'
-            }, {
+            },
+            {
                 name: 'Settings',
                 glyphicon: 'glyphicon glyphicon-wrench tab-icon',
                 templateUrl: '/tabs/settings-tab.template.html'
-            }, {
+            },
+            {
                 name: 'API',
                 glyphicon: 'glyphicon glyphicon-magnet tab-icon',
                 templateUrl: '/tabs/api-tab.template.html'
-            }, {
-                name: 'Info',
-                glyphicon: 'glyphicon glyphicon-question-sign tab-icon',
-                templateUrl: '/tabs/info-tab.template.html'
             }
         ];
 
@@ -828,6 +831,7 @@
                 title: 'Response Specification',
                 templateUrl: '/tabs/api-response-group.template.html'
             },
+            /*
             {
                 title: 'Notes',
                 templateUrl: '/tabs/api-notes-group.template.html'
@@ -836,6 +840,7 @@
                 title: 'Examples',
                 templateUrl: '/tabs/api-examples-group.template.html'
             }
+            */
         ];
 
         mapCtrl.apiInputs = [
@@ -860,35 +865,6 @@
                 desc: 'whether to prepend\na header row'
             }
         ];
-
-        /*
-        mapCtrl.apiInputs = {
-            params: [
-                {
-                    names: ['llng', 'rlng'],
-                    desc: 'left/right longitudes of bounding box'
-                },
-                {
-                    names: ['dlat', 'ulat'],
-                    desc: 'lower/upper latitudes of bounding box'
-                }
-            ],
-            qss: [
-                {
-                    names: ['lim'],
-                    desc: 'max number of data returned (otherwise unlimited)'
-                },
-                {
-                    names: ['inten'],
-                    desc: 'whether to return relative intensity instead of #IPs (for internal use)'
-                },
-                {
-                    names: ['head'],
-                    desc: 'whether to prepend a header row'
-                }
-            ]
-        };
-        */
 
     }
 }());
