@@ -216,6 +216,7 @@
             url: url,
             type: 'xyz',
             layerOptions: {
+                showOnSelector: false,
                 attribution: '© <a href=\'https://www.mapbox.com/map-feedback/\'>Mapbox</a>'
                 + ' | '
                 + '© <a href=\'http://www.openstreetmap.org/copyright\'>OpenStreetMap</a>'
@@ -353,6 +354,32 @@
         };
 
         return dDO;
+    }
+
+    angular
+        .module('iphm.map')
+        .directive('iphmDevTech', iphmDevTech);
+
+    iphmDevTech.$inject = [];
+
+    function iphmDevTech() {
+        var TechCtrl = function TechCtrl() {
+            var techCtrl = this;
+        };
+
+        var dDO = {
+            restrict: 'E',
+            scope: {},
+            bindToController: {
+                tech: '=iphmTech'
+            },
+            controller: TechCtrl,
+            controllerAs: 'techCtrl',
+            templateUrl: '/tabs/dev-tech.template.html'
+        };
+
+        return dDO;
+
     }
 
     angular
@@ -863,6 +890,66 @@
             {
                 names: ['?head'],
                 desc: 'whether to prepend\na header row'
+            }
+        ];
+
+        mapCtrl.devTechs = [
+            {
+                name: 'Node.js',
+                link: 'https://nodejs.org/en/',
+                desc: 'IPHM runs on a MEAN stack; both the front- and backends are engineered in Node.'
+            },
+            {
+                name: 'AngularJS',
+                link: 'https://angularjs.org/',
+                desc: 'IPHM\'s frontend is structured fully in Angular.'
+            },
+            /*
+            {
+                name: 'Bootstrap',
+                link: 'https://getbootstrap.com/',
+                desc: ''
+            },
+            */
+            {
+                name: 'Express',
+                link: 'https://expressjs.com/',
+                desc: 'All middlewares and server-side routers are mounted with Express.'
+            },
+            {
+                name: 'mLab',
+                link: 'https://mlab.com/',
+                desc: 'mLab serves the MongoDB shard cluster sandbox where the GeoLite2 data are rehosted.'
+            },
+            {
+                name: 'Mongoose',
+                link: 'http://mongoosejs.com',
+                desc: 'A Node package for interfacing with a live MongoDB from within JS. IPHM uses Mongoose to manage all queries and modifications of the IPv6 database.'
+            },
+            {
+                name: 'Heroku',
+                link: 'https://heroku.com/',
+                desc: 'IPHM is hosted and deployed on a Heroku dyno.'
+            },
+            {
+                name: 'Leaflet',
+                link: 'http://leafletjs.com/',
+                desc: 'An impressively lightweight JS library for embedded interactive maps. Thanks, Leaflet (and Leaflet.heat), for cramming this bulky dataset into a snappy & responsive map.'
+            },
+            {
+                name: 'Mapbox',
+                link: 'https://www.mapbox.com/',
+                desc: 'The vector tiles that Leaflet uses to actually draw the map are fetched from Mapbox\'s public API. IPHM uses the Mapbox Streets tileset.'
+            },
+            {
+                name: 'MaxMind',
+                link: 'https://maxmind.com/en/home',
+                desc: 'This app uses IPv6 geolocation data retrieved from MaxMind\'s GeoLite2 database.'
+            },
+            {
+                name: 'gulp',
+                link: 'http://gulpjs.com',
+                desc: ''
             }
         ];
 

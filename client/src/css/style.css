@@ -171,7 +171,8 @@ body {
 .info-col {
     border-top-right-radius: 1.5rem;
     border-bottom-right-radius: 1.5rem;
-    background: url(../img/cloth_alike.png) repeat 0 0;
+    /*background: url(../img/cloth_alike.png) repeat 0 0;*/
+    background: #F3FAFE;
 }
 
 .info-col > .row {
