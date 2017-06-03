@@ -98,10 +98,61 @@
             ':ulat'
         ].join('/');
 
-        var status = {
-            downloaded: false,
-            downloading: true
-        };
+        var dataStatus = (function() {
+            var statuses = {
+                inProgress: {
+                    icon: 'time',
+                    color: 'yellow'
+                },
+                finished: {
+                    icon: 'ok',
+                    color: 'green'
+                },
+                error: {
+                    icon: 'remove',
+                    color: 'red'
+                }
+            };
+
+            var status = statuses.inProgress;
+
+            var download = {
+                ing: false,
+                ed: false
+            };
+
+            var getStatus = function getStatus() {
+                return angular.merge({}, status);
+            };
+
+            var setStatus = function setStatus() {
+                if (download.ing === true) {
+                    status = statuses.inProgress;
+                } else if (download.ed === true) {
+                    status = statuses.finished;
+                } else {
+                    status = statuses.error;
+                }
+            };
+
+            var setDownloading = function setDownloading(bool) {
+                download.ing = bool;
+                setStatus();
+            };
+
+            var setDownloaded = function setDownloaded(bool) {
+                download.ed = bool;
+                setStatus();
+            };
+
+            return {
+                download: download,
+                getStatus: getStatus,
+                setDownloading: setDownloading,
+                setDownloaded: setDownloaded
+            };
+
+        }());
 
         var standingReq = null;
 
@@ -119,16 +170,16 @@
 
         var initiateReq = function(params) {
             standingReq = BBox.fetch(params);
-            status.downloading = true;
+            dataStatus.setDownloading(true);
             standingReq
                 .$promise
                 .then(function() {
-                    status.downloading = false;
-                    status.downloaded = true;
+                    dataStatus.setDownloading(false);
+                    dataStatus.setDownloaded(true);
                 })
                 .catch(function() {
-                    status.downloading = false;
-                    status.downloaded = false;
+                    dataStatus.setDownloading(false);
+                    dataStatus.setDownloaded(false);
                 });
 
         };
@@ -139,7 +190,7 @@
                 // the request has already been completed
                 // and the data has been processed
                 standingReq.$cancelRequest();
-                status.downloading = false;
+                dataStatus.setDownloading(false);
             }
         };
 
@@ -178,7 +229,7 @@
         */
 
         return {
-            status: status,
+            dataStatus: dataStatus,
             standingReq: standingReq,
             fetchBBox: fetchBBox,
             cancelReq: cancelReq
@@ -608,7 +659,7 @@
         mapCtrl.request = function(paramProm) {
             CoordFreqs.cancelReq();
             //mapCtrl.setData([]); // this is really just for visual confirmation
-            mapCtrl.status.downloaded = false;
+            CoordFreqs.dataStatus.setDownloaded(false);
             paramProm
                 .then(CoordFreqs.fetchBBox)
                 .then(function(data) {
@@ -698,7 +749,7 @@
 
         $scope.$on('leafletDirectiveMap.load', mapCtrl.init);
 
-        mapCtrl.status = CoordFreqs.status;
+        mapCtrl.dataStatus = CoordFreqs.dataStatus;
 
         mapCtrl.options = {
             dynamic: 1,
@@ -820,7 +871,7 @@
 
         mapCtrl.tabsetTemplateUrl = '/tabs/right-tabs.template.html';
 
-        mapCtrl.activeTab = 0;
+        mapCtrl.activeTab = 1;
 
         mapCtrl.tabs = [
             {

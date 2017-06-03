@@ -10,6 +10,7 @@
         layers="mapCtrl.layers"
         class="map">
       </leaflet>
+      <span class="data-status-icon data-icon-{{ mapCtrl.dataStatus.getStatus().color }}"><span class="glyphicon glyphicon-{{ mapCtrl.dataStatus.getStatus().icon }}"></span></span>
     </div>
 
     <div class="col-xs-5 info-col">
