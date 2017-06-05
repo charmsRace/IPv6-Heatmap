@@ -43,7 +43,7 @@
                 ng-repeat="tab in mapCtrl.tabs"
                 index="$index">
                 <uib-tab-heading>
-                  <span class="{{ tab.glyphicon }}"></span>
+                  <span class="tab-icon {{ tab.glyphicon }}"></span>
                 </uib-tab-heading>
                 <div ng-include="tab.templateUrl"></div>
               </uib-tab>

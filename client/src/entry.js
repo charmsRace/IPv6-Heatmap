@@ -955,13 +955,11 @@
                 link: 'https://angularjs.org/',
                 desc: 'IPHM\'s frontend is structured fully in Angular.'
             },
-            /*
             {
                 name: 'Bootstrap',
                 link: 'https://getbootstrap.com/',
-                desc: ''
+                desc: 'IPHM uses the Bootstrap grid system, for better or worse.'
             },
-            */
             {
                 name: 'Express',
                 link: 'https://expressjs.com/',
@@ -1000,7 +998,7 @@
             {
                 name: 'gulp',
                 link: 'http://gulpjs.com',
-                desc: ''
+                desc: 'Gulp performs generally development taskrunning (browserifying, minifying, &c.'
             }
         ];
 

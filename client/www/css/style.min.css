@@ -982,9 +982,9 @@ h6 {
 
 .tab-title-row {
     height: 8vh;
-    border: 2px solid red;
-    border-bottom: initial;
-    border-radius: 10px 10px 0 0;
+    /*border: 2px solid red;*/
+    /*border-bottom: initial;*/
+    /*border-radius: 10px 10px 0 0;*/
 }
 
 .tab-title {
@@ -992,8 +992,8 @@ h6 {
 }
 
 .tab-content-container {
-    border: 2px solid red;
-    border-radius: 0 0 10px 10px;
+    /*border: 2px solid red;*/
+    /*border-radius: 0 0 10px 10px;*/
 }
 
 .tab-box {
@@ -1064,18 +1064,31 @@ h6 {
     border-radius: 0;
     border-bottom-right-radius: 12px;
     border-top: none;
-    border-right: 4px solid #FF4919;
+    border-right: 4px solid #F7FCFF;
     border-bottom: none;
-    border-left: 4px solid #FF4919;
-    background-color: #FF4919;
+    border-left: 4px solid #F7FCFF;
+    background-color: #F7FCFF;
     padding: 0;
+}
+
+.tab-box-btn > a:hover,
+.tab-box-btn > a:focus {
+    /* */
 }
 
 .tab-box-btn-icon {
     font-size: 4vw;
-    color: #9AD0F5;
+    color: #FF3500;
     text-shadow: #00518B 0 0 1px;
-    margin: 0;
+    margin: 5px 0 0 0;
+}
+
+.tab-icon {
+    font-size: 3vw;
+    color: #FF3500;
+    text-shadow: #00518B 0 0 1px;
+    text-align: left;
+    margin: 0 0 0 -8px;
 }
 
 /*
