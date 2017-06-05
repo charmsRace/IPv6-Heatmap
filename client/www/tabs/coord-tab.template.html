@@ -1,107 +1,113 @@
-<div class="coord-tab">
+<div class="tab-template coord-tab">
 
   <div class="row tab-title-row">
     <div class="col-xs-12">
-      <h2>Tab Title</h2>
+      <h2 class="tab-title">Coordinates</h2>
     </div>
   </div>
 
-  <div class="row coordinates-container-row">
+  <div class="row tab-content-container coordinates-container">
 
-    <div class="col-xs-6">
-      <div class="row">
-        <div class="col-xs-12">
-          <h2>Latitude</h2>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="row">
-            <div class="col-xs-4">
-              <p>North</p>
-            </div>
-            <div class="col-xs-8">
-              <p><small>{{ mapCtrl.bounds.northEast.lat | coordFilter }}</small></p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-xs-4">
-              <p>South</p>
-            </div>
-            <div class="col-xs-8">
-              <p><small>{{ mapCtrl.bounds.southWest.lat | coordFilter }}</small></p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-xs-6">
-      <div class="row">
-        <div class="col-xs-12">
-          <h2>Longitude</h2>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="row">
-            <div class="col-xs-4">
-              <p>
-                Left
-              </p>
-            </div>
-            <div class="col-xs-8">
-              <p>
-                <small>
-                  {{ mapCtrl.bounds.southWest.lng | coordFilter }}
-                </small>
-              </p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-xs-4">
-              <p>
-                Right
-              </p>
-            </div>
-            <div class="col-xs-8">
-              <p>
-                <small>
-                  {{ mapCtrl.bounds.northEast.lng | coordFilter }}
-                </small>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!--
-  <div class="row center-container">
-    <div class="col-xs-12"></div>
-  </div>
-  -->
-
-  <div class="row">
     <div class="col-xs-12">
-      <iphm-center-coords iphm-center="mapCtrl.storedCenter"></iphm-center-coords>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-xs-12">
-      <a
-        href="#"
-        class="btn btn-info btn-lg"
-        ng-click="mapCtrl.centerMap();">
-        <span class="glyphicon glyphicon-map-marker"></span>
-        Center
-      </a>
+
+      <div class="row tab-box">
+        <div class="col-xs-6 tab-box-div-right">
+
+          <div class="row tab-box-header tab-box-header-left">
+            <div class="col-xs-12">
+              <h2 class="tab-box-heading">Latitude</h2>
+            </div>
+          </div>
+
+          <div class="row tab-box-content">
+            <div class="col-xs-12">
+
+              <div class="row tab-box-half-row">
+                <div class="col-xs-4">
+                  <p class="vc-text tab-box-label">North</p>
+                </div>
+                <div class="col-xs-8">
+                  <p class="vc-text"><small>{{ mapCtrl.bounds.northEast.lat | coordFilter }}</small></p>
+                </div>
+              </div>
+
+              <div class="row tab-box-half-row">
+                <div class="col-xs-4">
+                  <p class="vc-text tab-box-label">South</p>
+                </div>
+                <div class="col-xs-8">
+                  <p class="vc-text"><small>{{ mapCtrl.bounds.southWest.lat | coordFilter }}</small></p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-xs-6 tab-box-div-left">
+
+          <div class="row tab-box-header tab-box-header-right">
+            <div class="col-xs-12">
+              <h2 class="tab-box-heading">Longitude</h2>
+            </div>
+          </div>
+
+          <div class="row tab-box-content">
+            <div class="col-xs-12">
+
+              <div class="row tab-box-half-row">
+                <div class="col-xs-4">
+                  <p class="vc-text tab-box-label">Left</p>
+                </div>
+                <div class="col-xs-8">
+                  <p class="vc-text"><small>{{ mapCtrl.bounds.southWest.lng | coordFilter }}</small></p>
+                </div>
+              </div>
+
+              <div class="row tab-box-half-row">
+                <div class="col-xs-4">
+                  <p class="vc-text tab-box-label">Right</p>
+                </div>
+                <div class="col-xs-8">
+                  <p class="vc-text"><small>{{ mapCtrl.bounds.northEast.lng | coordFilter }}</small></p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="row tab-box">
+        <div class="col-xs-12">
+
+          <div class="row tab-box-header tab-box-header-left tab-box-header-right">
+            <div class="col-xs-12">
+              <h2 class="tab-box-heading">Center</h2>
+            </div>
+          </div>
+
+          <div class="row center-coords-container tab-box-content">
+
+            <div class="col-xs-9 tab-box-div-right">
+              <iphm-center-coords iphm-center="mapCtrl.storedCenter"></iphm-center-coords>
+            </div>
+
+            <div class="col-xs-3 tab-box-div-left tab-box-btn">
+              <a
+                href="#"
+                class="btn btn-info btn-lg center-btn"
+                ng-click="mapCtrl.centerMap();"><span class="vc-text glyphicon glyphicon-map-marker tab-box-btn-icon"></span></a>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
     </div>
   </div>
 
 </div>
-
-
-
-

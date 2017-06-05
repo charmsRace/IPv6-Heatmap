@@ -100,14 +100,120 @@
 
 .tab-title-row {
     height: 8vh;
+    border: 2px solid red;
+    border-bottom: initial;
+    border-radius: 10px 10px 0 0;
 }
 
-.settings-container-row {
-    height: 72vh;
+.tab-title {
+    font-size: 3vw;
 }
 
-.settings-container-row > [class^="col-"],
-.settings-container-row > [class*=" col-"] {
+.tab-content-container {
+    border: 2px solid red;
+    border-radius: 0 0 10px 10px;
+}
+
+.tab-box {
+    margin: 15px 0;
+    background-color: #F7FCFF;
+    border: 4px solid #C979FF;
+    border-radius: 15px;
+    height: 15vh;
+}
+
+.tab-box-header {
+    background-color: #C979FF;
+    margin-top: -4px;
+    height: 5vh;
+}
+
+.tab-box-header-left {
+    border-top-left-radius: 15px;
+    margin-left: -19px;
+}
+
+.tab-box-header-right {
+    border-top-right-radius: 15px;
+    margin-right: -19px;
+}
+
+.tab-box-heading {
+    line-height: 5vh;
+    margin: 0;
+}
+
+.tab-box-content,
+.tab-box-content > [class^="col-"],
+.tab-box-content > [class*=" col-"] {
+    height: 10vh;
+}
+
+.tab-box-half-row {
+    height: 5vh;
+}
+
+.tab-box-half-row > [class^="col-"],
+.tab-box-half-row > [class*=" col-"] {
+    height: 100%
+}
+
+.tab-box-div-right {
+    border-right: 2px solid #C979FF;
+}
+
+.tab-box-div-left {
+    border-left: 2px solid #C979FF;
+}
+
+.tab-box-label {
+    margin: 0;
+}
+
+.tab-box-btn {
+    height: 100%;
+    padding: 4px 0 0 0;
+    margin: -4px 0 0 0;
+}
+
+.tab-box-btn > a {
+    height: 100%;
+    width: 100%;
+    border-radius: 0;
+    border-bottom-right-radius: 12px;
+    border-top: none;
+    border-right: 4px solid #FF4919;
+    border-bottom: none;
+    border-left: 4px solid #FF4919;
+    background-color: #FF4919;
+    padding: 0;
+}
+
+.tab-box-btn-icon {
+    font-size: 4vw;
+    color: #9AD0F5;
+    text-shadow: #00518B 0 0 1px;
+    margin: 0;
+}
+
+/*
+.match-cols {
+    overflow: hidden;
+}
+
+.match-cols [class^="col-"],
+.match-cols [class*=" col-"] {
+    margin-bottom: -99999px;
+    padding-bottom: 99999px;
+}
+*/
+
+.settings-container {
+    /*height: 72vh;*/
+}
+
+.settings-container > [class^="col-"],
+.settings-container > [class*=" col-"] {
     height: 24vh;
 }
 
@@ -122,13 +228,12 @@
     width: 100%;
 }
 
-.center-coords-container,
-.center-coords-container .row {
-    margin: 0;
-}
-
 .center-coord-row {
     padding: 0 1vw;
+}
+
+.center-coord {
+    box-shadow: none;
 }
 
 .api-accordion-header {

@@ -9,12 +9,16 @@
 }
 
 .option-label {
+    border-top: 4px solid #C979FF;
+    border-right: none;
+    border-bottom: 4px solid #C979FF;
+    border-left: 4px solid #C979FF;
     border-top-left-radius: 1rem;
     border-bottom-left-radius: 1rem;
     font-size: 1vw;
     text-align: center;
     color: #000000;
-    background-color: #FF3500;
+    background-color: #C979FF;
     margin: 0;
     position: relative;
     top: 50%;
@@ -24,9 +28,13 @@
 }
 
 .option-input {
-    border: none;
+    border-top: 4px solid #C979FF;
+    border-right: 4px solid #C979FF;
+    border-bottom: 4px solid #C979FF;
+    border-left: none;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     border-top-right-radius: 1rem;
     border-bottom-right-radius: 1rem;
+    box-shadow: none;
 }
